@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: web-security-headers turn 5 (build) HECHO — 2/7 skills redactadas — siguiente = perf-ci-gates turn 1 (scoping)
+status: perf-ci-gates turn 1 (scoping) HECHO — 2/7 redactadas, #3 en curso — siguiente = perf-ci-gates turn 2 (pre-research)
 ---
 
 # web-stack-skills — RESIDENT
@@ -118,12 +118,13 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - astro-css-tokens turns 1–4 — hechos (scoping, pre-research, research verificado, decisiones cerradas). Veredicto y pins reescritos arriba (§3).
 - 1/7 skills redactadas (`astro-css-tokens` — turn 5 completo).
 - `astro-css-tokens` y `web-security-headers` — completas, 5/5 turns cada una. 2/7 redactadas. Fuentes de web-security-headers en commit 4f37a05 (SKILL.md + 5 references).
-- Siguiente — `perf-ci-gates`, turn 1 (Scoping).
+- `perf-ci-gates` (#3) turn 1 (Scoping) — HECHO. Alcance = gate de CI de dos puertas (LHCI + Biome en GitHub Actions). Tool-selection ya lockeado por stack-canon (no requiere turno de selección). 10 forks abiertos (F1–F10), caso-contrario nombrado, checklist de research de 9 puntos.
+- Siguiente — `perf-ci-gates`, turn 2 (Pre-research).
 
 ## 10. Roadmap
 
 - **Fase 0** — scaffold del marketplace. Hecha.
-- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (2/7; #2 `web-security-headers` completa, commit 4f37a05; #3 `perf-ci-gates` siguiente)
+- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (2/7 redactadas; #2 `web-security-headers` completa, commit 4f37a05; #3 `perf-ci-gates` en curso — turn 1 scoping HECHO)
 - **Skill planeada (post-7) — `cms-self-edit`** (placeholder) — capacidad self-edit/CMS headless; turno de selección de herramienta primero (gap de stack-canon), luego cadencia normal; scaffold al repo diferido hasta llegar.
 - **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
 
@@ -297,3 +298,43 @@ Bundle autoreado y commiteado (Git Data API, commit atómico de 6 archivos, sha 
 - Empaque: `web-security-headers.skill` (zip del árbol, raíz `web-security-headers/`, 12.9 KB) subido como artefacto descargable para Carlos. El repo guarda las FUENTES, no el `.skill`.
 
 Siguiente: perf-ci-gates turn 1 (Scoping).
+
+### 2026-06-17 — perf-ci-gates · turn 1 (Scoping) — HECHO
+
+Skill #3 (fundación). Tema: Lighthouse CI + Biome en GitHub Actions. Tool-selection ya lockeado por stack-canon (§2) → la skill codifica el CÓMO, no el QUÉ; NO requiere turno de selección (a diferencia de `cms-self-edit`). Sin discrepancia seed/§2/§3 este turno.
+
+Reframe: la skill es un **gate de CI de dos puertas independientes** — (a) LHCI (`@lhci/cli`) gatea CWV/peso/categorías; (b) Biome gatea lint+format+import-order. Ambas en un `ci.yml`, jobs paralelos.
+
+Orientación verificada (búsqueda ligera, re-verificar pins en turn 3):
+- `@lhci/cli` 0.15.x trae Lighthouse 12.6.1; ~2M dl/mo; mantenido (abr-2026). PWA fuera desde LH12. LH13 exige Node 22.19+ y aún NO está en LHCI → watch de versión de Node.
+- `treosh/lighthouse-ci-action` = action canónica (budget.json, numberOfRuns, `temporary-public-storage` default público 7 días). Es 3rd-party → SECONDARY vs `lhci autorun` crudo.
+- Biome v2.4 (feb-2026); `biome ci` = lint+format+import-sort en un comando.
+- **GOTCHA load-bearing — Biome × .astro es EXPERIMENTAL** (2.3+ landed, 2.4 mejoró): parse/lint/format de HTML/`<style>` exige `experimentalFullHtmlSupportEnabled:true`; reglas de lint cross-embedded "not supported yet". Decide F5.
+
+Alcance — IN: config LHCI (`lighthouserc.json` + `budget.json`, assertions, target de colección, upload), config Biome (`biome.json`, `biome ci`, manejo .astro), el workflow `ci.yml`, targets de budget CWV 2026 + caveats de proxy de lab, control de flake (mediana-de-N, tiers warn/error), cómo servir un build Astro+Cloudflare para colección, wiring de status-checks. PARCIAL: `@lhci/server` self-host (solo la costura); run post-deploy contra preview URL (nombrado, no default). OUT (pointer): caching/`Cache-Control` runtime más allá del adapter (punt entrante de web-security-headers F6 → ver F8), SEO/schema profundo (→#4), a11y profundo + `prefers-reduced-motion` (→#5/#6/#7), RUM/field (CF Web Analytics, runtime no CI).
+
+Forks abiertos (resolver turn 4) con sesgo:
+- F1 target de colección LHCI: `staticDistDir:./dist` (sitio estático premium) · server-command (wrangler/preview) para rutas SSR · preview-URL post-deploy opcional.
+- F2 estrategia de assertions: capas — category-score floors + budgets de métrica CWV + `budget.json` resource budgets. Lab NO mide INP → gatear **TBT** como proxy.
+- F3 target de upload: `temporary-public-storage` default (cero infra, encaja en skill pública) · `@lhci/server` self-host en PikaPods como upgrade de historia durable.
+- F4 runner LHCI: `npx @lhci/cli autorun` crudo (native-first, sin capa 3rd-party) vs `treosh` action (ergonómica, PR comments). Sesgo: crudo, honra "layers are a cost"; reconsiderar turn 4.
+- F5 Biome en .astro: activar `experimentalFullHtmlSupportEnabled` (template completo) CON review-gate vs acotar Biome a script/TS/CSS/JSON + `prettier-plugin-astro` para template. El research decide.
+- F6 invocación Biome en CI: `npx @biomejs/biome ci` vía script pnpm + `--reporter=github` (sin setup action extra).
+- F7 forma del workflow: un `ci.yml`, dos jobs paralelos — `quality` (Biome, barato) ‖ `lighthouse` (build→serve→assert).
+- F8 frontera cache/runtime: gate-only. Nota de una pantalla "qué perf asume el gate" (adapter hace `_astro/*` immutable; preload/preconnect; estrategia de imágenes). NO se vuelve workstream de config runtime — satisface el punt F6 mínimamente.
+- F9 overlap de gating a11y/SEO con #4: asertar las 4 category floors de LH aquí (mismo run barato); SEO profundo→#4, a11y profundo→skills de visuales. Coarse-gate-aquí / deep-impl-en-otra.
+- F10 granularidad references: ~4 — `lighthouse-config.md`, `github-actions-workflow.md`, `biome-setup.md`, `budgets-and-thresholds.md`. SKILL.md = veredicto + split de dos puertas + receta mínima.
+
+Estructura del bundle propuesta: `SKILL.md` + references/{lighthouse-config, github-actions-workflow, biome-setup, budgets-and-thresholds}.
+
+CASO CONTRARIO a defender en research:
+- Primario: LHCI es lab-sintético y flakea en runners compartidos; el stack ya trae CF Web Analytics (RUM) con CWV de campo. Un gate pre-merge persigue un número que no matchea el campo y agrega fricción → solo Biome + RUM. La skill debe justificar LHCI como **gate de regresión pre-merge** (RUM es post-hoc, no bloquea un merge malo) y probar que se hace no-flaky (mediana-de-N, budgets en audits estables + tamaños de recurso, tiers warn/error, TBT-no-INP en lab). Si el research no lo defiende → veredicto pivota a "Biome gate duro + CF RUM; LHCI como run programado/manual opcional, no merge blocker".
+- Secundario (tooling): soporte .astro de Biome aún experimental; ESLint+Prettier lintea mejor el template hoy. Research confirma si Biome 2.4 basta como herramienta única o si lo honesto mantiene `prettier-plugin-astro` para format de template (parte F5).
+
+Checklist de research (turns 2→3): 1) re-verificar pins (`@lhci/cli`/LH/Node floor; Biome ≥2.4; `treosh`). 2) servir build Astro+`@astrojs/cloudflare@13` para LHCI — ¿`astro build` emite `dist/` estático→`staticDistDir`, o `_worker.js`? wrangler dev vs astro preview (F1). 3) shape de assertions LHCI 2026 + confirmar proxies de lab (TBT↔INP) (F2). 4) thresholds CWV 2026 (LCP ≤2.5s, INP ≤200ms, CLS ≤0.1) + budgets de lab sensatos + mitigación de flake (numberOfRuns, throttling). 5) Biome .astro en 2.4 — ¿qué tan bueno `experimentalFullHtmlSupportEnabled`? cobertura de lint del template? ¿aún `prettier-plugin-astro`? (F5). 6) comportamiento exacto `biome ci` + GitHub/multi-reporter (2.4) (F6). 7) `temporary-public-storage` vs `@lhci/server` self-host en PikaPods (F3). 8) `lhci autorun` crudo vs `treosh` action — delta de features, story de PR-comments, peso native-first (F4). 9) qué cachea `@astrojs/cloudflare@13` auto vs qué queda (acota F8).
+
+Decisión de Carlos pendiente (1): confirmar frontera F8 — `perf-ci-gates` se queda como gate de CI y el punt de caching entrante se satisface con nota "perf asumida", NO workstream de caching runtime (sesgo fuerte; caching runtime es homeless en las 7, probablemente pertenece al playbook diferido).
+
+Sandbox suffix activo este chat: `pcg_9jv35m`.
+
+Siguiente: perf-ci-gates turn 2 (Pre-research).

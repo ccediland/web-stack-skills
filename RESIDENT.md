@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: perf-ci-gates turn 5 (build) HECHO — 3/7 skills redactadas; bundle commiteado (23d8388f) — siguiente = seo-aeo-schema turn 1 (scoping)
+status: seo-aeo-schema turn 1 (scoping) HECHO — 3/7 skills redactadas (23d8388f) — siguiente = seo-aeo-schema turn 2 (pre-research); F1 (alcance meta/head) pendiente de Carlos
 ---
 
 # web-stack-skills — RESIDENT
@@ -122,12 +122,13 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - `perf-ci-gates` (#3) turn 2 (Pre-research) — HECHO. `pre-research` corrida: 8 búsquedas (entre turns 1–2) + fuentes primarias; pre-brief de 8 subtasks armado para Research mode. Hallazgos clave a verificar en turn 3 (abajo en §11).
 - `perf-ci-gates` (#3) turns 3–4 (Research + Decisions) — HECHOS. Research mode entregó reporte verificado contra fuentes primarias. Forks F1–F10 lockeados (detalle en §11). 2 reversals vs leans previos: F4 (raw autorun → treosh action) y F5 (flag `.astro` ON → OFF + prettier-plugin-astro). Caso contrario derrotado; claim CWV 2.0s confirmado FALSO.
 - `perf-ci-gates` (#3) turn 5 (Build) — HECHO. Bundle (SKILL.md + 4 refs) autorado, `quick_validate` PASS (description 998/1024, sin `<`/`>`, sin `: `, body house-style limpio), `.skill` empacado (15.3 KB), fuente commiteada atómica (Git Data API) en `23d8388f`. Stub sobrescrito. (Turn 5 se reanudó tras un corte; el bundle del run cortado persistió en el contenedor de code-exec, se verificó contra los forks lockeados y se re-validó antes de commitear.)
-- Siguiente — `seo-aeo-schema` (#4, fundación), turn 1 (Scoping).
+- `seo-aeo-schema` (#4, fundación) turn 1 (Scoping) — HECHO. Alcance IN/PARTIAL/OUT delimitado; 10 forks abiertos (F1–F10) con leans; caso contrario doble (schema-dts ceremony + llms.txt cargo-cult); seam CSP×JSON-LD (×#2) marcado load-bearing; checklist de research de 9 puntos. Tool-selection NO requerido. Pendiente de Carlos: F1 (expandir alcance a componente meta/head typed, o no).
+- Siguiente — `seo-aeo-schema` (#4) turn 2 (Pre-research).
 
 ## 10. Roadmap
 
 - **Fase 0** — scaffold del marketplace. Hecha.
-- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (3/7 redactadas; #2 `web-security-headers` commit 4f37a05; #3 `perf-ci-gates` completa, bundle commit 23d8388f; #4 `seo-aeo-schema` siguiente)
+- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (3/7 redactadas; #2 `web-security-headers` 4f37a05; #3 `perf-ci-gates` 23d8388f; #4 `seo-aeo-schema` turn 1 scoped, en curso)
 - **Skill planeada (post-7) — `cms-self-edit`** (placeholder) — capacidad self-edit/CMS headless; turno de selección de herramienta primero (gap de stack-canon), luego cadencia normal; scaffold al repo diferido hasta llegar.
 - **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
 
@@ -418,3 +419,41 @@ Estado del repo: 3/7 skills redactadas y commiteadas (#1 astro-css-tokens, #2 we
 Sandbox suffix activo este chat: `pcg_9jv35m`.
 
 Siguiente: `seo-aeo-schema` (#4, fundación) turn 1 (Scoping). Tema sembrado: `schema-dts` `@graph` tipado (`@id` cruzados) + `@astrojs/sitemap` + `llms.txt`. Pins sembrados a re-verificar: `schema-dts`, `@astrojs/sitemap`.
+
+### 2026-06-17 — seo-aeo-schema · turn 1 (Scoping) — HECHO
+
+Skill #4 (fundación). Tema sembrado: `schema-dts` `@graph` tipado (cross-`@id`) + `@astrojs/sitemap` + `llms.txt`. Tool-selection NO requerido (el stack-canon ya cubre el QUÉ; la skill codifica el CÓMO). Sin discrepancia seed/§3 este turno.
+
+Reframe: la skill es la **capa de descubribilidad machine-readable** (qué es la página y cómo se relaciona con el resto del sitio, sin tocar un pixel). De los 3 pilares, solo schema.org JSON-LD tiene payoff probado hoy; sitemap = plumbing table-stakes; `llms.txt` = apuesta a un estándar no ratificado. El esfuerzo se pondera así.
+
+Alcance — IN: `schema-dts` `@graph` centralizado por página (cross-`@id`: Organization↔WebSite↔WebPage↔Breadcrumb↔entidad) + render util tipado; `@astrojs/sitemap` opinionado; `robots.txt` generado (ref al sitemap + directivas AI-crawler); `llms.txt` (provisional — ver caso contrario); canonical + componente meta/OG/Twitter typed mínimo (F1, decisión de Carlos); receta de validación JSON-LD. PARCIAL (seam): i18n/hreflang; OG image dinámico (satori, constraint Workers). OUT (pointer): RSS (`@astrojs/rss`, content concern); catálogo exhaustivo de tipos schema; el GATE de SEO (se queda en #3 — F9 puso seo a `warn`; #4 autorea+valida, #3 gatea el merge).
+
+Forks abiertos (resolver turn 4) con lean:
+- F1 alcance meta/head: incluir componente `<Head>` typed mínimo (title/desc/canonical/OG/Twitter, hand-rolled, sin `astro-seo`) vs punt. **Lean: incluir** — DECISIÓN DE CARLOS pendiente (scope-expansion).
+- F2 forma de emisión JSON-LD: `@graph` centralizado cross-`@id` vs bloques dispersos. Lean: centralizado.
+- F3 herramienta de autoría schema: `schema-dts` + render util vs wrapper (`astro-seo-schema`) vs JSON a mano. Lean: schema-dts + util (sin wrapper); gated por caso contrario.
+- F4 profundidad sitemap config: defaults vs opinionado (filter, serialize/lastmod, i18n seam). Lean: opinionado.
+- F5 disposición `llms.txt`: shippear build-generated por default vs documentar-opcional vs omitir. Lean provisional: shippear flagged low-consensus; depende de research #5.
+- F6 robots.txt + política AI-crawler: incluir (generado, ref sitemap, directivas UA) vs punt. Lean: incluir mínimo — robots.txt es el home *real* y aplicable del control de AI-crawlers (a diferencia de llms.txt).
+- F7 validación schema en build: receta + check opcional (invocable por #3) vs solo receta. Lean: receta + check; el merge-gate se queda en #3.
+- F8 OG image + RSS: out→pointer vs in. Lean: out→pointer.
+- F9 i18n/hreflang: solo seam vs desarrollar. Lean: solo seam.
+- F10 granularidad refs: ~4 — `meta-and-canonical.md`, `json-ld-graph.md`, `sitemap-config.md`, `robots-and-llms.md` (posible 5º catálogo de tipos en build).
+
+CASO CONTRARIO (doble) a romper/defender en research:
+- Primario — schema-dts es ceremonia sin valor runtime (solo tipos TS; los `@id` cross-ref se tipan como strings planos, sin chequeo referencial real). Un sitio con ~5 tipos podría autorar un JSON a mano y soltar la dep. La skill debe justificar schema-dts por seguridad de typo/refactor a escala de `@graph`, autocomplete sobre el vocabulario, mantenibilidad — o el veredicto pivota a JSON-LD a mano con shape tipado. Si schema-dts está stale/sin mantener → pivote forzado.
+- Secundario — `llms.txt` es apuesta a estándar no adoptado (a jun-2026, ningún AI-crawler mayor ha confirmado honrarlo — INFERIDO, verificar). Shippear por default puede ser cargo-cult. La skill debe justificarlo como insurance barato de posicionamiento presente, o degradarlo a opcional y liderar AEO con lo que sí funciona (HTML semántico + JSON-LD + meta + sitemap + control AI-crawler en robots.txt).
+
+Seams cross-skill (no perder):
+- **JSON-LD × CSP (#2) — LOAD-BEARING.** JSON-LD se shippea inline (`<script type="application/ld+json">`); `script-src` aplica a esos bloques por spec CSP aunque no ejecuten. Si el CSP hash-based de Astro 6 NO hashea bloques `ld+json`, un `script-src` estricto de #2 puede BLOQUEAR la structured data en silencio. Tope del research.
+- SEO floor (#3): #3 puso `best-practices`/`seo` a `warn` (coarse); #4 autorea+valida (deep). Componen: coarse-gate en #3, deep aquí.
+
+Checklist de research (turns 2→3): 1) pins (`schema-dts` last-publish/mantenimiento; `@astrojs/sitemap` vs astro@6.4.7/Node22). 2) typing `@graph` de schema-dts (`WithContext`/`Graph`, si los `@id` cross-ref se tipan o son strings, render helper, gotchas de profundidad/union, `@context`). 3) `@astrojs/sitemap` bajo astro@6 + cloudflare@13 (opciones, descubrimiento de páginas, static-vs-SSR — adapter default `output:'server'`, ¿qué rutas entran?, output path `dist/client`?, entryLimit/index, i18n, lastmod). 4) **CSP×JSON-LD (×#2)**: ¿Astro 6 hashea `ld+json` inline? ¿`script-src` los gatea? failure mode + fix. 5) `llms.txt` 2026 (estado del spec + adopción real por AI-crawlers mayores — verificar; `llms.txt` vs `llms-full.txt`; generación static vs endpoint Astro desde content collections). 6) robots.txt + control AI-crawler (tokens UA exactos: GPTBot, ClaudeBot, Google-Extended, PerplexityBot, CCBot — verificar; generado vs static; ref sitemap; ¿robots.txt es el surface real vs llms.txt?). 7) payoff schema.org 2026 (tipos de rich-result vivos — verificar deprecación FAQ/HowTo; Article/Product/Breadcrumb/Organization/WebSite+SearchAction; evidencia de que AI Overviews/Perplexity/ChatGPT search consumen JSON-LD). 8) validación (Rich Results Test + Schema Markup Validator actuales; validación de JSON-LD en build invocable por #3). 9) patrón de static-endpoint Astro bajo cloudflare@13 para emitir text files (robots.txt, llms.txt): `prerender = true`, `GET → Response(text)`, dónde aterriza, vs drop estático en `public/`.
+
+Estructura del bundle propuesta: `SKILL.md` + references/{meta-and-canonical, json-ld-graph, sitemap-config, robots-and-llms} (4; posible 5º).
+
+Decisión de Carlos pendiente (1): F1 — ¿expandir alcance a componente meta/head typed mínimo (lean) o mantener #4 estricto a schema+sitemap+llms?
+
+Sandbox suffix activo este chat: `sas_k4m2q9`.
+
+Siguiente: seo-aeo-schema turn 2 (Pre-research).

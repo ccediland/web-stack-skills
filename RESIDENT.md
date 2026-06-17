@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: seo-aeo-schema turn 1 (scoping) HECHO — 3/7 skills redactadas (23d8388f) — siguiente = seo-aeo-schema turn 2 (pre-research); F1 (alcance meta/head) pendiente de Carlos
+status: seo-aeo-schema turn 2 (pre-research) HECHO — 3/7 redactadas (23d8388f) — siguiente = seo-aeo-schema turn 3 (Research mode ON); F1 resuelto IN; pre-brief de 8 subtasks entregado
 ---
 
 # web-stack-skills — RESIDENT
@@ -122,13 +122,14 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - `perf-ci-gates` (#3) turn 2 (Pre-research) — HECHO. `pre-research` corrida: 8 búsquedas (entre turns 1–2) + fuentes primarias; pre-brief de 8 subtasks armado para Research mode. Hallazgos clave a verificar en turn 3 (abajo en §11).
 - `perf-ci-gates` (#3) turns 3–4 (Research + Decisions) — HECHOS. Research mode entregó reporte verificado contra fuentes primarias. Forks F1–F10 lockeados (detalle en §11). 2 reversals vs leans previos: F4 (raw autorun → treosh action) y F5 (flag `.astro` ON → OFF + prettier-plugin-astro). Caso contrario derrotado; claim CWV 2.0s confirmado FALSO.
 - `perf-ci-gates` (#3) turn 5 (Build) — HECHO. Bundle (SKILL.md + 4 refs) autorado, `quick_validate` PASS (description 998/1024, sin `<`/`>`, sin `: `, body house-style limpio), `.skill` empacado (15.3 KB), fuente commiteada atómica (Git Data API) en `23d8388f`. Stub sobrescrito. (Turn 5 se reanudó tras un corte; el bundle del run cortado persistió en el contenedor de code-exec, se verificó contra los forks lockeados y se re-validó antes de commitear.)
-- `seo-aeo-schema` (#4, fundación) turn 1 (Scoping) — HECHO. Alcance IN/PARTIAL/OUT delimitado; 10 forks abiertos (F1–F10) con leans; caso contrario doble (schema-dts ceremony + llms.txt cargo-cult); seam CSP×JSON-LD (×#2) marcado load-bearing; checklist de research de 9 puntos. Tool-selection NO requerido. Pendiente de Carlos: F1 (expandir alcance a componente meta/head typed, o no).
-- Siguiente — `seo-aeo-schema` (#4) turn 2 (Pre-research).
+- `seo-aeo-schema` (#4, fundación) turn 1 (Scoping) — HECHO. Alcance IN/PARTIAL/OUT; 10 forks (F1–F10) con leans; caso contrario doble; seam CSP×JSON-LD (×#2) load-bearing; checklist de research. Tool-selection NO requerido.
+- `seo-aeo-schema` (#4) turn 2 (Pre-research) — HECHO. Skill `pre-research` corrida (5 búsquedas + 1 fetch; Phase 1 = proceder con supuestos). F1 resuelto IN (decisión de Claude, delegada): incluir componente meta/head typed. Hallazgos clave de pre-investigación (verificar turn 3) abajo en §11. Pre-brief de 8 subtasks + source priority entregado en chat para Research mode.
+- Siguiente — `seo-aeo-schema` (#4) turn 3 (Research — Research mode ON + Context7).
 
 ## 10. Roadmap
 
 - **Fase 0** — scaffold del marketplace. Hecha.
-- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (3/7 redactadas; #2 `web-security-headers` 4f37a05; #3 `perf-ci-gates` 23d8388f; #4 `seo-aeo-schema` turn 1 scoped, en curso)
+- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (3/7 redactadas; #2 `web-security-headers` 4f37a05; #3 `perf-ci-gates` 23d8388f; #4 `seo-aeo-schema` turns 1–2 hechos, en curso)
 - **Skill planeada (post-7) — `cms-self-edit`** (placeholder) — capacidad self-edit/CMS headless; turno de selección de herramienta primero (gap de stack-canon), luego cadencia normal; scaffold al repo diferido hasta llegar.
 - **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
 
@@ -457,3 +458,33 @@ Decisión de Carlos pendiente (1): F1 — ¿expandir alcance a componente meta/h
 Sandbox suffix activo este chat: `sas_k4m2q9`.
 
 Siguiente: seo-aeo-schema turn 2 (Pre-research).
+
+### 2026-06-17 — seo-aeo-schema · turn 2 (Pre-research) — HECHO
+
+Skill `pre-research` corrida (4 fases). Phase 1 = proceder con supuestos (sin preguntas; F1 resuelto, territorio claro). **F1 RESUELTO → IN** (decisión de Claude, delegada por Carlos): la skill incluye componente meta/head typed mínimo (title/desc/canonical/OG/Twitter, hand-rolled, sin `astro-seo`). Phase 2 = pre-investigación substantiva (5 búsquedas + 1 fetch + fuentes primarias). Pre-brief de 8 subtasks + source priority entregado en chat. TODO LO DE ABAJO ES PRE-INVESTIGACIÓN — re-verificar en turn 3.
+
+Hallazgos clave (pre-investigación, con citas en el chat del turn):
+- **schema-dts NO está stale — lo contrario.** Major fresco 2.0.0 (23-mar-2026, npm), mantenimiento healthy, ~0.95–1.16M dl/semana. Expone `WithContext<T>`, interfaz `Graph` (estructuras interconectadas con refs `@id`), `Role<T,P>`. → DERROTA en gran parte el caso contrario primario ("schema-dts muerto, autorar a mano"). Resta: ¿vale el dep el surface de 2.0.0?, ¿los `@id` cross-ref se type-checkean o son strings planos?, pin 2.0.0 vs conservador 1.1.5.
+- **@astrojs/sitemap 3.7.3** (~3 sem, core-team, actualizado a Astro 6). LIMITACIÓN DURA: NO genera entradas para rutas dinámicas en SSR mode ni analiza el source de la página. Como el adapter CF default es `output:'server'`, solo rutas prerendered entran al sitemap → rutas SSR necesitan `customPages`/`serialize` o endpoint custom. Output `sitemap-index.xml` + `sitemap-0.xml`. Opciones: `filter`, `serialize`, `entryLimit` (45000), `namespaces` (3.6.0+), changefreq/priority (IGNORADOS por Google). CAUTION: 3.7.1 tuvo regresión de build ('reduce' undefined, #15894) → verificar 3.7.3 limpio en astro@6.4.7.
+- **Seam CSP×JSON-LD (×#2) — REAL y SIN RESOLVER.** Astro CSP hashea SUS scripts bundleados (islands); scripts externos NO soportados de fábrica (provees tu hash). JSON-LD inline autorado NO es "bundled script" → ¿Astro lo hashea? Abierto. Por spec, `script-src` gobierna scripts inline (allow vía unsafe-inline/nonce/hash que matchee) — PERO JSON-LD es data block que NO ejecuta; si los browsers aplican `script-src` a data blocks es EL crux. Compone con #2: si solo el `<meta>` lleva hashes, el script se permite solo donde header Y meta permiten; el `<meta>` solo puede restringir más. Trampa de determinismo: hashes de inline-scripts por-página varían en CI por chunk boundaries de Vite (pero un bloque ld+json estático tiene hash content-stable). → TOP del research turn 3.
+- **llms.txt: contested; el framing honesto INVIERTE el instinto del seed.** Consenso (varios estudios may-2026): ningún proveedor LLM mayor ha comprometido públicamente honrar llms.txt como señal en producción; Google (Illyes, jul-2025) dijo NO explícitamente; interés de crawler negligible (408 de 500M+ eventos; ~10.13% adopción de dominios); Semrush sin correlación estadística. COMO SEO play = inútil. PERO el uso legítimo es otro: capa Business-to-Agent (routing para agentes); OpenAI/Anthropic/Stripe/Cloudflare/Vercel usan llms.txt como routing layer para agentes de coding; Chrome Lighthouse 13.3 (7-may-2026) ahora lo audita. → F5 resuelve hacia: SHIPPEAR, framed como posicionamiento B2A barato, NO como palanca SEO; liderar AEO con lo que sí funciona. NOTA: una fuente (whatsmygeoscore) afirma "plataformas comprometidas para contenido post-ene-2026" — choca con las fuentes fuertes y conflaciona llms.txt con bloqueo de crawlers; LOW-RELIABILITY, verificar contra docs primarios de vendor.
+- **robots.txt = el surface REAL (aunque imperfecto) de control AI-crawler.** Bots reputables lo honran; scrapers agresivos lo ignoran. Tokens surfaced (verificar exactos turn 3): GPTBot + OAI-SearchBot + ChatGPT-User (OpenAI), ClaudeBot + Claude-SearchBot (Anthropic), Google-Extended (Google), PerplexityBot, CCBot (Common Crawl), Meta-ExternalAgent (Meta), Applebot-Extended (Apple), Bingbot (MS). NUANCE CRÍTICO: bloquear un crawler ≠ mantener la página fuera de una respuesta AI — para excluir del todo usar noindex/auth; no contradecir robots.txt vs llms.txt.
+- **Payoff de schema 2026 más estrecho y actual de lo que asumía el seed.** Google deprecó FAQ rich results el 7-may-2026 (RRT pierde FAQ jun-2026, Search Console API ago-2026; FAQPage sigue válido como tipo y parseado; rankings NO afectados). HowTo ya muerto; 7 tipos retirados jun-2025 (Book Actions, Course Info, Claim Review, Estimated Salary, Learning Video, Special Announcement, Vehicle Listing). SIGUEN dando rich results: Product, Review/AggregateRating, Article, Recipe, Video, Organization, LocalBusiness, BreadcrumbList, Event. HECHO AEO-definitorio (guía de Google): NO se necesita schema especial para AI Overviews / AI Mode, aunque la structured data debe matchear el contenido visible. Organization/Person = esenciales para reconocimiento de entidad en sistemas AI. → Valor honesto del JSON-LD = reconocimiento de entidad + rich results sobrevivientes + parseo correcto, NO palanca mágica de ranking AI. Palancas AEO reales son content-side: citas/quotes/estadísticas suben visibilidad hasta 40% (Princeton/Georgia Tech); 86% de citas AI vienen de fuentes brand-controlled (Yext).
+
+Subtasks de research (8, cap del skill — versión completa en el pre-brief del chat):
+1. schema-dts 2.0.0: breaking changes vs 1.x, `WithContext`/`Graph`/`Role`, ¿`@id` type-checked o strings?, pin 2.0.0 vs 1.1.5.
+2. **CSP×JSON-LD (×#2) LOAD-BEARING**: ¿`script-src` bloquea data blocks `ld+json`? ¿Astro 6 `security.csp` hashea ld+json inline autorado o solo sus bundled? fix si hace falta hash. → patrón ship-safe bajo el `<meta>` CSP de #2.
+3. @astrojs/sitemap 3.7.3 en el stack: regresión 3.7.1 fija?, límite SSR + cómo incluir rutas SSR (serialize/customPages vs endpoint), output path (dist/client?), surface de opciones.
+4. llms.txt: ¿algún vendor lo honra en prod (docs primarios)?, Lighthouse 13.3 audita?, framing B2A + `llms.txt` vs `llms-full.txt`, patrón de generación en Astro (public/ vs endpoint prerendered desde content collections).
+5. robots.txt: tokens UA exactos de cada vendor (docs oficiales), surface enforceable + nuance disallow-≠-fuera-de-respuestas.
+6. payoff schema 2026 + `@graph` canónico: tipos de rich-result vivos + estado deprecación (Search Central), guía AI-features "no special schema, match visible content", entity graph baseline (Organization↔WebSite[+SearchAction]↔WebPage↔BreadcrumbList↔entidad).
+7. validación + factibilidad CI: estado de Rich Results Test (pierde FAQ jun-2026) vs Schema Markup Validator; ¿validador JSON-LD programático/CI invocable por `ci.yml` de #3?, o validación type-time + manual. Dónde vive (#3 vs #4).
+8. patrón text-endpoint Astro (cloudflare@13) para robots.txt + llms.txt (`prerender = true`, `GET → Response(text)`), dónde aterriza, endpoint-from-collections vs drop static en public/.
+
+Source priority (completa en chat): 1) docs primarios (docs.astro.build `security.csp`/sitemap/endpoints/build-with-ai, @astrojs/cloudflare; Google Search Central structured-data/AI-features/crawlers/rich-results; W3C CSP3 + MDN; schema.org + validator; spec llms.txt llmstxt.org). 2) docs de crawler de vendor (OpenAI/Anthropic/Google-Extended/Perplexity/Common Crawl). 3) repos/changelogs (`withastro/astro` sitemap CHANGELOG + CSP #14798/#6407 + roadmap #377; `google/schema-dts` 2.0.0 notes; `@astrojs/cloudflare`). 4) Context7 (@astrojs/sitemap, schema-dts, astro, @astrojs/cloudflare). 5) npm pins. 6) [SECONDARY] estudios GEO con metodología nombrada (Limy, SE Ranking, OtterlyAI, paper Princeton/Georgia Tech, Yext) solo para cifras de adopción; claims de blogs SEO "plataformas comprometidas con llms.txt" = leads low-reliability.
+
+Estado del pre-brief: entregado con línea de confirmación (Continuar / Refinar / Abortar). Carlos decide antes de turn 3; el toggle de Research mode es acción suya en la UI.
+
+Sandbox suffix activo este chat: `sas_k4m2q9`.
+
+Siguiente: seo-aeo-schema turn 3 (Research — Research mode ON + Context7; re-verificar pins schema-dts 2.0.0 vs 1.1.5, @astrojs/sitemap 3.7.3, astro@6.4.7, @astrojs/cloudflare@13.7.0, Node 22).

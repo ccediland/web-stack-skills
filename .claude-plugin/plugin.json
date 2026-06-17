@@ -4,5 +4,14 @@
   "version": "0.1.0",
   "author": {
     "name": "ccediland"
-  }
+  },
+  "skills": [
+    "./skills/astro-css-tokens",
+    "./skills/web-security-headers",
+    "./skills/perf-ci-gates",
+    "./skills/seo-aeo-schema",
+    "./skills/motion-system",
+    "./skills/webgl-atmosfera",
+    "./skills/signature-anim"
+  ]
 }

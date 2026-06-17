@@ -1,0 +1,8 @@
+{
+  "name": "web-stack",
+  "description": "Skills for premium high-performance websites on Astro 6 plus Cloudflare Workers Static Assets — design tokens, native CSP, perf CI gates, schema and AEO, motion, WebGL, and signature animation.",
+  "version": "0.1.0",
+  "author": {
+    "name": "ccediland"
+  }
+}

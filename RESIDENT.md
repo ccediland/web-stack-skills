@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: perf-ci-gates turn 4 (decisions) HECHO — 2/7 redactadas, #3 forks F1–F10 lockeados — siguiente = perf-ci-gates turn 5 (build: autoría + validación + package + commit)
+status: perf-ci-gates turn 5 (build) HECHO — 3/7 skills redactadas; bundle commiteado (23d8388f) — siguiente = seo-aeo-schema turn 1 (scoping)
 ---
 
 # web-stack-skills — RESIDENT
@@ -121,12 +121,13 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - `perf-ci-gates` (#3) turn 1 (Scoping) — HECHO. Alcance = gate de CI de dos puertas (LHCI + Biome en GitHub Actions). Tool-selection ya lockeado por stack-canon (no requiere turno de selección). 10 forks abiertos (F1–F10), caso-contrario nombrado, checklist de research de 9 puntos.
 - `perf-ci-gates` (#3) turn 2 (Pre-research) — HECHO. `pre-research` corrida: 8 búsquedas (entre turns 1–2) + fuentes primarias; pre-brief de 8 subtasks armado para Research mode. Hallazgos clave a verificar en turn 3 (abajo en §11).
 - `perf-ci-gates` (#3) turns 3–4 (Research + Decisions) — HECHOS. Research mode entregó reporte verificado contra fuentes primarias. Forks F1–F10 lockeados (detalle en §11). 2 reversals vs leans previos: F4 (raw autorun → treosh action) y F5 (flag `.astro` ON → OFF + prettier-plugin-astro). Caso contrario derrotado; claim CWV 2.0s confirmado FALSO.
-- Siguiente — `perf-ci-gates`, turn 5 (Build): autoría del bundle (SKILL.md + 4 refs), `quick_validate`, package `.skill`, commit fuente.
+- `perf-ci-gates` (#3) turn 5 (Build) — HECHO. Bundle (SKILL.md + 4 refs) autorado, `quick_validate` PASS (description 998/1024, sin `<`/`>`, sin `: `, body house-style limpio), `.skill` empacado (15.3 KB), fuente commiteada atómica (Git Data API) en `23d8388f`. Stub sobrescrito. (Turn 5 se reanudó tras un corte; el bundle del run cortado persistió en el contenedor de code-exec, se verificó contra los forks lockeados y se re-validó antes de commitear.)
+- Siguiente — `seo-aeo-schema` (#4, fundación), turn 1 (Scoping).
 
 ## 10. Roadmap
 
 - **Fase 0** — scaffold del marketplace. Hecha.
-- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (2/7 redactadas; #2 `web-security-headers` completa, commit 4f37a05; #3 `perf-ci-gates` en curso — turns 1–4 HECHOS, forks lockeados, turn 5 build siguiente)
+- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (3/7 redactadas; #2 `web-security-headers` commit 4f37a05; #3 `perf-ci-gates` completa, bundle commit 23d8388f; #4 `seo-aeo-schema` siguiente)
 - **Skill planeada (post-7) — `cms-self-edit`** (placeholder) — capacidad self-edit/CMS headless; turno de selección de herramienta primero (gap de stack-canon), luego cadencia normal; scaffold al repo diferido hasta llegar.
 - **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
 
@@ -401,3 +402,19 @@ Artefacto de research (reporte completo) generado en el chat de este turno — r
 Sandbox suffix activo este chat: `pcg_9jv35m`.
 
 Siguiente: perf-ci-gates turn 5 (Build) — autoría de SKILL.md + 4 refs, `quick_validate` (description ≤1024, sin `<`/`>`, sin `: ` mid-string; frontmatter solo {name, description, license, allowed-tools, metadata, compatibility}), package `.skill`, commit del fuente. Re-verificar pins al inicio del build.
+
+### 2026-06-17 — perf-ci-gates · turn 5 (Build) — HECHO · skill #3 COMPLETA
+
+NOTA DE RECUPERACIÓN: turn 5 se reanudó tras un corte a mitad del commit. El run cortado YA había autorado los 5 archivos (vía code-exec) y empacado el `.skill`; esos archivos persistieron en el contenedor de code-exec (entorno distinto al sandbox de Composio). En la reanudación se confirmó por API que el commit de fuente NO había aterrizado (HEAD seguía en turn-4 `cf93847`, y `skills/perf-ci-gates/` solo tenía el stub de 1459 B sin references). Se reusaron los archivos persistidos tras verificarlos uno por uno contra los forks F1–F10 lockeados, se re-validó y se commiteó. Cero reautoría a ciegas.
+
+Bundle: `skills/perf-ci-gates/SKILL.md` (13.4 KB, 215 líneas) + `references/` (lighthouse-config.md, github-actions-workflow.md, biome-setup.md, budgets-and-thresholds.md). Convenciones de casa seguidas (frontmatter name+description solo; body `#/##/###`, sin bold/italics/HR; tablas; TOC en los 3 refs >100 líneas; budgets-and-thresholds 55 líneas sin TOC). Refleja los forks lockeados exactamente: F1 `staticDistDir ./dist/client` (+ astro preview SSR, trampa base absoluta); F2 assertions en capas, preset `no-pwa`, floors perf/a11y error + best-practices/seo warn, métricas LCP/TBT/CLS error + FCP/SI/TTI warn, `budget.json` (KB vs bytes); F3 `temporary-public-storage` + uploadArtifacts, self-host `@lhci/server` documentado; F4 `treosh/lighthouse-ci-action@v12` (sin lock-in, variante raw autorun + mecánica de tokens en ref); F5 flag `.astro` OFF + `prettier-plugin-astro` + formatter Biome OFF para `.astro` + 4 overrides; F6 `biome ci --reporter=github` explícito; F7 un `ci.yml`, 2 jobs, fetch-depth 20, PR head SHA, numberOfRuns 5; F8 nota gate-only (#13164); F9 floors coarse. CWV sin cambio (2.5/200/0.1), claim 2.0s rechazado, INP→TBT.
+
+Validación: `quick_validate` → "Skill is valid!". description 998/1024, frontmatter keys = {name, description}, sin `<`/`>`, sin `: ` mid-string. Lint house-style propio = 0 issues reales (2 falsos positivos por asteriscos de globs `**/*.astro` dentro de inline-code). `package_skill.py` → `.skill` 15319 B (15.3 KB), validó adentro, árbol completo (SKILL.md + 4 refs).
+
+Commit de fuente: atómico vía Git Data API (5 blobs → tree sobre base `238ede14` → commit → update ref). Commit `23d8388f`, autor Carlos A. Cedillo L. / carlos@venturedge.com.mx. main → `23d8388f`. Verificado por API: SKILL.md (sha 3e8f9c, stub sobrescrito) + 4 refs presentes en `references/`.
+
+Estado del repo: 3/7 skills redactadas y commiteadas (#1 astro-css-tokens, #2 web-security-headers 4f37a05, #3 perf-ci-gates 23d8388f). El `.skill` empacado se entrega al usuario en el chat (present_files). Recordatorio de gobernanza: Claude Code sigue reservado para el BUILD FINAL de las 7 juntas — no se abrió.
+
+Sandbox suffix activo este chat: `pcg_9jv35m`.
+
+Siguiente: `seo-aeo-schema` (#4, fundación) turn 1 (Scoping). Tema sembrado: `schema-dts` `@graph` tipado (`@id` cruzados) + `@astrojs/sitemap` + `llms.txt`. Pins sembrados a re-verificar: `schema-dts`, `@astrojs/sitemap`.

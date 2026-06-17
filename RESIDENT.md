@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: astro-css-tokens turns 1–4 hechos (decisiones cerradas) — 0/7 redactadas — siguiente = astro-css-tokens turn 5 (build)
+status: astro-css-tokens turn 5 (build) HECHO — 1/7 skills redactadas — siguiente = web-security-headers turn 1 (scoping)
 ---
 
 # web-stack-skills — RESIDENT
@@ -114,8 +114,8 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 
 - Fase 0 (scaffold) — completada.
 - astro-css-tokens turns 1–4 — hechos (scoping, pre-research, research verificado, decisiones cerradas). Veredicto y pins reescritos arriba (§3).
-- 0/7 skills redactadas (8 skeletons; frontmatter válido). astro-css-tokens lista para autorar.
-- Siguiente — `astro-css-tokens`, turn 5 (Build): autorar SKILL.md + references → quick_validate → package → .skill → commit.
+- 1/7 skills redactadas (`astro-css-tokens` — turn 5 completo).
+- Siguiente — `web-security-headers`, turn 1 (Scoping).
 
 ## 10. Roadmap
 
@@ -169,3 +169,18 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 **Pendiente de verificar en el build:** patches exactos en npm (`tailwindcss`/`@tailwindcss/postcss` mostraron 4.3.1 vs 4.3.0; SD npm 5.4.4 vs tag GitHub 5.4.2).
 
 Siguiente: astro-css-tokens turn 5 (Build).
+
+### 2026-06-17 — astro-css-tokens · turn 5 (Build) — HECHO · commit 9b182b0
+
+Bundle autoreado y commiteado en un commit atómico (Git Data API):
+
+- `skills/astro-css-tokens/SKILL.md` (108 líneas) — veredicto, diagrama de arquitectura, tabla de versiones pinadas, 3 capas, setup en orden (5 pasos), gotchas, limitaciones, pointers a references.
+- `skills/astro-css-tokens/references/style-dictionary-config.md` (114 líneas) — `build.mjs` verificado completo: `TW_NAMESPACE`, `UTILITY_LAYERS`, formato custom `css/tailwind-theme`, config SD v5, tabla de partes, hooks `package.json`, extensión, gotchas SD.
+- `skills/astro-css-tokens/references/tokens-example.md` (128 líneas) — `tokens/base.json` + `tokens/semantic.json` + `tokens/component.json` en DTCG verificado; reglas de autoría; output compilado `tokens.css` + `theme.css`; gotcha `$value` objeto.
+- `skills/astro-css-tokens/references/astro-tailwind-wiring.md` (99 líneas) — por qué `@tailwindcss/postcss`, `postcss.config.mjs`, orden de imports `global.css`, script no-flash `is:inline`, `@reference "tailwindcss"` para `@apply` en scoped styles, switch-back trigger #16542.
+- `skills/astro-css-tokens/references/color-oklch.md` (39 líneas) — OKLCH perceptualmente uniforme, Baseline 2025-11-09 (sin fallback), preservación en SD (transforms solo-nombre), escape hatch legacy.
+
+Validado: `quick_validate PASS` | Empaquetado: `astro-css-tokens.skill` 8.7 K.
+Commit: [9b182b0](https://github.com/ccediland/web-stack-skills/commit/9b182b00b3595d2b755cbf27e485e90870aa7c56)
+
+Siguiente: web-security-headers turn 1 (Scoping).

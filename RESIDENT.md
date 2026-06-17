@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: perf-ci-gates turn 1 (scoping) HECHO — 2/7 redactadas, #3 en curso — siguiente = perf-ci-gates turn 2 (pre-research)
+status: perf-ci-gates turn 2 (pre-research) HECHO — 2/7 redactadas, #3 en curso — siguiente = perf-ci-gates turn 3 (research, Research mode ON)
 ---
 
 # web-stack-skills — RESIDENT
@@ -119,12 +119,13 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - 1/7 skills redactadas (`astro-css-tokens` — turn 5 completo).
 - `astro-css-tokens` y `web-security-headers` — completas, 5/5 turns cada una. 2/7 redactadas. Fuentes de web-security-headers en commit 4f37a05 (SKILL.md + 5 references).
 - `perf-ci-gates` (#3) turn 1 (Scoping) — HECHO. Alcance = gate de CI de dos puertas (LHCI + Biome en GitHub Actions). Tool-selection ya lockeado por stack-canon (no requiere turno de selección). 10 forks abiertos (F1–F10), caso-contrario nombrado, checklist de research de 9 puntos.
-- Siguiente — `perf-ci-gates`, turn 2 (Pre-research).
+- `perf-ci-gates` (#3) turn 2 (Pre-research) — HECHO. `pre-research` corrida: 8 búsquedas (entre turns 1–2) + fuentes primarias; pre-brief de 8 subtasks armado para Research mode. Hallazgos clave a verificar en turn 3 (abajo en §11).
+- Siguiente — `perf-ci-gates`, turn 3 (Research — Research mode ON + Context7; re-verificar pins).
 
 ## 10. Roadmap
 
 - **Fase 0** — scaffold del marketplace. Hecha.
-- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (2/7 redactadas; #2 `web-security-headers` completa, commit 4f37a05; #3 `perf-ci-gates` en curso — turn 1 scoping HECHO)
+- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (2/7 redactadas; #2 `web-security-headers` completa, commit 4f37a05; #3 `perf-ci-gates` en curso — turns 1–2 HECHOS, turn 3 research siguiente)
 - **Skill planeada (post-7) — `cms-self-edit`** (placeholder) — capacidad self-edit/CMS headless; turno de selección de herramienta primero (gap de stack-canon), luego cadencia normal; scaffold al repo diferido hasta llegar.
 - **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
 
@@ -338,3 +339,34 @@ Decisión de Carlos pendiente (1): confirmar frontera F8 — `perf-ci-gates` se 
 Sandbox suffix activo este chat: `pcg_9jv35m`.
 
 Siguiente: perf-ci-gates turn 2 (Pre-research).
+
+### 2026-06-17 — perf-ci-gates · turn 2 (Pre-research) — HECHO
+
+Skill `pre-research` corrida (4 fases). Phase 1 = proceder con supuestos (sin preguntas; F8 se lleva como supuesto declarado — gate-only, nota "perf asumida", no workstream de caching). Phase 2 = pre-investigación substantiva (8 búsquedas entre turns 1–2 + fuentes primarias). Pre-brief de 8 subtasks entregado en chat para Research mode (turn 3). TODO LO DE ABAJO ES PRE-INVESTIGACIÓN — re-verificar en turn 3.
+
+Hallazgos clave (pre-investigación):
+- **LHCI vivo y canónico, lab-only por diseño:** `@lhci/cli` 0.15.x trae Lighthouse 12.6.1; ~2M dl/mo; mantenido (abr-2026). PWA fuera desde LH12. LH13 exige Node 22.19+ y NO está aún en LHCI; 0.15.x corre en Node 18+. Runners Ubuntu traen Chrome en `/usr/bin/google-chrome`. **INP es field-only — lab usa TBT como proxy.** FCP/TBT solo-lab; LCP/INP/CLS pueden estar en ambos pero solo el percentil de campo cuenta para CWV. → Responde el caso contrario: LHCI = gate de regresión pre-merge sobre señales de lab estables (TBT, CLS, resource budgets) + proxies (LCP/FCP); CF RUM = verdad de campo post-deploy. "Passing beats perfection": no perseguir score perfecto.
+- **Serving path Astro 6 + CF más rico que en turn 1:** `astro preview` ahora corre en **workerd** (paridad de producción, v13) y `astro dev`/`preview` usan el Cloudflare Vite plugin (workerd, no Node). Con worker presente, los assets estáticos viven en `dist/client/*` (no `dist/`). → Fork de colección LHCI: `astro preview` (paridad workerd, captura headers immutable del adapter) vs `staticDistDir: ./dist/client` (determinista, sin worker). Trampa que favorece el server path: build con base URL absoluta + LHCI sirviendo en puerto random de localhost → assets 404.
+- **Biome `.astro` real pero experimental opt-in:** v2.3 metió soporte full Vue/Svelte/Astro (lint/format de JS/TS en script + CSS en style + template por reglas HTML de Biome), gated en `html.experimentalFullSupportEnabled`. Flag OFF = solo extrae JS/TS, ignora el resto. v2.4 mejoró parsing + bajó falsos positivos (noUnusedVariables/useConst/useImportType/noUnusedImports) SOLO con el flag ON. Caveat honesto (hilo contrario ESLint+Prettier): reglas cross-embedded aún no soportadas, formatting puede no matchear; roadmap 2026 lista "HTML stable + matchear Prettier + reglas HTML-ish" como pendientes. `biome ci` = formatter+linter+import-sort en un pase. OJO build: la key canónica es `html.experimentalFullSupportEnabled`; un blog v2.4 escribe `experimentalFullHtmlSupportEnabled` — verificar spelling en turn 3.
+- **El runner casi no afecta el artefacto de config:** ambos consumen el mismo `lighthouserc.json` + `budget.json`. `lhci autorun` crudo pone PR status vía LHCI GitHub App (status a nivel PR/commit, link "Details", SIN artifacts/anotaciones GH-Actions). `treosh/lighthouse-ci-action@v12` (con el equipo Lighthouse + Treo) guarda resultados como action artifacts, soporta budgets que fallan el build, runs paralelos, `serverBaseUrl`/`serverToken` para server privado. Gotchas duros: `fetch-depth: 20`+ (shallow clone rompe detección de ancestro → "Could not find hash"); checkout del head sha en PRs. Storage default skill pública = `temporary-public-storage` (público, borra a 7 días); upgrade durable = `@lhci/server` self-host (Docker → PikaPods, encaja sesgo stack-canon).
+- **CONFLICTO de fuentes a resolver:** mayoría 2026 mantiene LCP "good" <2.5s (LCP <2.5s, INP <200ms, CLS <0.1 @ p75). Un blog SEO (abr-2026) afirma que Google bajó LCP a 2.0s + subió INP a señal primaria (Search Central 18-mar-2026). Minoría vs varias fuentes → Research reconcilia contra primaria web.dev/Search Central, no resolver en silencio.
+
+Subtasks de research (8, cap del skill) — versión completa en el pre-brief del chat:
+1. Serving path (F1): `astro preview` workerd headless en CI + headers immutable, vs `staticDistDir ./dist/client`; caveat base-absoluta→404.
+2. Shape de assertions LHCI + proxies (F2): `lighthouserc.json` 2026 (preset vs category minScore vs `maxNumericValue` FCP/LCP/TBT/CLS) + `budget.json` resource-summary; INP ausente en lab (TBT); mobile/desktop + límite de un solo status por run.
+3. Thresholds CWV — reconciliación primaria (F4-threshold): LCP 2.0 vs 2.5 + reclasif INP contra web.dev/Search Central; traducir a budgets de LAB (más laxos, orientados a regresión).
+4. Biome `.astro` en v2.4 (F5): confirmar key del flag, qué lintea/formatea ON vs OFF, fidelidad de format de template vs Prettier, `biome.json` recomendado (+ reglas a apagar si OFF).
+5. `biome ci` + GitHub reporter (F6): semántica + exit codes, `--reporter=github` + multi-reporter 2.4, script pnpm.
+6. Pins + Node floor (#1): `@lhci/cli`/LH/Node, Biome ≥2.4, `treosh@v12`, Astro 6/adapter 13.
+7. Storage + mecánica de PR-status (F3): tokens autorun (LHCI GitHub App + PAT `repo:status`) vs treosh artifacts; esfuerzo de self-host `@lhci/server` (Docker→PikaPods).
+8. Frontera de caching (F8): qué cachea `@astrojs/cloudflare@13` auto (`_astro/*` immutable confirmado) vs qué queda al autor → acota la nota de una pantalla.
+
+(F7 forma del workflow, F9 overlap de category-floor con #4, F10 granularidad de refs = decisiones de turn 4, NO subtasks de research.)
+
+Source priority: 1) docs primarias (docs.astro.build adapter CF, biomejs.dev config/language-support/v2.4, GoogleChrome/lighthouse-ci docs, web.dev/Search Central CWV); 2) repos/changelogs fuente (`withastro/astro`, `@astrojs/cloudflare`, `biomejs/biome`, `treosh/lighthouse-ci-action`); 3) Context7 (`@lhci/cli`, `biome`, `@astrojs/cloudflare`); 4) npm pins; 5) [SECONDARY] unlighthouse.dev (mismo autor, verificar), DEV/Medium, blogs SEO (el claim LCP-2.0 es uno de estos → lead, no hecho).
+
+Estado del pre-brief: entregado con línea de confirmación. Carlos decide Continuar / Refinar / Abortar antes de turn 3 (toggle de Research mode es acción suya en la UI).
+
+Sandbox suffix activo este chat: `pcg_9jv35m`.
+
+Siguiente: perf-ci-gates turn 3 (Research — Research mode ON + Context7; re-verificar pins `@lhci/cli`/LH/Node, Biome ≥2.4, `astro@6.x`, `@astrojs/cloudflare@13.x`).

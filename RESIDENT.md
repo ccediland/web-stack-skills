@@ -1,49 +1,123 @@
 ---
-title: web-stack-skills — RESIDENT
-updated: 2026-06-16
-repo: ccediland/web-stack-skills (public, MIT)
+title: web-stack-skills — RESIDENT (working doc / home base)
+updated: 2026-06-17
+repo: ccediland/web-stack-skills (público, MIT)
+status: Fase 0 completada — 0/7 skills redactadas — siguiente = astro-css-tokens, turn 1
 ---
 
 # web-stack-skills — RESIDENT
 
-Living doc for this repo — what it is, how it is structured, and where it stands.
+Documento vivo y **home base** del proyecto: fuente de verdad única. Reemplaza al plan-de-ejecución original. Contiene qué es, el stack, las 7 skills y sus seeds, la cadencia de autoría, las reglas operativas, las decisiones, los descubrimientos del proceso, el estado y el log de sesiones. Quien lo lea queda al día para continuar.
 
-## What this is
+## 1. Qué es
 
-A public, generic Claude Code **plugin marketplace** shipping 7 skills that encode a premium high-performance website stack. Reusable on any project; one origin project was the first consumer, not the scope. No project-specific content, no secrets, MIT.
+Un **marketplace de plugins de Claude Code**, público y genérico (MIT), que entrega **7 skills** que codifican un stack web premium de alto rendimiento ("lo mejor de todos los mundos"). Reusable en cualquier proyecto: un proyecto origen fue el primer consumidor, **no** el alcance. Cero contenido específico de proyecto, cero marca, cero secretos. Una 8ª skill queda **diferida** como skeleton.
 
-## Structure
+Meta: parándote en cualquier proyecto nuevo, levantar la misma arquitectura sin volver a descubrir los filos.
 
-    .claude-plugin/marketplace.json   marketplace -> one plugin: web-stack
-    .claude-plugin/plugin.json        the web-stack plugin manifest
-    skills/<name>/SKILL.md            the 7 installable skills
-    deferred/stack-integration-playbook/SKILL.md   skeleton, excluded from the plugin
+## 2. El stack (una herramienta por trabajo)
+
+Astro 6 · Cloudflare Workers Static Assets · Tailwind v4 + Style Dictionary · GSAP + CSS scroll-driven + Motion · OGL · Rive · schema-dts + @astrojs/sitemap + llms.txt · CSP nativo · Lighthouse CI + Biome.
+
+## 3. Las 7 skills + 1 diferida
+
+Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, gotchas, outline) vive en su `SKILL.md`; aquí va el resumen.
+
+| # | Skill | Capa | Veredicto (una línea) |
+|---|---|---|---|
+| 1 | `astro-css-tokens` | fundación | Tailwind v4 `@theme` + Style Dictionary — `tokens.json` (DTCG) a 2 consumidores (CSS vars + `@theme`), sin lock-in |
+| 2 | `web-security-headers` | fundación | CSP nativo Astro 6 (`csp:true`) + `_headers` en Workers + `.assetsignore` + SRI |
+| 3 | `perf-ci-gates` | fundación | Lighthouse CI (`budget.json`) + Biome, en GitHub Actions |
+| 4 | `seo-aeo-schema` | fundación | `schema-dts` `@graph` tipado (`@id` cruzados) + `@astrojs/sitemap` + `llms.txt` |
+| 5 | `motion-system` | visuales | 3 motores por trabajo — GSAP (scroll cinemático), CSS scroll-driven (reveals), Motion `useAnimate` mini (islas React) |
+| 6 | `webgl-atmosfera` | visuales | OGL + shader GLSL custom para atmósfera de hero (lazy + fallback); WebGPU descartado |
+| 7 | `signature-anim` | visuales | Rive (state machine) para un momento interactivo bespoke |
+
+**Diferida — `stack-integration-playbook`** (en `deferred/`, fuera de `skills/`): documenta cómo componen todos los elementos del sitio entre sí y cómo el sitio se conecta al resto del stack más allá de la web (Supabase, otros repos, Cloudflare, GitHub Actions, Infisical, Google Workspace, comms, pagos, catálogos, ads, social, analítica). Se llena "mucho después" con lecciones de campo. Excluida del plugin instalable hasta tener sustancia.
+
+### Pins (2026-06-16 — re-verificar en el research de cada skill)
+
+| Skill | Pins |
+|---|---|
+| astro-css-tokens | `tailwindcss@4.3.1`, `@tailwindcss/vite@4.3.1`, `style-dictionary` v4 |
+| web-security-headers | `astro@6.4.7`, `@astrojs/cloudflare@13.x` |
+| perf-ci-gates | `@lhci/cli@0.15.1` (LH 12.6.1), `@biomejs/biome@2.5.0`, Node 22.12+ |
+| seo-aeo-schema | `schema-dts`, `@astrojs/sitemap` |
+| motion-system | `gsap@3.15.0`, `@gsap/react@2.1.x`, `motion@12.40.0` |
+| webgl-atmosfera | `ogl@1.0.11` (exacto; dep estancada — vendorizar) |
+| signature-anim | `@rive-app/canvas@2.37.6` (o `@rive-app/webgl2@2.37.8`); NO `@rive-app/webgl` (deprecado) |
+
+Gotchas y outline detallados — en cada `skills/<nombre>/SKILL.md`.
+
+## 4. Estructura del repo
+
+    .claude-plugin/
+      marketplace.json     -> 1 plugin: web-stack (source ".")
+      plugin.json          -> manifiesto + "skills":[ las 7, rutas relativas ]
+    skills/
+      astro-css-tokens/SKILL.md
+      web-security-headers/SKILL.md
+      perf-ci-gates/SKILL.md
+      seo-aeo-schema/SKILL.md
+      motion-system/SKILL.md
+      webgl-atmosfera/SKILL.md
+      signature-anim/SKILL.md
+    deferred/
+      stack-integration-playbook/SKILL.md   (excluido del plugin)
     README.md  LICENSE  RESIDENT.md
 
-Skills live under `skills/` (folder name = skill name). The deferred 8th skill sits under `deferred/` so it is structurally impossible to ship until it has substance.
+Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) **y** registradas en `plugin.json`. La diferida vive en `deferred/` = imposible de shippear hasta tener sustancia.
 
-## The stack (one tool per job)
+## 5. Cadencia de autoría (5 turnos por skill, ~1 skill por chat)
 
-Astro 6 · Cloudflare Workers Static Assets · Tailwind v4 + Style Dictionary · GSAP + CSS scroll-driven + Motion · OGL · Rive · schema-dts + @astrojs/sitemap + llms.txt · native CSP · Lighthouse CI + Biome.
+| Turno | Qué |
+|---|---|
+| 1 | Entendimiento / scoping — delimitar cobertura, proponer estructura del bundle, enlistar lo que resolver en research |
+| 2 | Pre-research — skill `pre-research` (web_search + pre-brief) |
+| 3 | Research — Research mode + Context7 (`resolve-library-id` → `query-docs`); **re-verificar versiones** |
+| 4 | Cierre / decisiones / preguntas |
+| 5 | Build — autoría del bundle → `quick_validate.py` → `package_skill.py` → `.skill` → commit. Al cierre: actualizar este RESIDENT + hand-off al siguiente chat |
 
-## Authoring cadence
+## 6. Reglas operativas
 
-Each skill is authored through a 5-turn cadence — understanding, pre-research, research, close/decisions, build (validate with skill-creator `quick_validate.py`, package with `package_skill.py`). About one skill per chat.
+- **GitHub = TODO por Composio** (Git Data API vía `proxy_execute` en el workbench). **Claude Code queda reservado estrictamente para el build final** (cuando estén las 7 literal). No abrir Claude Code antes — ni para probar instalación.
+- **Un plugin** (`web-stack`) agrupa las 7. Instalación: `/plugin marketplace add ccediland/web-stack-skills` luego `/plugin install web-stack@web-stack-skills`.
+- Gobierno: **skill-author** = autoridad de arquitectura; **skill-creator** (`/mnt/skills/examples/skill-creator`, con `quick_validate.py` + `package_skill.py`) = validar/empacar; **Context7** + docs oficiales = contenido actual.
+- Naming de skills: kebab-case, ≤64, sin la palabra "claude". Description ≤1024, sin `<` ni `>`, sin dos-puntos-espacio a media cadena (rompe YAML — usar guión largo).
+- Pins del 2026-06-16 — re-verificar en turns 2/3 de cada skill.
+- `SKILL.md` = veredicto + receta; `references/` = configs/plantillas/gotchas (progressive disclosure).
 
-## Status
+## 7. Decisiones
 
-- Phase 0 (scaffold) — done.
-- 0/7 skills authored (skeletons in place).
-- Next — `astro-css-tokens`, turn 1.
+- Público + genérico + MIT. Un repo-marketplace, un plugin que agrupa las 7.
+- 8ª skill diferida como skeleton; excluida del instalable hasta tener sustancia.
+- Skills bajo `skills/<nombre>/`; manifiesto `plugin.json` agregado; skills registradas explícitamente en `plugin.json`; diferida fuera de `skills/`.
 
-## Decisions
+## 8. Descubrimientos del proceso (2026-06-16/17)
 
-- Public + generic + MIT. One marketplace repo, one plugin (`web-stack`) grouping all 7.
-- `SKILL.md` = verdict + recipe; `references/` = configs/templates/gotchas (progressive disclosure).
-- 8th skill `stack-integration-playbook` deferred as a skeleton; excluded from the installable plugin until it has substance.
+- **Layout de plugin** (verificado vs docs oficiales): skills van bajo `skills/<n>/SKILL.md` (no en raíz); hace falta `.claude-plugin/plugin.json`; las skills deben **registrarse** en `plugin.json` vía `"skills":["./skills/..."]` — el auto-discovery solo no basta.
+- **Quirk de GitHub** (verificado en ejecución): en repo recién creado **vacío**, la Git Data API (`git/trees`) da 409 "Git Repository is empty" → bootstrapear con un commit inicial (Contents API) y luego reemplazar el árbol completo.
+- Poner la 8ª en `deferred/` (fuera de `skills/`) la excluye **estructuralmente** — más limpio que listas de exclusión en el manifiesto.
 
-## Layout corrections vs the original plan (2026-06-16)
+## 9. Estado
 
-- Skills moved from repo root to `skills/<name>/` (Claude Code plugin convention).
-- Added `.claude-plugin/plugin.json` (plugin manifest; the original tree omitted it).
-- Deferred 8th skill placed in `deferred/` (outside `skills/`) rather than relying on a marketplace.json exclusion list.
+- Fase 0 (scaffold) — completada.
+- 0/7 skills redactadas (8 skeletons en su sitio, frontmatter válido).
+- Siguiente — `astro-css-tokens`, turn 1 (Entendimiento).
+
+## 10. Roadmap
+
+- **Fase 0** — scaffold del marketplace. Hecha.
+- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (0/7)
+- **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
+
+## 11. Log de sesiones
+
+### 2026-06-16/17 — Fase 0 (scaffold) — hecha
+
+- Identidad confirmada (`ccediland`). Repo público creado.
+- 13 archivos pusheados por Composio (Git Data API), commit scaffold `a4bd7f0`; bootstrap previo por el quirk de repo vacío.
+- `plugin.json` parcheado para registrar las 7 (`"skills":[...]`), commit `b24c124`.
+- Frontmatter de los 8 SKILL.md validado inline (el `quick_validate.py` real corre en el build).
+- Descubrimientos en §8.
+- Siguiente: `astro-css-tokens` turn 1 en chat nuevo.

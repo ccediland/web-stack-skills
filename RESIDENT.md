@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: perf-ci-gates turn 2 (pre-research) HECHO — 2/7 redactadas, #3 en curso — siguiente = perf-ci-gates turn 3 (research, Research mode ON)
+status: perf-ci-gates turn 4 (decisions) HECHO — 2/7 redactadas, #3 forks F1–F10 lockeados — siguiente = perf-ci-gates turn 5 (build: autoría + validación + package + commit)
 ---
 
 # web-stack-skills — RESIDENT
@@ -27,7 +27,7 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 |---|---|---|---|
 | 1 | `astro-css-tokens` | fundación | DTCG `tokens.json` → Style Dictionary **v5** → capa `:root --ds-*` (fuente de verdad) + bridge `@theme inline`; OKLCH sin fallback; en Astro 6 vía `@tailwindcss/postcss` (vite roto, #16542) |
 | 2 | `web-security-headers` | fundación | CSP nativo Astro 6 (`security.csp`, hash-based, `<meta>` en estático — CF@13 no soporta `staticHeaders`) + `public/_headers` para HSTS/frame-ancestors/Referrer/Permissions/COOP-CORP (lo que `<meta>` ignora) + middleware solo SSR; SRI manual/astro-shield solo cross-origin; nonce = hash-only |
-| 3 | `perf-ci-gates` | fundación | Lighthouse CI (`budget.json`) + Biome, en GitHub Actions |
+| 3 | `perf-ci-gates` | fundación | Dos puertas en GitHub Actions — (a) LHCI vía `treosh/lighthouse-ci-action@v12`, `staticDistDir ./dist/client`, preset `no-pwa` + floors (perf 0.9 err / a11y 0.95 err; best-practices+seo warn) + budgets de métrica (LCP/TBT/CLS err) + `budget.json` (KB), INP→TBT proxy, mediana de 5, `temporary-public-storage`+artifacts; (b) Biome `biome ci --reporter=github`, flag `.astro` OFF + `prettier-plugin-astro` (template) + 4 overrides. CWV oficiales SIN cambio (LCP 2.5s/INP 200ms/CLS 0.1) — claim 2.0s FALSO. Gate-only (caching = nota de una pantalla) |
 | 4 | `seo-aeo-schema` | fundación | `schema-dts` `@graph` tipado (`@id` cruzados) + `@astrojs/sitemap` + `llms.txt` |
 | 5 | `motion-system` | visuales | 3 motores por trabajo — GSAP (scroll cinemático), CSS scroll-driven (reveals), Motion `useAnimate` mini (islas React) |
 | 6 | `webgl-atmosfera` | visuales | OGL + shader GLSL custom para atmósfera de hero (lazy + fallback); WebGPU descartado |
@@ -43,7 +43,7 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 |---|---|
 | astro-css-tokens | `astro@6.4.7`, `tailwindcss@4.3.1`, `@tailwindcss/postcss@4.3.0` (NO `@tailwindcss/vite` — #16542), `style-dictionary@5.4.4` (v5, no v4), Node ≥22.12 — verificar en build |
 | web-security-headers | `astro@6.4.7`, `@astrojs/cloudflare@13.7.0`; SRI opc. `@kindspells/astro-shield@1.7.1` (≥1.3.2 por CVE-2024-30250). Review-gate: `staticHeaders` en cada minor de `@astrojs/cloudflare`; CSP no testeable en `dev` (build+preview); watch Astro 7 alpha |
-| perf-ci-gates | `@lhci/cli@0.15.1` (LH 12.6.1), `@biomejs/biome@2.5.0`, Node 22.12+ |
+| perf-ci-gates | `@lhci/cli@0.15.1` (LH 12.6.1), `treosh/lighthouse-ci-action@v12`, `@biomejs/biome@2.5.0` (`--save-exact`; conservador `2.4.16`), `prettier-plugin-astro` (solo format de template `.astro`), `astro@6.4.7`, `@astrojs/cloudflare@13.7.0`, **Node 22** (piso Astro 6). Review-gate: thresholds CWV contra web.dev/Search Central (rechazar claim 2.0s); flag `html.experimentalFullSupportEnabled` ON cuando Biome marque HTML estable; LH13 bloqueado de LHCI por Node 22.19+. Verificado 2026-06-17 |
 | seo-aeo-schema | `schema-dts`, `@astrojs/sitemap` |
 | motion-system | `gsap@3.15.0`, `@gsap/react@2.1.x`, `motion@12.40.0` |
 | webgl-atmosfera | `ogl@1.0.11` (exacto; dep estancada — vendorizar) |
@@ -120,12 +120,13 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - `astro-css-tokens` y `web-security-headers` — completas, 5/5 turns cada una. 2/7 redactadas. Fuentes de web-security-headers en commit 4f37a05 (SKILL.md + 5 references).
 - `perf-ci-gates` (#3) turn 1 (Scoping) — HECHO. Alcance = gate de CI de dos puertas (LHCI + Biome en GitHub Actions). Tool-selection ya lockeado por stack-canon (no requiere turno de selección). 10 forks abiertos (F1–F10), caso-contrario nombrado, checklist de research de 9 puntos.
 - `perf-ci-gates` (#3) turn 2 (Pre-research) — HECHO. `pre-research` corrida: 8 búsquedas (entre turns 1–2) + fuentes primarias; pre-brief de 8 subtasks armado para Research mode. Hallazgos clave a verificar en turn 3 (abajo en §11).
-- Siguiente — `perf-ci-gates`, turn 3 (Research — Research mode ON + Context7; re-verificar pins).
+- `perf-ci-gates` (#3) turns 3–4 (Research + Decisions) — HECHOS. Research mode entregó reporte verificado contra fuentes primarias. Forks F1–F10 lockeados (detalle en §11). 2 reversals vs leans previos: F4 (raw autorun → treosh action) y F5 (flag `.astro` ON → OFF + prettier-plugin-astro). Caso contrario derrotado; claim CWV 2.0s confirmado FALSO.
+- Siguiente — `perf-ci-gates`, turn 5 (Build): autoría del bundle (SKILL.md + 4 refs), `quick_validate`, package `.skill`, commit fuente.
 
 ## 10. Roadmap
 
 - **Fase 0** — scaffold del marketplace. Hecha.
-- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (2/7 redactadas; #2 `web-security-headers` completa, commit 4f37a05; #3 `perf-ci-gates` en curso — turns 1–2 HECHOS, turn 3 research siguiente)
+- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (2/7 redactadas; #2 `web-security-headers` completa, commit 4f37a05; #3 `perf-ci-gates` en curso — turns 1–4 HECHOS, forks lockeados, turn 5 build siguiente)
 - **Skill planeada (post-7) — `cms-self-edit`** (placeholder) — capacidad self-edit/CMS headless; turno de selección de herramienta primero (gap de stack-canon), luego cadencia normal; scaffold al repo diferido hasta llegar.
 - **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
 
@@ -370,3 +371,33 @@ Estado del pre-brief: entregado con línea de confirmación. Carlos decide Conti
 Sandbox suffix activo este chat: `pcg_9jv35m`.
 
 Siguiente: perf-ci-gates turn 3 (Research — Research mode ON + Context7; re-verificar pins `@lhci/cli`/LH/Node, Biome ≥2.4, `astro@6.x`, `@astrojs/cloudflare@13.x`).
+
+### 2026-06-17 — perf-ci-gates · turns 3–4 (Research + Decisions) — HECHOS
+
+Research mode (turn 3) entregó reporte técnico verificado contra fuentes primarias (docs.astro.build, biomejs.dev, GoogleChrome/lighthouse-ci, treosh README, web.dev/Search Central, npm). Turn 4 lockea forks F1–F10.
+
+Forks LOCKEADOS:
+- F1 colección: `staticDistDir: ./dist/client` (sitio mostly-static premium; el adapter CF default es `output:'server'` → assets en `dist/client`, no `dist`). `startServerCommand`/`astro preview` (corre en workerd en Astro 6) SOLO si hay rutas SSR que auditar. Trampa #16276: con `base`/`site` absoluto los assets quedan en `dist/client/*` sin prefijo → 404 al servir literal; evitar `base` en el build auditado.
+- F2 assertions: capas — preset `lighthouse:no-pwa` (PWA fuera desde LH12, no-pwa más seguro que recommended) + floors de categoría (performance error 0.9, accessibility error 0.95) + `maxNumericValue` por métrica (LCP/TBT/CLS error; FCP/SI/TTI warn) + `budget.json` resource budgets. OJO unidades: budget.json en KB, assertions LHCI en bytes/ms. INP NO medible en lab → TBT proxy (verificado web.dev).
+- F3 upload: `temporary-public-storage` (público, borra a 7 días) + `uploadArtifacts`. Self-host `@lhci/server` (Docker → PikaPods; build token write-only seguro en repos públicos) = upgrade documentado para historia durable.
+- F4 runner: **`treosh/lighthouse-ci-action@v12`** (REVERSAL del lean turn-1 "raw autorun por native-first"). Razón: raw `autorun` necesita la LHCI GitHub App instalada para PR status (MÁS integración externa, no menos); treosh no necesita app, guarda artifacts de Actions + public storage nativo, y consume el MISMO `lighthouserc.json` portable → cero lock-in del config (swappable a raw autorun después). Una action de marketplace es uso idiomático de Actions, no una capa de orquestación extra.
+- F5 Biome `.astro`: flag **`html.experimentalFullSupportEnabled` OFF** + `prettier-plugin-astro` para format del template + 4 overrides cuando flag OFF (`style.useConst`, `style.useImportType`, `correctness.noUnusedVariables`, `correctness.noUnusedImports` → off para `.astro`/`.svelte`/`.vue`). (REVERSAL del lean turn-1/2 "flag ON con review-gate"). Razón: el formatter HTML de Biome sigue experimental, mete diffs breaking, y NO matchea Prettier (roadmap 2026 de Biome). Determinismo > bleeding-edge para una skill que codifica el stack. Split de ownership: Biome dueño de JS/TS/CSS/JSON; prettier-plugin-astro dueño del format de template `.astro`. EXCEPCIÓN stack-canon (dos formatters) — narrow, documentada; flipea a Biome-only cuando Biome marque HTML estable (review-gate). Carlos puede redirigir a flag-ON si prefiere comerse lo experimental. Key correcta = `html.experimentalFullSupportEnabled` (el blog v2.4 escribe `experimentalFullHtmlSupportEnabled` — INCORRECTO).
+- F6 Biome CI: `npx @biomejs/biome ci --reporter=github` (el reporter debe ser explícito — auto-detección NO implementada, bug #9109). Biome pineado `--save-exact` como devDep. `biome ci` = formatter+linter+import-sort en un pase, sin `--write`, exit ≠0 en error. v2.4+ multi-reporter + `--reporter-file` opcional.
+- F7 workflow: un `ci.yml`, 2 jobs paralelos — `quality` (Biome, barato) ‖ `lighthouse` (build→collect→assert→upload), ambos required checks para merge. Node 22, `npm ci`, `fetch-depth: 20` (shallow rompe detección de ancestro LHCI → "Could not find hash"), checkout del PR head SHA, `numberOfRuns: 5` (mediana de 5 = 2x más estable que 1 run; Chrome preinstalado en runners Ubuntu en `/usr/bin/google-chrome`).
+- F8 caching: GATE-ONLY (lean turn-1 confirmado, Carlos no objetó). Nota de una pantalla "perf asumida": adapter auto-inyecta `Cache-Control` immutable (~1 año) en assets hasheados `_astro/*`; assets NO-hasheados vía `public/_headers` pero limitado por quirk de Workers Static Assets (#13164, wontfix/has-workaround: `_headers` Cache-Control no honrado para assets estáticos, vuelve `max-age=0, must-revalidate`). Watch: #16692 (hashed assets no cacheados en algunas configs adapter 13.5.0). NO workstream de caching runtime.
+- F9 overlap con #4: floors coarse aquí — performance+accessibility `error`, best-practices+seo `warn` (deja el gate duro de SEO a #4). Deep SEO/schema → #4; deep a11y + prefers-reduced-motion → skills de visuales (#5/#6/#7).
+- F10 refs: 4 — `lighthouse-config.md` (lighthouserc + budget.json + serving path), `github-actions-workflow.md` (ci.yml completo, ambos jobs, caching, fetch-depth, status checks), `biome-setup.md` (biome.json + flag .astro + biome ci), `budgets-and-thresholds.md` (CWV 2026, proxies de lab TBT↔INP, control de flake). SKILL.md = veredicto + split de dos puertas + receta mínima + gotchas + limits.
+
+Caso contrario DERROTADO:
+- Primario (LHCI flaky/redundante con CF RUM): LHCI = gate de regresión PRE-MERGE (mediana de 5, budgets de lab orientados a regresión, TBT como proxy de INP); CF RUM = verdad de CAMPO post-deploy. Complementarios, no redundantes. "Passing beats perfection" — no perseguir score perfecto.
+- Conflicto de fuentes RESUELTO: claim "LCP a 2.0s / INP reclasificado a primario / post Search Central 18-mar-2026" = FALSO. Ninguna fuente primaria de Google lo confirma; web.dev y Search Central (últ. act. 2025-12-10) mantienen LCP 2.5s / INP 200ms / CLS 0.1 @ p75. INP es CWV completo desde el swap FID→INP del 12-mar-2024. digitalapplied.com (citada por los blogs SEO) ella misma desmiente el 2.0s. El "alertar a 80% del threshold (LCP 2.0/INP 160)" es un buffer auto-impuesto, no un threshold de Google — origen probable de la confusión. Veredicto rechaza 2.0s explícitamente.
+
+Pins verificados 2026-06-17 (npm/repos, con fechas): `astro@6.4.7` (Node 22+; watch 7.0.0-alpha.2/beta.3); `@astrojs/cloudflare@13.7.0` (solo Workers, no Pages; peer wrangler@^4.83); `@lhci/cli@0.15.1` (LH 12.6.1; piso histórico Node ≥18 pero Astro 6 fuerza 22; LH13 exige Node 22.19+ y NO está aún en LHCI); `@biomejs/biome@2.5.0` (508 reglas, cross-file lint; conservador 2.4.16 del 2026-05-27); `treosh/lighthouse-ci-action@v12` (tag vivo → 12.6.2, node24, LH 12.6).
+
+Confianza: pins/thresholds/key-de-flag/quirk #13164/mecánica de tokens (`LHCI_GITHUB_TOKEN` PAT `repo:status` vs `LHCI_GITHUB_APP_TOKEN`)/gotchas de CI = VERIFICADO (fuentes primarias). Números de budget de lab = INFERIDO (calibrar al valor medido real del sitio, ~110-115% del actual, luego ratchet down).
+
+Artefacto de research (reporte completo) generado en el chat de este turno — reusar en turn 5 para los 4 refs.
+
+Sandbox suffix activo este chat: `pcg_9jv35m`.
+
+Siguiente: perf-ci-gates turn 5 (Build) — autoría de SKILL.md + 4 refs, `quick_validate` (description ≤1024, sin `<`/`>`, sin `: ` mid-string; frontmatter solo {name, description, license, allowed-tools, metadata, compatibility}), package `.skill`, commit del fuente. Re-verificar pins al inicio del build.

@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: web-security-headers turn 3 (research) HECHO — 1/7 skills redactadas — siguiente = web-security-headers turn 4 (decisiones; cerrar F1–F8)
+status: web-security-headers turn 4 (decisiones) HECHO — 1/7 skills redactadas — siguiente = web-security-headers turn 5 (build)
 ---
 
 # web-stack-skills — RESIDENT
@@ -26,7 +26,7 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 | # | Skill | Capa | Veredicto (una línea) |
 |---|---|---|---|
 | 1 | `astro-css-tokens` | fundación | DTCG `tokens.json` → Style Dictionary **v5** → capa `:root --ds-*` (fuente de verdad) + bridge `@theme inline`; OKLCH sin fallback; en Astro 6 vía `@tailwindcss/postcss` (vite roto, #16542) |
-| 2 | `web-security-headers` | fundación | CSP nativo Astro 6 (`csp:true`) + `_headers` en Workers + `.assetsignore` + SRI |
+| 2 | `web-security-headers` | fundación | CSP nativo Astro 6 (`security.csp`, hash-based, `<meta>` en estático — CF@13 no soporta `staticHeaders`) + `public/_headers` para HSTS/frame-ancestors/Referrer/Permissions/COOP-CORP (lo que `<meta>` ignora) + middleware solo SSR; SRI manual/astro-shield solo cross-origin; nonce = hash-only |
 | 3 | `perf-ci-gates` | fundación | Lighthouse CI (`budget.json`) + Biome, en GitHub Actions |
 | 4 | `seo-aeo-schema` | fundación | `schema-dts` `@graph` tipado (`@id` cruzados) + `@astrojs/sitemap` + `llms.txt` |
 | 5 | `motion-system` | visuales | 3 motores por trabajo — GSAP (scroll cinemático), CSS scroll-driven (reveals), Motion `useAnimate` mini (islas React) |
@@ -35,12 +35,14 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 
 **Diferida — `stack-integration-playbook`** (en `deferred/`, fuera de `skills/`): documenta cómo componen todos los elementos del sitio entre sí y cómo el sitio se conecta al resto del stack más allá de la web (Supabase, otros repos, Cloudflare, GitHub Actions, Infisical, Google Workspace, comms, pagos, catálogos, ads, social, analítica). Se llena "mucho después" con lecciones de campo. Excluida del plugin instalable hasta tener sustancia.
 
+**Planeada (post-7) — `cms-self-edit`** (placeholder; nombre final se fija en el turno de selección): capacidad de **self-edit** para clientes (CMS headless). Cadencia especial — primero un **turno de selección de herramienta** (Sanity/Storyblok/Tina/Keystatic u otro) porque hoy NO hay CMS web en el stack-canon (gap a resolver y registrar en `stack-canon-argos`), luego la cadencia normal de 5 turnos para documentar el stack elegido. Scaffold al repo (carpeta/nombre/`plugin.json`) DIFERIDO hasta llegar a esa etapa.
+
 ### Pins (2026-06-16 — re-verificar en el research de cada skill)
 
 | Skill | Pins |
 |---|---|
 | astro-css-tokens | `astro@6.4.7`, `tailwindcss@4.3.1`, `@tailwindcss/postcss@4.3.0` (NO `@tailwindcss/vite` — #16542), `style-dictionary@5.4.4` (v5, no v4), Node ≥22.12 — verificar en build |
-| web-security-headers | `astro@6.4.7`, `@astrojs/cloudflare@13.x` |
+| web-security-headers | `astro@6.4.7`, `@astrojs/cloudflare@13.7.0`; SRI opc. `@kindspells/astro-shield@1.7.1` (≥1.3.2 por CVE-2024-30250). Review-gate: `staticHeaders` en cada minor de `@astrojs/cloudflare`; CSP no testeable en `dev` (build+preview); watch Astro 7 alpha |
 | perf-ci-gates | `@lhci/cli@0.15.1` (LH 12.6.1), `@biomejs/biome@2.5.0`, Node 22.12+ |
 | seo-aeo-schema | `schema-dts`, `@astrojs/sitemap` |
 | motion-system | `gsap@3.15.0`, `@gsap/react@2.1.x`, `motion@12.40.0` |
@@ -115,13 +117,14 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - Fase 0 (scaffold) — completada.
 - astro-css-tokens turns 1–4 — hechos (scoping, pre-research, research verificado, decisiones cerradas). Veredicto y pins reescritos arriba (§3).
 - 1/7 skills redactadas (`astro-css-tokens` — turn 5 completo).
-- `web-security-headers` — turns 1–3 hechos (scoping, pre-research, research verificado). Pivote resuelto: `@astrojs/cloudflare@13.7.0` NO soporta `staticHeaders` → CSP estático queda en `<meta>`; resto de headers en `_headers`. Pins verificados `astro@6.4.7`, `@astrojs/cloudflare@13.7.0` (log §11).
-- Siguiente — `web-security-headers`, turn 4 (Decisiones — cerrar F1–F8, reescribir veredicto/pins en §3).
+- `web-security-headers` — turns 1–4 hechos (scoping, pre-research, research, decisiones). F1–F8 cerrados; veredicto/pins reescritos arriba (§3). Gobierno: §6 sin cambios (Carlos), skill `cms-self-edit` planeada (post-7, scaffold diferido).
+- Siguiente — `web-security-headers`, turn 5 (Build — autoría del bundle, validar, empacar, commit).
 
 ## 10. Roadmap
 
 - **Fase 0** — scaffold del marketplace. Hecha.
-- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (0/7)
+- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (1/7; #2 `web-security-headers` decisiones cerradas, build pendiente)
+- **Skill planeada (post-7) — `cms-self-edit`** (placeholder) — capacidad self-edit/CMS headless; turno de selección de herramienta primero (gap de stack-canon), luego cadencia normal; scaffold al repo diferido hasta llegar.
 - **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
 
 ## 11. Log de sesiones
@@ -264,3 +267,22 @@ Registrado pero NO adoptado:
 
 Mantenido FUERA del RESIDENT (público), en notas privadas de Carlos (Plan de Vida / Argos):
 - Tesis de rentabilidad, fulfillment-vs-demanda, reuse-compression como métrica, nicho/segmento objetivo, CMS como definición de mercado, postura de gama/ticket y el criterio de cierre del objetivo "modelo rentable". Es inteligencia comercial específica de Carlos; no pertenece a un repo público. (El README sí podría nombrar el nicho como posicionamiento de producto si Carlos lo decide — eso no es secreto.)
+
+### 2026-06-17 — web-security-headers · turn 4 (Decisiones) — HECHO
+
+F1–F8 cerrados sobre el research del turn 3. Veredicto y pins reescritos en §3. Decisiones lockeadas:
+
+- **F1 — entrega CSP:** `<meta>` hash-based nativo de Astro en estático (default). NO se fuerza header real en Cloudflare — `@astrojs/cloudflare@13.7.0` no soporta `staticHeaders`. `frame-ancestors`/`report-to`/`sandbox`/report-only van en `public/_headers`. Review-gate: revisar `staticHeaders` en cada minor del adapter; si aterriza, reconsiderar header unificado.
+- **F2 — headers no-CSP:** `public/_headers` canónico (todos los assets estáticos). Middleware (`src/middleware.ts`) SOLO para rutas on-demand/SSR (donde `_headers` no aplica).
+- **F3 — nonce:** hash-only. Inline de tercero → hash en `scriptDirective.hashes`. Nonce real exige SSR + header; fuera de alcance del `<meta>` nativo.
+- **F4 — COOP/COEP/CORP:** COOP `same-origin` en baseline; **COEP OFF por default** (`require-corp` rompe assets cross-origin de OGL #6 / Rive #7); CORP `same-origin` (aflojar a `cross-origin` para assets embebibles). Documentar cómo prender COEP solo si todo cross-origin manda CORP.
+- **F5 — SRI:** no nativo. Para un sitio premium mayormente same-origin, SRI es OPCIONAL: documentar `integrity=` manual + `@kindspells/astro-shield@≥1.3.2` (1.7.1) como integración SOLO cross-origin y SOLO para SRI (su CSP solapa el nativo). Review-gate por CVE/mantenimiento.
+- **F6 — cache:** el adapter v13 ya inyecta Cache-Control immutable para `_astro/*`. NO meter Cache-Control custom en `_headers` (quirk #13164, poco fiable). Caching de perf se difiere a `perf-ci-gates` (#3).
+- **F7 — granularidad references:** 5 archivos — `csp-astro-native.md`, `cloudflare-headers.md` (incl. `.assetsignore`), `header-inventory.md` (tabla valor-por-header), `middleware-ssr.md`, `sri-and-verification.md`. `SKILL.md` carga veredicto + split `<meta>`/header + baseline `_headers` + config mínima.
+- **F8 — Pages vs Workers Static Assets:** Workers Static Assets canónico (Pages removido en adapter v13); `_headers` porta a Pages.
+
+Gobierno (decisiones de Carlos este turn):
+- §6 SIN CAMBIOS: no se abre Claude Code para smoke-test temprano de install (resuelve el pendiente del entry de revisión externa — Carlos decidió No).
+- Skill **`cms-self-edit`** (placeholder) planeada post-7: turno de selección de herramienta primero (gap de stack-canon — no hay CMS web), luego cadencia normal; scaffold al repo diferido. Registrada en §3 y §10.
+
+Siguiente: web-security-headers turn 5 (Build — autoría del bundle → `quick_validate` → `package` → commit).

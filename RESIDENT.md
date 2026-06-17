@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: Fase 0 completada · astro-css-tokens turn 1 (scoping) hecho — 0/7 redactadas — siguiente = astro-css-tokens turn 2 (pre-research)
+status: astro-css-tokens turns 1–4 hechos (decisiones cerradas) — 0/7 redactadas — siguiente = astro-css-tokens turn 5 (build)
 ---
 
 # web-stack-skills — RESIDENT
@@ -25,7 +25,7 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 
 | # | Skill | Capa | Veredicto (una línea) |
 |---|---|---|---|
-| 1 | `astro-css-tokens` | fundación | Tailwind v4 `@theme` + Style Dictionary — `tokens.json` (DTCG) a 2 consumidores (CSS vars + `@theme`), sin lock-in |
+| 1 | `astro-css-tokens` | fundación | DTCG `tokens.json` → Style Dictionary **v5** → capa `:root --ds-*` (fuente de verdad) + bridge `@theme inline`; OKLCH sin fallback; en Astro 6 vía `@tailwindcss/postcss` (vite roto, #16542) |
 | 2 | `web-security-headers` | fundación | CSP nativo Astro 6 (`csp:true`) + `_headers` en Workers + `.assetsignore` + SRI |
 | 3 | `perf-ci-gates` | fundación | Lighthouse CI (`budget.json`) + Biome, en GitHub Actions |
 | 4 | `seo-aeo-schema` | fundación | `schema-dts` `@graph` tipado (`@id` cruzados) + `@astrojs/sitemap` + `llms.txt` |
@@ -39,7 +39,7 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 
 | Skill | Pins |
 |---|---|
-| astro-css-tokens | `tailwindcss@4.3.1`, `@tailwindcss/vite@4.3.1`, `style-dictionary` v4 |
+| astro-css-tokens | `astro@6.4.7`, `tailwindcss@4.3.1`, `@tailwindcss/postcss@4.3.0` (NO `@tailwindcss/vite` — #16542), `style-dictionary@5.4.4` (v5, no v4), Node ≥22.12 — verificar en build |
 | web-security-headers | `astro@6.4.7`, `@astrojs/cloudflare@13.x` |
 | perf-ci-gates | `@lhci/cli@0.15.1` (LH 12.6.1), `@biomejs/biome@2.5.0`, Node 22.12+ |
 | seo-aeo-schema | `schema-dts`, `@astrojs/sitemap` |
@@ -99,12 +99,23 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - **Quirk de GitHub** (verificado en ejecución): en repo recién creado **vacío**, la Git Data API (`git/trees`) da 409 "Git Repository is empty" → bootstrapear con un commit inicial (Contents API) y luego reemplazar el árbol completo.
 - Poner la 8ª en `deferred/` (fuera de `skills/`) la excluye **estructuralmente** — más limpio que listas de exclusión en el manifiesto.
 
+### 2026-06-17 — research astro-css-tokens (verificado, fuente primaria)
+
+- **Style Dictionary v5** es el actual (npm 5.4.4); drop-in desde v4 (breaking budget mínimo: refs no apuntan a hojas no-token ni sufijo `.value`; delimitadores `{…}` fijos; Node ≥22). Toda la API que usamos (`new StyleDictionary`, `registerFormat`, `usesDtcg`, `outputReferences`, `css/variables`) sin cambio.
+- **Astro 6 × rolldown-vite rompe `@tailwindcss/vite`** (#16542 abierto a jun-2026; causa raíz #19802 `aliasOnly:true`). Camino que compila: `@tailwindcss/postcss` + `postcss.config.mjs` (Astro corre PostCSS nativo). Pinear Vite a v6 también, pero pelea con Astro 6.
+- **OKLCH `oklch()` = Baseline Widely Available desde 2025-11-09** (Chrome/Edge 111, Firefox 113, Safari 15.4). Se shippea sin fallback. Tailwind v4 trae su paleta default en OKLCH.
+- **El transform SD `color/css` convierte OKLCH a hex/rgb** (Color.js, gamut-map a sRGB). Para preservar OKLCH: transforms solo-nombre (`attribute/cti`, `name/kebab`), sin grupo `css`. (SD v5.3+ trae `color/oklch` pero opera sobre color DTCG estructurado, no string plano.)
+- **`@theme inline`** no emite var global; la utility compila a `var(--ref)` — es el mecanismo del bridge. `@theme` plano sí emite var global; `@theme static` fuerza emitir todas las vars aunque no se usen.
+- **DTCG composite split bug** (#1398/#1494): `$value` objeto (`{value, unit}`) emite vars partidas `-value`/`-unit`. Workaround: `$value` string plano.
+- **DTCG estabilizó 2025.10** (28-oct-2025, primera versión estable); SD da soporte.
+- Ref de implementación SD→`@theme`: `tokens-studio/sd-tailwindv4` (~15★, README admite patrones no-DTCG; minar por forma, no como dependencia).
+
 ## 9. Estado
 
 - Fase 0 (scaffold) — completada.
-- astro-css-tokens turn 1 (Entendimiento) — hecho (alcance + estructura del bundle + checklist de research; forks abiertos para turn 4).
-- 0/7 skills redactadas (8 skeletons en su sitio, frontmatter válido).
-- Siguiente — `astro-css-tokens`, turn 2 (Pre-research).
+- astro-css-tokens turns 1–4 — hechos (scoping, pre-research, research verificado, decisiones cerradas). Veredicto y pins reescritos arriba (§3).
+- 0/7 skills redactadas (8 skeletons; frontmatter válido). astro-css-tokens lista para autorar.
+- Siguiente — `astro-css-tokens`, turn 5 (Build): autorar SKILL.md + references → quick_validate → package → .skill → commit.
 
 ## 10. Roadmap
 
@@ -131,3 +142,30 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - Checklist de research (turns 2/3): re-verificar pins (tailwindcss/@tailwindcss/vite 4.3.1?, style-dictionary 4.x, astro 6.x) · soporte DTCG en SD v4 (flag usesDtcg/preprocessor, sintaxis $value/$type, alias {group.token}) · custom format SD->@theme (SD v4 no lo trae de fábrica) · @theme vs @theme inline (sostiene la tesis no-lock-in) · OKLCH default + fallback · @reference "tailwindcss" para @apply scoped · @astrojs/tailwind muerto en v4 · dónde corre style-dictionary build (sesgo: prebuild script, native-first).
 - CASO CONTRARIO a defender en research: Tailwind v4 @theme ya genera CSS vars solo -> ¿para qué SD? La skill debe justificar SD por multi-output + transforms + portabilidad DTCG, o se reescribe el veredicto a @theme + CSS vars hand-authored.
 - Siguiente: astro-css-tokens turn 2 (Pre-research) en chat nuevo.
+
+### 2026-06-17 — astro-css-tokens · turns 2–4 (pre-research · research · decisiones) — hechos
+
+**Turn 2 (pre-research):** pre-brief armado. Caso contrario resuelto — SD se justifica solo con ≥2 consumidores / portabilidad; si no, `@theme` nativo basta. Detectado el build-break de Astro 6.
+
+**Turn 3 (research, verificado fuente primaria):** seis subtasks cerrados → descubrimientos en §8.
+
+**Turn 4 — decisiones cerradas (spec para el build):**
+- Compilador: **Style Dictionary v5** (5.4.4), drop-in desde v4.
+- Install Tailwind en Astro 6: **`@tailwindcss/postcss`** + `postcss.config.mjs`; NO `@tailwindcss/vite` (#16542 abierto). Review gate: volver a vite cuando #16542 cierre + repro verde.
+- Bridge: **`@theme inline`** sobre capa `:root --ds-*` (fuente de verdad CSS pura); no `@theme` plano. Un solo override point; sirve utilities + CSS a mano + 2º consumidor.
+- Color: OKLCH **sin fallback** (Baseline 2025-11-09). Transforms SD solo-nombre; NUNCA `color/css`.
+- Tokens DTCG: `$value` **string plano** (evita split #1398/#1494). Capas base→semantic→component, alias `{…}`, `outputReferences:true`, `usesDtcg:true`.
+- Build SD: **prebuild script** (`node build.mjs`), native-first.
+- Dark mode: solo la costura — `@custom-variant dark (&:where([data-theme="dark"], …))` + `[data-theme="dark"]{ --ds-color-*: oklch(oscuro) }`.
+
+**Arquitectura fijada:** `tokens.json` → SD v5 → `tokens.css` (`:root --ds-*`, css/variables) + `theme.css` (`@theme inline { --color-*: var(--ds-color-*) }`). Utilities/CSS/2º consumidor leen `--ds-*`.
+
+**Veredicto reescrito** (reemplaza al del seed): un `tokens.json` DTCG → SD v5 → capa `:root --ds-*` (fuente de verdad framework-independiente) + bridge `@theme inline` delgado que la referencia. Justificado con ≥2 consumidores / portabilidad; si no, `@theme` solo basta. En Astro 6 vía `@tailwindcss/postcss`.
+
+**Forks turn 1 cerrados:** dark = costura inline (sin multi-tema build); ejemplo = color+spacing+font+radius mínimos; ejemplo como código fenced en `references/` (no `assets/`).
+
+**Estructura del bundle (sin cambio):** SKILL.md + references/{style-dictionary-config, tokens-example, astro-tailwind-wiring, color-oklch, gotchas}.
+
+**Pendiente de verificar en el build:** patches exactos en npm (`tailwindcss`/`@tailwindcss/postcss` mostraron 4.3.1 vs 4.3.0; SD npm 5.4.4 vs tag GitHub 5.4.2).
+
+Siguiente: astro-css-tokens turn 5 (Build).

@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: Fase 0 completada — 0/7 skills redactadas — siguiente = astro-css-tokens, turn 1
+status: Fase 0 completada · astro-css-tokens turn 1 (scoping) hecho — 0/7 redactadas — siguiente = astro-css-tokens turn 2 (pre-research)
 ---
 
 # web-stack-skills — RESIDENT
@@ -102,8 +102,9 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 ## 9. Estado
 
 - Fase 0 (scaffold) — completada.
+- astro-css-tokens turn 1 (Entendimiento) — hecho (alcance + estructura del bundle + checklist de research; forks abiertos para turn 4).
 - 0/7 skills redactadas (8 skeletons en su sitio, frontmatter válido).
-- Siguiente — `astro-css-tokens`, turn 1 (Entendimiento).
+- Siguiente — `astro-css-tokens`, turn 2 (Pre-research).
 
 ## 10. Roadmap
 
@@ -121,3 +122,12 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - Frontmatter de los 8 SKILL.md validado inline (el `quick_validate.py` real corre en el build).
 - Descubrimientos en §8.
 - Siguiente: `astro-css-tokens` turn 1 en chat nuevo.
+
+### 2026-06-17 — astro-css-tokens · turn 1 (Entendimiento) — hecho
+
+- Alcance delimitado. Dentro: tokens.json DTCG (fuente única) -> SD v4 -> 2 salidas (CSS vars planas + bloque @theme) · 3 capas base/semantic/component vía alias DTCG · OKLCH · wiring Astro (global.css, @tailwindcss/vite, dónde corre el build) · config SD que emite ambas salidas · gotchas. Parcial: dark/multi-tema (solo la costura), dims no-color (ejemplo mínimo). Fuera: estilo a nivel componente, diseño de paleta, stacks no-Astro, migración.
+- Forks abiertos (resolver turn 4): (1) dark/multi-tema — costura inline vs build multi-tema de SD como reference; (2) ejemplo solo color vs +spacing/tipografía; (3) ejemplo como código fenced en references vs archivos en assets/. Sesgos: costura inline · sí dim extra mínima · fenced en references.
+- Estructura del bundle propuesta: SKILL.md (veredicto + receta + gotchas + punteros) + references/ {style-dictionary-config, tokens-example, astro-tailwind-wiring, color-oklch, gotchas}. Calls menores: gotchas inline si ≤~8; posible fusión config+wiring en build-setup.md.
+- Checklist de research (turns 2/3): re-verificar pins (tailwindcss/@tailwindcss/vite 4.3.1?, style-dictionary 4.x, astro 6.x) · soporte DTCG en SD v4 (flag usesDtcg/preprocessor, sintaxis $value/$type, alias {group.token}) · custom format SD->@theme (SD v4 no lo trae de fábrica) · @theme vs @theme inline (sostiene la tesis no-lock-in) · OKLCH default + fallback · @reference "tailwindcss" para @apply scoped · @astrojs/tailwind muerto en v4 · dónde corre style-dictionary build (sesgo: prebuild script, native-first).
+- CASO CONTRARIO a defender en research: Tailwind v4 @theme ya genera CSS vars solo -> ¿para qué SD? La skill debe justificar SD por multi-output + transforms + portabilidad DTCG, o se reescribe el veredicto a @theme + CSS vars hand-authored.
+- Siguiente: astro-css-tokens turn 2 (Pre-research) en chat nuevo.

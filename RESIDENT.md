@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: web-security-headers turn 4 (decisiones) HECHO — 1/7 skills redactadas — siguiente = web-security-headers turn 5 (build)
+status: web-security-headers turn 5 (build) HECHO — 2/7 skills redactadas — siguiente = perf-ci-gates turn 1 (scoping)
 ---
 
 # web-stack-skills — RESIDENT
@@ -117,13 +117,13 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - Fase 0 (scaffold) — completada.
 - astro-css-tokens turns 1–4 — hechos (scoping, pre-research, research verificado, decisiones cerradas). Veredicto y pins reescritos arriba (§3).
 - 1/7 skills redactadas (`astro-css-tokens` — turn 5 completo).
-- `web-security-headers` — turns 1–4 hechos (scoping, pre-research, research, decisiones). F1–F8 cerrados; veredicto/pins reescritos arriba (§3). Gobierno: §6 sin cambios (Carlos), skill `cms-self-edit` planeada (post-7, scaffold diferido).
-- Siguiente — `web-security-headers`, turn 5 (Build — autoría del bundle, validar, empacar, commit).
+- `astro-css-tokens` y `web-security-headers` — completas, 5/5 turns cada una. 2/7 redactadas. Fuentes de web-security-headers en commit 4f37a05 (SKILL.md + 5 references).
+- Siguiente — `perf-ci-gates`, turn 1 (Scoping).
 
 ## 10. Roadmap
 
 - **Fase 0** — scaffold del marketplace. Hecha.
-- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (1/7; #2 `web-security-headers` decisiones cerradas, build pendiente)
+- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (2/7; #2 `web-security-headers` completa, commit 4f37a05; #3 `perf-ci-gates` siguiente)
 - **Skill planeada (post-7) — `cms-self-edit`** (placeholder) — capacidad self-edit/CMS headless; turno de selección de herramienta primero (gap de stack-canon), luego cadencia normal; scaffold al repo diferido hasta llegar.
 - **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
 
@@ -286,3 +286,14 @@ Gobierno (decisiones de Carlos este turn):
 - Skill **`cms-self-edit`** (placeholder) planeada post-7: turno de selección de herramienta primero (gap de stack-canon — no hay CMS web), luego cadencia normal; scaffold al repo diferido. Registrada en §3 y §10.
 
 Siguiente: web-security-headers turn 5 (Build — autoría del bundle → `quick_validate` → `package` → commit).
+
+### 2026-06-17 — web-security-headers · turn 5 (Build) — HECHO
+
+Bundle autoreado y commiteado (Git Data API, commit atómico de 6 archivos, sha 4f37a05): `skills/web-security-headers/SKILL.md` + 5 references.
+
+- SKILL.md (120 líneas): veredicto + split meta/header-real + tabla de capas + receta de 5 pasos (security.csp mínimo, `public/_headers` baseline, middleware SSR, SRI opcional, verificación) + gotchas + limitations. Frontmatter solo name+description (validador); description 953 chars. Cuerpo en md-house-style — sin bold/itálicas/hr, solo #/##/###, "load when relevant".
+- references: `csp-astro-native.md` (security.csp, runtime API, hashes externos, incompatibles, dev caveat), `cloudflare-headers.md` (_headers sintaxis/matching + `.assetsignore` + quirk #13164 + compat Pages), `header-inventory.md` (tabla valor-por-header + HSTS preload + trío cross-origin + XFO vs frame-ancestors + Managed Transforms), `middleware-ssr.md` (headers en rutas on-demand + CSP header real SSR + nonce), `sri-and-verification.md` (SRI manual/astro-shield ≥1.3.2 + verificación). Cada una con front matter ligero y una dirección de profundidad.
+- Validación: reproducidas las reglas EXACTAS de `quick_validate.py` (un solo SKILL.md; frontmatter solo {name, description, license, allowed-tools, metadata, compatibility}; name kebab ≤64; description ≤1024 sin `<`/`>`) → PASS. El entorno de este chat es solo-Composio; el script canónico de skill-creator (`quick_validate` + `package_skill` reales) corre en el container local. La validación canónica + empaque oficial quedan para el BUILD FINAL de las 7 vía Claude Code (ya en plan, §6 y §9) — gate único, no per-skill.
+- Empaque: `web-security-headers.skill` (zip del árbol, raíz `web-security-headers/`, 12.9 KB) subido como artefacto descargable para Carlos. El repo guarda las FUENTES, no el `.skill`.
+
+Siguiente: perf-ci-gates turn 1 (Scoping).

@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: web-security-headers turn 2 (pre-research) HECHO — 1/7 skills redactadas — siguiente = web-security-headers turn 3 (research, Research mode + Context7)
+status: web-security-headers turn 3 (research) HECHO — 1/7 skills redactadas — siguiente = web-security-headers turn 4 (decisiones; cerrar F1–F8)
 ---
 
 # web-stack-skills — RESIDENT
@@ -115,8 +115,8 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - Fase 0 (scaffold) — completada.
 - astro-css-tokens turns 1–4 — hechos (scoping, pre-research, research verificado, decisiones cerradas). Veredicto y pins reescritos arriba (§3).
 - 1/7 skills redactadas (`astro-css-tokens` — turn 5 completo).
-- `web-security-headers` — turn 1 (scoping) + turn 2 (pre-research) hechos; pre-brief con findings de pre-investigación, source priority y 7 subtasks de research (log §11).
-- Siguiente — `web-security-headers`, turn 3 (Research — Research mode + Context7; re-verificar pins).
+- `web-security-headers` — turns 1–3 hechos (scoping, pre-research, research verificado). Pivote resuelto: `@astrojs/cloudflare@13.7.0` NO soporta `staticHeaders` → CSP estático queda en `<meta>`; resto de headers en `_headers`. Pins verificados `astro@6.4.7`, `@astrojs/cloudflare@13.7.0` (log §11).
+- Siguiente — `web-security-headers`, turn 4 (Decisiones — cerrar F1–F8, reescribir veredicto/pins en §3).
 
 ## 10. Roadmap
 
@@ -221,3 +221,46 @@ Skill `pre-research` corrida: pre-investigación (8 búsquedas + fuentes primari
 **Source priority:** Astro docs oficiales > Cloudflare Developer docs > W3C CSP3 + MDN > OWASP CSP Cheat Sheet > GitHub repos/changelogs (`withastro/astro`, `@astrojs/cloudflare`) > integraciones de terceros (`astro-shield`, `astro-static-headers` — marcar SECONDARY, verificar mantenimiento + CVEs) > blogs técnicos [SECONDARY].
 
 Siguiente: web-security-headers turn 3 (Research — Research mode + Context7; re-verificar pins `astro@6.4.7`, `@astrojs/cloudflare@13.x`).
+
+### 2026-06-17 — web-security-headers · turn 3 (Research) — HECHO · informe completo en chat
+
+Research mode + web/source verification. Informe completo en el chat del turn 3; aquí el esqueleto decisión-relevante (turn 4 reescribe veredicto/pins en §3).
+
+**Pins verificados (npm, 2026-06-17):** `astro@6.4.7` (CSP estable bajo `security.csp`, "Added in astro@6.0.0"); `@astrojs/cloudflare@13.7.0`. Watch: Astro 7 alpha (Vite 8, compilador Rust default) ya tageado — puede cambiar internals de CSP/adapter en un major futuro.
+
+**Pivote (F1/F2) resuelto — `@astrojs/cloudflare@13.7.0` NO soporta `staticHeaders`/`experimentalStaticHeaders`:** verificado contra el source del adapter (la interfaz `Options` y el bloque `adapterFeatures` no lo declaran, y no consume el map `astro:build:generated`/`routeToHeaders`). El core añadió la feature (PR #13926) y la estabilizó como `staticHeaders` (PR #15258, ejemplos Netlify/Node); el blog Astro 5.11 prometió Cloudflare "coming soon… vía `_headers`" pero NO ha shippeado. Consecuencia: en Cloudflare estático el CSP de Astro queda como `<meta>`; no hay path nativo para emitirlo como header a `_headers`. `abemedia/astro-static-headers` sí puede, pero exige `cloudflare({ prerenderEnvironment: 'node' })`.
+
+**`security.csp` (shape estable):** `algorithm` (SHA-256/384/512), `directives[]` (NO admite `script-src`/`style-src` aquí → usar las sub-claves), `scriptDirective`/`styleDirective` cada una con `hashes[]` + `resources[]`, `scriptDirective.strictDynamic`. Runtime API `Astro.csp.insertDirective/insertScriptResource/insertStyleResource`. Recursos externos = hashes manuales. No corre en `dev` (usar `build`+`preview`). Incompatibles: `unsafe-inline`, `<ClientRouter/>` view transitions, Shiki (estilos inline → usar `<Prism/>`). Imágenes responsivas: cubiertas.
+
+**`<meta>` no expresa `frame-ancestors`, `report-uri`, `sandbox` ni report-only** (W3C/MDN; reproducido en Astro #13896) → obligan header real en `_headers`.
+
+**`_headers` (Workers Static Assets):** texto plano en `public/`, aplica SOLO a respuestas de assets estáticos (NO a respuestas del Worker/SSR), mismo formato que Pages. Quirk #13164 (Cache-Control no aplicaba) = `wontfix`/upstream; pero el adapter v13 auto-inyecta Cache-Control immutable para `_astro/*` hasheados. `.assetsignore` (sintaxis .gitignore, raíz de assets) excluye `_worker.js`/`_routes.json`/`_headers` de servirse; lo maneja adapter/wrangler.
+
+**SRI:** no nativo en Astro 6. `@kindspells/astro-shield` 1.7.1 (CVE-2024-30250 CVSS 7.5, parchado en 1.3.2); su rol CSP solapa con el nativo → usarlo SOLO para SRI, sobre todo cross-origin. **Nonce:** hash-only; no hay modo nonce; nonce en `<style>` se elimina (#377) → inline de tercero = agregar su hash en `scriptDirective.hashes`; nonce real exige header desde SSR.
+
+**Baseline no-CSP:** HSTS `max-age=63072000; includeSubDomains` (preload OFF por default — OWASP avisa consecuencias permanentes; en CF preferir HSTS zone-wide en dashboard); `X-Content-Type-Options: nosniff`; `Referrer-Policy: strict-origin-when-cross-origin`; `X-Frame-Options: DENY` + `frame-ancestors 'none'` (en `_headers`); Permissions-Policy apagar features no usados; COOP `same-origin` OK, **COEP OFF por default** (`require-corp` rompe assets cross-origin de OGL #6 / Rive #7), CORP `same-origin`. CF Managed Transform "Add security headers" omite CSP+Permissions-Policy; evitar duplicar headers entre `_headers` y dashboard.
+
+**Recomendaciones F1–F8 (entran a turn 4):** F1 `<meta>` hashes default, sin forzar header en CF; frame-ancestors/report en `_headers`. F2 `_headers` canónico (estático) + middleware solo en rutas SSR. F3 hash-only. F4 COOP on, COEP opt-in. F5 astro-shield ≥1.3.2 solo para SRI cross-origin; si no, manual. F6 caching de assets hasheados lo hace el adapter; Cache-Control custom mínimo/evitar (#13164); diferir perf a otra skill. F7 split de 5 references soportado. F8 Workers Static Assets canónico (Pages removido en v13); `_headers` porta a Pages.
+
+**Caveats:** el veredicto "CF no soporta staticHeaders" se apoya en el source de `main` + ausencia en changelog (no se leyó el changelog línea por línea) → si un release futuro lo agrega, F1 cambia. Algunos blogs 2026 confunden entrega por `<meta>` (sí funciona) con header (no) → poco fiables. #13164 verificar empíricamente en deploy real. CSP no testeable en `dev`.
+
+Siguiente: web-security-headers turn 4 (Decisiones — cerrar F1–F8, reescribir §3).
+
+### 2026-06-17 — Revisión externa (dev front-end senior) — REGISTRADO (filtrado)
+
+Revisión externa del stack como artefacto terminado y como método. Se registran SOLO los takeaways genéricos/de proceso; este RESIDENT es público y el repo es charter "cero secretos / genérico", así que la tesis comercial/GTM se mantuvo deliberadamente FUERA (ver más abajo).
+
+Adoptado (genérico, rationale de diseño):
+- **El activo durable es el MÉTODO, no las 7 skills.** El motor portable (este RESIDENT + cadencia 5-turn + caso-contrario + source-priority + log) sobrevive a cualquier stack/dominio; las skills son perecederas y reconstruibles desde docs (con costo de verificación no trivial — cf. el pivote del turn 3, que salió del source, no de docs). El repo se organiza alrededor del motor a propósito.
+- **La skill diferida `stack-integration-playbook` concentra el valor irremplazable** (lecciones de composición de campo), no las 7 fundación/visuales. Justifica subir su prioridad de alimentación cuando haya sustancia de campo.
+- **Disciplina de perecederos:** cada pin duro y cada workaround por issue-number lleva review-gate (como #16542 en skill #1), no solo "re-verificar". Solo + sin auto-update = half-life corto → presupuestar mantenimiento activo, no asumir estabilidad.
+- **La capa de visuales (WebGL/Rive/scroll) es de doble filo:** gana el pitch pero puede dañar los CWV que LHCI gatea, exige `prefers-reduced-motion` (si no, pasivo de accesibilidad) y parte del B2B lo lee como forma-sobre-fondo. Regla: UNA, cuando el brief lo justifique; nunca default. Refuerza el "3 motores por trabajo" de motion-system (#5).
+
+Decisión abierta (choca con regla vigente §6):
+- El dev recomienda probar `marketplace add`/install/triggering YA con la 1 skill existente (las `description` son la superficie más propensa a fallar; no reservar todo el riesgo de install al final). Esto choca con §6 ("Claude Code reservado estrictamente para el build final; no abrir antes ni para probar instalación"). PENDIENTE de decisión de Carlos: mantener §6, o abrir una excepción de smoke-test de install temprano. No se toca §6 hasta que decida.
+
+Registrado pero NO adoptado:
+- "Shippear un sitio real antes de autorar las 7" (el dev lo marca como sugerencia, no crítico). Tensión: las fundaciones (security-headers, perf-gates, tokens) deben existir para shippear bien → huevo-gallina; y vamos a mitad (1/7 + 1 en curso). Se mantiene la cadencia; opción anotada, no ejecutada.
+
+Mantenido FUERA del RESIDENT (público), en notas privadas de Carlos (Plan de Vida / Argos):
+- Tesis de rentabilidad, fulfillment-vs-demanda, reuse-compression como métrica, nicho/segmento objetivo, CMS como definición de mercado, postura de gama/ticket y el criterio de cierre del objetivo "modelo rentable". Es inteligencia comercial específica de Carlos; no pertenece a un repo público. (El README sí podría nombrar el nicho como posicionamiento de producto si Carlos lo decide — eso no es secreto.)

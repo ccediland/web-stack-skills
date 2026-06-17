@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: web-security-headers turn 1 (scoping) HECHO — 1/7 skills redactadas — siguiente = web-security-headers turn 2 (pre-research)
+status: web-security-headers turn 2 (pre-research) HECHO — 1/7 skills redactadas — siguiente = web-security-headers turn 3 (research, Research mode + Context7)
 ---
 
 # web-stack-skills — RESIDENT
@@ -115,8 +115,8 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - Fase 0 (scaffold) — completada.
 - astro-css-tokens turns 1–4 — hechos (scoping, pre-research, research verificado, decisiones cerradas). Veredicto y pins reescritos arriba (§3).
 - 1/7 skills redactadas (`astro-css-tokens` — turn 5 completo).
-- `web-security-headers` — turn 1 (scoping) hecho; alcance, estructura de archivos, checklist de research y forks definidos (log §11).
-- Siguiente — `web-security-headers`, turn 2 (Pre-research).
+- `web-security-headers` — turn 1 (scoping) + turn 2 (pre-research) hechos; pre-brief con findings de pre-investigación, source priority y 7 subtasks de research (log §11).
+- Siguiente — `web-security-headers`, turn 3 (Research — Research mode + Context7; re-verificar pins).
 
 ## 10. Roadmap
 
@@ -205,3 +205,19 @@ Siguiente: web-security-headers turn 1 (Scoping).
 **Descubrimiento de proceso:** `raw.githubusercontent.com` sirve copia cacheada/vieja del RESIDENT (mostró Fase 0 / 0/7 mientras el HEAD real iba 1/7). Para leer el estado real del RESIDENT, usar **Contents API vía Composio** (`proxy_execute GET .../contents/RESIDENT.md` → content+sha), no el raw. Sandbox suffix activo este chat: `axpx`.
 
 Siguiente: web-security-headers turn 2 (Pre-research).
+
+### 2026-06-17 — web-security-headers · turn 2 (Pre-research) — HECHO
+
+Skill `pre-research` corrida: pre-investigación (8 búsquedas + fuentes primarias) + pre-brief para turn 3 (Research mode on). Hallazgos clave (**pre-investigación, a verificar en turn 3**):
+
+- **Entrega del CSP en Astro 6 es por modo de página, automática:** páginas estáticas → `<meta http-equiv="content-security-policy">`; páginas on-demand (SSR) → header `Content-Security-Policy`. No es elección libre (changelog 5.9.3 + blog Astro 6 + config reference).
+- **`experimentalStaticHeaders` = Astro Adapter Feature:** si el adapter lo soporta, Astro deja de emitir el `<meta>` en estáticas y entrega los headers vía hook `astro:build:generated` (`experimentalRouteToHeaders`) para que el adapter escriba un archivo de config (p.ej. `_headers`). Fuentes listan Vercel/Netlify/Node con soporte; **Cloudflare NO confirmado** → pivote del research (decide F1/F2).
+- **`<meta>` CSP ignora `frame-ancestors`, `report-uri`/`report-to` y `sandbox`** (W3C CSP2 §, CSP3, OWASP, MDN) y no soporta `-Report-Only` → esas directivas + clickjacking obligan **header real** (en `_headers` o middleware). Confirma el split CSP/headers del turn 1.
+- **Cloudflare `_headers`:** archivo de texto sin extensión en `public/`, parseado por la plataforma (no servido como asset), aplica a respuestas de assets estáticos; static-only (sin per-request). Quirk conocido de cache en Workers assets (issue withastro/astro #13164).
+- **SRI no es nativo en Astro:** lo provee `@kindspells/astro-shield` (SRI on-by-default en estático + CSP headers) o se hace manual; astro-shield tuvo CVE-2024-30250 (parchado 1.3.2) y su rol de CSP ahora **solapa** con el nativo de Astro 6 → su valor único hoy es SRI. Alternativa: `abemedia/astro-static-headers` (captura `Astro.response.headers.set` → escribe `_headers`; requiere `prerenderEnvironment: 'node'` con `@astrojs/cloudflare` v13+). SRI importa sobre todo para recursos cross-origin.
+
+**Subtasks de research (7 — versión completa en el pre-brief del chat):** 1) ¿`@astrojs/cloudflare@13` soporta `experimentalStaticHeaders`?; 2) shape de `security.csp` en `astro@6.4.7` (`directives`, `scriptDirective`/`styleDirective`, `strictDynamic`, hash algo) + runtime API `Astro.csp.*`; 3) `_headers` en Workers Static Assets (sintaxis/matching/precedencia/estado del quirk de cache); 4) `.assetsignore` con cloudflare@13 (propósito, qué listar, ¿lo genera Astro?); 5) SRI nativo vs astro-shield (mantenimiento 2026, overlap con CSP nativo, CVE resuelto, alcance); 6) ruta de nonce para inline de terceros (¿hash-only?) + estado issue #377; 7) baseline 2026 de headers no-CSP (HSTS `includeSubDomains`/`preload`, Permissions-Policy, COOP/COEP/CORP — impacto en embeds de #6 OGL/#7 Rive, Referrer-Policy) + ¿Cloudflare inyecta headers por default que choquen?
+
+**Source priority:** Astro docs oficiales > Cloudflare Developer docs > W3C CSP3 + MDN > OWASP CSP Cheat Sheet > GitHub repos/changelogs (`withastro/astro`, `@astrojs/cloudflare`) > integraciones de terceros (`astro-shield`, `astro-static-headers` — marcar SECONDARY, verificar mantenimiento + CVEs) > blogs técnicos [SECONDARY].
+
+Siguiente: web-security-headers turn 3 (Research — Research mode + Context7; re-verificar pins `astro@6.4.7`, `@astrojs/cloudflare@13.x`).

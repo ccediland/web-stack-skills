@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: astro-css-tokens turn 5 (build) HECHO — 1/7 skills redactadas — siguiente = web-security-headers turn 1 (scoping)
+status: web-security-headers turn 1 (scoping) HECHO — 1/7 skills redactadas — siguiente = web-security-headers turn 2 (pre-research)
 ---
 
 # web-stack-skills — RESIDENT
@@ -115,7 +115,8 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - Fase 0 (scaffold) — completada.
 - astro-css-tokens turns 1–4 — hechos (scoping, pre-research, research verificado, decisiones cerradas). Veredicto y pins reescritos arriba (§3).
 - 1/7 skills redactadas (`astro-css-tokens` — turn 5 completo).
-- Siguiente — `web-security-headers`, turn 1 (Scoping).
+- `web-security-headers` — turn 1 (scoping) hecho; alcance, estructura de archivos, checklist de research y forks definidos (log §11).
+- Siguiente — `web-security-headers`, turn 2 (Pre-research).
 
 ## 10. Roadmap
 
@@ -184,3 +185,23 @@ Validado: `quick_validate PASS` | Empaquetado: `astro-css-tokens.skill` 8.7 K.
 Commit: [9b182b0](https://github.com/ccediland/web-stack-skills/commit/9b182b00b3595d2b755cbf27e485e90870aa7c56)
 
 Siguiente: web-security-headers turn 1 (Scoping).
+
+### 2026-06-17 — web-security-headers · turn 1 (Scoping) — HECHO
+
+**Reframe que reordena el bundle** (verificado, blog Astro 6 + config reference): el CSP de Astro 6 es **estable** (salió de `experimental:`), **basado en hashes**, e inyectado como `<meta http-equiv="content-security-policy">` en el HTML — **no** como response header. Hashea scripts/estilos bundleados (incl. cargados dinámicamente); funciona estático y SSR; imágenes responsivas ya cubiertas. Consecuencias duras: (a) el CSP de Astro **NO pasa por `_headers`**; (b) `<meta>` **ignora** `frame-ancestors`, `report-to`/`report-uri` y `sandbox` → esas directivas obligan un **header real**; (c) el **nonce** deja de ser el eje y pasa a escape hatch de nicho (Astro es hash-first; issue #377: nonces en `<style>` se eliminan).
+
+**Alcance IN:** CSP nativo Astro 6 (`security.csp`, hashes, cómo añadir hashes externos); set de security headers vía Cloudflare `_headers` (HSTS, X-Frame-Options + `frame-ancestors`, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, Cross-Origin-* según necesidad); el split `<meta>` vs header real; middleware de Astro (`src/middleware.ts`) como escape hatch dinámico (headers por-ruta, CSP como header real, ruta de nonce); SRI para externos; `.assetsignore` (higiene Workers Static Assets); baseline copy-paste + verificación (curl, securityheaders.com, CSP evaluator, consola).
+
+**Alcance OUT (pointer, sin desarrollo):** CORS de APIs / WAF / rate-limit / bots; cookies (SameSite/Secure/HttpOnly, capa app); Cache-Control / headers de perf (→ `perf-ci-gates` #3, fork F6); backend de reportes CSP; nonce como vía SSR principal.
+
+**Estructura preliminar** (granularidad final en build): `SKILL.md` + `references/`: `csp-astro-native.md`, `cloudflare-headers.md`, `middleware-and-nonce.md`, `header-inventory.md`, `sri-and-verification.md` (5 refs tentativas).
+
+**Checklist de research (turn 2→3):** 1) config exacta `security.csp` estable vs flag viejo, ¿opción de header real en adapter Cloudflare? 2) `@astrojs/cloudflare@13.x` / Workers Static Assets — ¿emite headers reales o siempre meta-CSP + `_headers`? 3) directivas ignoradas en `<meta>` en navegadores actuales; 4) sintaxis/precedencia/límites de `_headers` en WSA, confirmar static-only; 5) `.assetsignore` propósito exacto con adapter; 6) ¿Astro 6 genera SRI auto o manual?; 7) ruta de nonce por middleware (¿soportado o hash-only?); 8) HSTS preload + conflicto con HSTS de dashboard Cloudflare; 9) baseline Permissions-Policy; 10) COOP/COEP/CORP (COEP rompe embeds → interacción #6 OGL/#7 Rive); 11) ¿Cloudflare inyecta headers por default que choquen?; 12) re-verificar pins `astro@6.4.7`, `@astrojs/cloudflare@13.x`.
+
+**Forks abiertos (turn 4):** F1 entrega CSP (`<meta>` hashes default vs header real) → default meta + header solo para frame-ancestors/report-to. F2 headers no-CSP (`_headers` vs middleware) → `_headers` canónico, middleware solo dinámico. F3 nonce (documentar escape hatch vs hash-only) → hash-only + nota. F4 COOP/COEP/CORP (default vs opt-in) → opt-in con nota. F5 SRI (paso doc vs pointer) → depende de research #6. F6 cache headers (incluir en `_headers` vs ceder a #3) → pointer a #3. F7 granularidad refs (4 vs 5). F8 Pages vs Workers Static Assets → target WSA (RESIDENT), notar compat Pages.
+
+**Discrepancias reconciliadas:** seed de chat decía "+ `.astro` middleware"; veredicto RESIDENT §3 decía "+ `.assetsignore` + SRI" → alcance cubre la **unión** (middleware + .assetsignore + SRI). Pages (seed) vs Workers Static Assets (RESIDENT) → canónico WSA, compat Pages notada (F8).
+
+**Descubrimiento de proceso:** `raw.githubusercontent.com` sirve copia cacheada/vieja del RESIDENT (mostró Fase 0 / 0/7 mientras el HEAD real iba 1/7). Para leer el estado real del RESIDENT, usar **Contents API vía Composio** (`proxy_execute GET .../contents/RESIDENT.md` → content+sha), no el raw. Sandbox suffix activo este chat: `axpx`.
+
+Siguiente: web-security-headers turn 2 (Pre-research).

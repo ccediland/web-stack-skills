@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-18
 repo: ccediland/web-stack-skills (público, MIT)
-status: cms-self-edit (#8) — SELECCIÓN de herramienta HECHA (ganador Sveltia · Pages CMS runner-up · escalera de 3 etapas); la cadencia de autoría de la skill (5 turnos, como las demás) arranca en Turn 1 (Scope) — siguiente = #8 turn 1 en chat nuevo; al cierre del turn 5, BUILD FINAL de las 8 skills vía Claude Code
+status: cms-self-edit (#8) — COMPLETA. Las 8 skills autoradas; bundle + registro en plugin.json commiteados a `main` (commit `90110a9e`). SIGUIENTE = BUILD FINAL de las 8 skills vía Claude Code (validación + gate de build del marketplace), según `v1-finalization-plan.md`.
 ---
 
 # web-stack-skills — RESIDENT
@@ -637,3 +637,19 @@ RESIDENT actualizado en esta fase de selección (commit `a8c0948`) para registra
 Sandbox suffix activo este chat: `dqif`.
 
 Siguiente: `cms-self-edit` (#8) turn 1 (Scope) de la cadencia de la skill, en chat nuevo (la selección de herramienta ya quedó). La cadencia corre Scope → Pre-research → Research → Decisiones → Build; el turn 5 (Build) autorea el bundle (skill-author + md-house-style) → `quick_validate` → `package` → `.skill` (entregar vía present_files, NO commitear el zip) → commit atómico de FUENTES (Git Data API) → 2ª actualización del RESIDENT. Re-verificar pins al inicio del build (`date -u` para la fecha UTC del contenedor).
+
+## Log — cms-self-edit (#8), turn 5 (build) — 2026-06-18
+
+Octava skill COMPLETA y commiteada. Cadencia de 5 turnos cerrada (scope, pre-research, research, decisiones, build). `cms-self-edit` = receta Sveltia CMS para que un cliente no-técnico edite un sitio Astro 6 en Cloudflare Workers Static Assets, con escalera de 3 etapas (Sveltia → Pages CMS → Directus).
+
+Commit del bundle + registro en `plugin.json`: `90110a9e` (parent `389d406e`). Archivos: `skills/cms-self-edit/SKILL.md` + 5 referencias (`sveltia-setup`, `cloudflare-auth-worker`, `media-r2`, `i18n-and-publishing`, `escalation-ladder`); `plugin.json` ahora lista las 8 skills. El `.skill` empaquetado se entregó en chat, NO se commitea (el repo solo guarda fuentes).
+
+Decisiones cerradas: /admin estático en `public/` con CSP propio en `_headers`; media por umbral (repo piso, R2 arriba); auth Sveltia/GitHub-OAuth Stage 1 (+PAT para admin único) y Pages CMS magic-link Stage 2; publicación por rama `drafts` + CI + merge manual; i18n `multiple_folders` + `default_locale es`; content collections ↔ Zod.
+
+Correcciones verificadas (2026-06-18) que reemplazan datos previos del §3: versión real `@sveltia/cms 0.167.2` (beta; GA objetivo mid-2026, NO early-2026); DeepL DESHABILITADO en Sveltia → usar Google Cloud Translation / Gemini / Mistral; la latencia commit→rebuild «~2-3 min» era FALSA (sin cifra de fuente; medir en el sitio real); COOP en `/admin` = `same-origin-allow-popups` (NO `same-origin`, que rompe el popup OAuth); orígenes GitHub del CSP = `api.github.com` + `www.githubstatus.com` en connect-src y `avatars/raw.githubusercontent.com` en img-src (el Worker OAuth NO va en CSP); Directus ahora bajo MSCL 1.0 (no BUSL), gratis vía Open Innovation Grant si <5M USD ingresos Y <50 empleados.
+
+Encuadre corregido: la selección de herramienta (#8) ya estaba hecha; este chat corrió la cadencia de autoría completa de la skill y la dejó COMPLETA. Con esto las 8 skills quedan autoradas.
+
+SIGUIENTE: BUILD FINAL de las 8 skills vía Claude Code (validación + gate de build del marketplace), según `v1-finalization-plan.md`. Claude Code se reserva para esa fase; no se abrió a mitad de la cadencia.
+
+Sandbox suffix activo este chat: `78kr`.

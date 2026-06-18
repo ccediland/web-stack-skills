@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-18
 repo: ccediland/web-stack-skills (público, MIT)
-status: signature-anim (#7) COMPLETA — bundle 26576412328123844b493e3559c7ccb0d356bc4d — 7/7 redactadas — BUILD FINAL de las 7 vía Claude Code pendiente
+status: cms-self-edit (#8, NUEVA) turns 1–4 HECHOS — decisión lockeada: Sveltia (ganador) · Pages CMS (runner-up) · escalera de 3 etapas; build pendiente — siguiente = #8 turn 5 (Build) en chat nuevo; luego BUILD FINAL de las 8 skills vía Claude Code
 ---
 
 # web-stack-skills — RESIDENT
@@ -11,7 +11,7 @@ Documento vivo y **home base** del proyecto: fuente de verdad única. Reemplaza 
 
 ## 1. Qué es
 
-Un **marketplace de plugins de Claude Code**, público y genérico (MIT), que entrega **7 skills** que codifican un stack web premium de alto rendimiento ("lo mejor de todos los mundos"). Reusable en cualquier proyecto: un proyecto origen fue el primer consumidor, **no** el alcance. Cero contenido específico de proyecto, cero marca, cero secretos. Una 8ª skill queda **diferida** como skeleton.
+Un **marketplace de plugins de Claude Code**, público y genérico (MIT), que entrega **8 skills** que codifican un stack web premium de alto rendimiento ("lo mejor de todos los mundos"). Reusable en cualquier proyecto: un proyecto origen fue el primer consumidor, **no** el alcance. Cero contenido específico de proyecto, cero marca, cero secretos. Una 8ª skill queda **diferida** como skeleton.
 
 Meta: parándote en cualquier proyecto nuevo, levantar la misma arquitectura sin volver a descubrir los filos.
 
@@ -19,7 +19,7 @@ Meta: parándote en cualquier proyecto nuevo, levantar la misma arquitectura sin
 
 Astro 6 · Cloudflare Workers Static Assets · Tailwind v4 + Style Dictionary · GSAP + CSS scroll-driven + Motion · OGL · Rive · schema-dts + @astrojs/sitemap + llms.txt · CSP nativo · Lighthouse CI + Biome.
 
-## 3. Las 7 skills + 1 diferida
+## 3. Las 8 skills + 1 diferida
 
 Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, gotchas, outline) vive en su `SKILL.md`; aquí va el resumen.
 
@@ -35,7 +35,7 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 
 **Diferida — `stack-integration-playbook`** (en `deferred/`, fuera de `skills/`): documenta cómo componen todos los elementos del sitio entre sí y cómo el sitio se conecta al resto del stack más allá de la web (Supabase, otros repos, Cloudflare, GitHub Actions, Infisical, Google Workspace, comms, pagos, catálogos, ads, social, analítica). Se llena "mucho después" con lecciones de campo. Excluida del plugin instalable hasta tener sustancia.
 
-**Planeada (post-7) — `cms-self-edit`** (placeholder; nombre final se fija en el turno de selección): capacidad de **self-edit** para clientes (CMS headless). Cadencia especial — primero un **turno de selección de herramienta** (Sanity/Storyblok/Tina/Keystatic u otro) porque hoy NO hay CMS web en el stack-canon (gap a resolver y registrar en `stack-canon-argos`), luego la cadencia normal de 5 turnos para documentar el stack elegido. Scaffold al repo (carpeta/nombre/`plugin.json`) DIFERIDO hasta llegar a esa etapa.
+**Skill #8 — `cms-self-edit`** (turns 1–4 HECHOS · build pendiente · aún NO en `skills/` ni en `.claude-plugin/`): disciplina para dar a un cliente NO técnico la capacidad de auto-editar el contenido de un sitio Astro 6 + Cloudflare Pages/Workers, sin lock-in tipo Webflow/Framer, como patrón reusable de bajo mantenimiento por sitio. Decisión por MÉRITO puro (sin lente de stack-canon — dropeado por Carlos: no existe / el stack no es fijo). **Veredicto:** ganador = **Sveltia** — CMS git-based client-side puro, montado como `public/admin/index.html`, sin backend; contenido = Markdown/YAML en el repo; OAuth GitHub vía el Worker oficial gratis `sveltia-cms-auth`; media en Cloudflare R2 (SigV4 browser→R2); i18n first-class + DeepL; `/admin` se mantiene como archivo estático en `public/` para esquivar la CSP `<meta>` de #2; publicar vía rama `drafts` + check CI antes de merge (Editorial Workflow aún no es GA). Runner-up = **Pages CMS** — git-based, magic-link por email (el editor NO necesita cuenta GitHub), media R2; pero reintroduce dependencia: app hosteada de terceros con acceso al repo, O self-host con Postgres+BetterAuth. Diseño = **escalera de 3 etapas**: Etapa 1 (default) Sveltia · Etapa 2 (cliente jamás ve GitHub) Pages CMS · Etapa 3 (contenido relacional / multi-canal / publicación instantánea / workflow editorial pesado) Directus (motor por sitio: VPS+Postgres+S3 ~$200/mes; licencia MSCL, OIG libre si <$5M ingresos Y <50 empleados). **Descartados:** Keystatic = roto en Astro 6 (peer-dep `@keystatic/astro@5.0.6` tope astro 2–5, admin truena con error de React hook; issue #1515 ABIERTO, PR #1527 sin merge) + bug OAuth en Cloudflare (#1497 ABIERTO) + sin i18n → review-gate (reconsiderar si #1515 cierra fixed Y #1497 cierra; el cero-i18n sigue siendo tapón MX); EmDash = v0.1.0 dev-preview, contenido en DB/Portable-Text (no archivos), sandbox requiere CF de pago; Tina = pesado (motor+DB o Tina Cloud), Astro experimental, sin i18n nativo; Decap = abandonado (Sveltia es su sucesor); Sanity / headless-DB self-host (Directus/Strapi/Payload/PocketBase) = overkill salvo Etapa 3. Pins a RE-VERIFICAR en build: `@sveltia/cms@0.167.2` (beta, GA mid-2026), `astro@6.x`, `@astrojs/cloudflare@13.x`, Node 22; Worker `sveltia-cms-auth` (gratis) + GitHub OAuth App (`ALLOWED_DOMAINS` = hostname del sitio); bucket R2 + token (Object R/W) + CORS al dominio del CMS + `public_url`. Bundle propuesto: `SKILL.md` (veredicto + escalera + receta Sveltia + gotchas + limits) + references/ {`sveltia-setup`, `cloudflare-auth-worker`, `media-r2`, `escalation-ladder` (Pages CMS + frontera git-vs-DB), `i18n-and-publishing`}. Caveats: Sveltia es beta de un solo mantenedor (riesgo bajo por portabilidad de archivos); la interacción CSP×`/admin` es INFERIDA (verificar en build); Keystatic es time-sensitive (re-chequear). Registro = §11 (turns 1–4); reporte de research completo = artefacto del chat de decisiones.
 
 ### Pins (2026-06-16 — re-verificar en el research de cada skill)
 
@@ -132,13 +132,13 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - `webgl-atmosfera` (#6, visuales) turns 1–4 — HECHOS (scoping/10 forks, pre-research, research verificado fuente primaria, lock). 4 reversals vs leans de turn 1: F1 motor (OGL → raw WebGL2 vendorizado default, native-first), F5 fallback (gradiente CSS → AVIF/WebP estático astro:assets primario), F6 carga (client:visible → init manual rIC+IntersectionObserver; canvas no elegible-LCP), F7 a11y (aria-hidden+reduced-motion → + control pausa OBLIGATORIO SC 2.2.2). CC-A (just-use-CSS) acotado no derrotado; CC-B (OGL estancado) aceptado (movió F1). Seams: CSP×shader paridad #5/#2 (bundled hasheado, template-literals sin connect-src); scroll→uniform por rAF+listener pasivo (0 libs) × #5; reduced-motion × a11y 0.95 #3.
 - `webgl-atmosfera` (#6) turn 5 (Build) — HECHO. Bundle (SKILL.md + 5 refs) autorado por md-house-style + skill-author, validado (quick_validate OK; description 951/1024; frontmatter solo {name, description}; sin bold/HR/H4; TOC en los 2 refs >100 líneas), empaquetado (.skill 17707 B, 6 archivos), commiteado atómico vía Git Data API en `22f805c5ca1275f4198ff788e16cd2d7ded74a38` (parent 1881820f; sha-git de blob == local para los 6 antes de mover el ref). Skill #6 COMPLETA. Detalle en §11.
 - 6/7 redactadas.
-- Siguiente — BUILD FINAL de las 7 skills vía Claude Code (quick_validate + package las 7, probar marketplace add/install/triggering); luego empezar a llenar el deferred `stack-integration-playbook`.
+- Siguiente — `cms-self-edit` (#8) turn 5 (Build) en chat nuevo; luego BUILD FINAL de las 8 skills vía Claude Code (quick_validate + package las 7, probar marketplace add/install/triggering); luego empezar a llenar el deferred `stack-integration-playbook`.
 
 ## 10. Roadmap
 
 - **Fase 0** — scaffold del marketplace. Hecha.
 - **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (7/7 redactadas; #7 `signature-anim` 26576412; #2 `web-security-headers` 4f37a05; #3 `perf-ci-gates` 23d8388f; #4 `seo-aeo-schema` 0b55775; #5 `motion-system` 1bd35f15; #6 `webgl-atmosfera` 22f805c5 — COMPLETA; siguiente = #7 `signature-anim` turn 1)
-- **Skill planeada (post-7) — `cms-self-edit`** (placeholder) — capacidad self-edit/CMS headless; turno de selección de herramienta primero (gap de stack-canon), luego cadencia normal; scaffold al repo diferido hasta llegar.
+- **Skill #8 — `cms-self-edit`** — turns 1–4 HECHOS, build pendiente; decisión = Sveltia (default) / Pages CMS (runner-up) / Directus (Etapa 3); ver §3 y §11. Scaffold al repo se hace en el build (turn 5).
 - **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
 
 ## 11. Log de sesiones
@@ -619,3 +619,21 @@ Commits atómicos vía Git Data API (Composio proxy_execute, sandbox `dqif`). Fa
 Repo: 7/7 skills commiteadas (#1 9b182b0, #2 4f37a05, #3 23d8388f, #4 0b55775, #5 1bd35f15, #6 22f805c5, #7 26576412). Pins #7 verificados 2026-06-18: canvas 2.38.1, canvas-lite 2.37.3 (tren lite atrás), canvas-single 2.38.0, webgl2 2.38.1, react-canvas 4.28.0. Claude Code sigue reservado al build final de las 7.
 
 Siguiente: BUILD FINAL de las 7 vía Claude Code — quick_validate + package las 7, probar el marketplace (add/install/triggering); luego empezar a llenar el deferred `stack-integration-playbook`.
+
+### 2026-06-18 — cms-self-edit · turns 1–4 (Scoping · Pre-research · Research · Decisiones) — HECHOS
+
+Skill #8, NUEVA (no estaba en el scaffold de 7 + 1 diferida → no tiene stub ni registro en `.claude-plugin/`; en el build verificar si el auto-discovery basta o hay que registrarla en `plugin.json`/`marketplace.json`). Override de Carlos: decisión por MÉRITO puro; `stack-canon-argos` dropeado como autoridad (no existe / el stack no es fijo). Reframe vs el placeholder previo del RESIDENT ("CMS headless / turno de selección primero"): el espacio se mapeó completo (git-based / content-collections / headless-DB), native-first favoreciendo git-native.
+
+**Turn 1 (Scope):** enmarcado "CMS-self-edit ideal" sobre Astro 6 + CF para cliente no-técnico; familias + ejes (UX no-técnico · no-lock-in/own-data · low-maintenance · native-first · Astro6+CF fit · i18n MX · auth del editor · media · preview · latencia de rebuild); forks abiertos sin pre-decidir.
+
+**Turn 2 (Pre-research):** skill `pre-research` (5 búsquedas + fuentes primarias). Hallazgo que invierte el seed: Keystatic ("Astro-native") tiene 3 strikes sobre este stack. Sveltia = candidato git puro más fuerte. Pages CMS = mejor auth no-técnico (magic-link). Apareció EmDash (CMS oficial de Cloudflare). Pre-brief de 8 subtasks + source priority.
+
+**Turn 3 (Research mode, verificado fuente primaria):** reporte completo en el chat de decisiones. Resoluciones: Keystatic OUT hoy (#1515 ABIERTO, PR #1527 sin merge, peer-dep cap astro 2–5; #1497 OAuth-CF ABIERTO) — VERIFICADO en el issue tracker. Sveltia: SPA <600KB en `public/admin`, OAuth Worker oficial gratis, R2 nativo, i18n+DeepL, beta GA mid-2026, single-maintainer. Pages CMS: magic-link sin GitHub, pero hosted-SaaS-con-acceso-al-repo O self-host Postgres+BetterAuth. EmDash: v0.1.0 preview, contenido DB/Portable-Text, sandbox = CF pago → OUT. Tina: editor visual top pero DB/cloud + Astro experimental + sin i18n. DB self-host = VPS+Postgres+S3 (~$200/mes); Directus MSCL, OIG libre <$5M y <50 empleados. Latencia git→CF rebuild ~2–3 min (aceptable para sitio premium). Caveat INFERIDO (no documentado): mantener `/admin` como archivo estático en `public/` esquiva la CSP `<meta>` de #2; si fuera página renderizada por Astro, allowlistear el origen del bundle en `security.csp.scriptDirective.resources` (CSP es global, sin opt-out por ruta).
+
+**Turn 4 (Decisiones, lockeadas):** veredicto + escalera de 3 etapas (ver §3). Carlos aprobó Sveltia como default. Fork de auth (su llamada): si los clientes raramente rechazan GitHub → default = Sveltia tal cual; si es la norma → default = Pages CMS. PENDIENTE de su confirmación; sin respuesta, queda Sveltia default.
+
+RESIDENT actualizado en este turn 4 (este commit) para registrar la decisión y armar el chat de build. La 2ª actualización del RESIDENT (marcar #8 COMPLETA + flip de "siguiente") la hace el chat de build al cierre del turn 5, junto al commit del bundle.
+
+Sandbox suffix activo este chat: `dqif`.
+
+Siguiente: `cms-self-edit` (#8) turn 5 (Build) en chat nuevo — autoría del bundle (skill-author + md-house-style) → `quick_validate` → `package` → `.skill` (entregar vía present_files, NO commitear el zip) → commit atómico de FUENTES (Git Data API) → 2ª actualización del RESIDENT. Re-verificar pins al inicio del build (`date -u` para la fecha UTC del contenedor).

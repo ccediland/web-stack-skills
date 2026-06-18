@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-06-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: seo-aeo-schema turn 4 (decisiones) HECHO — F2–F10 lockeados, §3 veredicto/pins reescritos — 3/7 redactadas (23d8388f) — siguiente = seo-aeo-schema turn 5 (Build)
+status: seo-aeo-schema turn 5 (build) HECHO — SKILL.md + 5 refs commiteadas (0b55775), fuente byte-verificada — 4/7 redactadas — siguiente = motion-system (#5) turn 1 (Scoping)
 ---
 
 # web-stack-skills — RESIDENT
@@ -126,12 +126,13 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - `seo-aeo-schema` (#4) turn 2 (Pre-research) — HECHO. Skill `pre-research` corrida; F1 resuelto IN; pre-brief de 8 subtasks entregado.
 - `seo-aeo-schema` (#4) turn 3 (Research) — HECHO. Research mode entregó reporte verificado (fuentes primarias). De-risking clave: el seam CSP×JSON-LD (×#2) se RESUELVE como NO-ISSUE — `ld+json` es data block exento de script-src, no necesita hash. schema-dts@2.0.0 vivo (caso contrario primario derrotado) pero NO valida @id cross-refs. Detalle en §11.
 - `seo-aeo-schema` (#4) turn 4 (Decisiones) — HECHO. F2–F10 lockeados; §3 veredicto/pins reescritos. Detalle en §11.
-- Siguiente — `seo-aeo-schema` (#4) turn 5 (Build).
+- `seo-aeo-schema` (#4) turn 5 (Build) — HECHO. SKILL.md + 5 refs autoradas, validadas (quick_validate OK; description 961 chars; sin `<`/`>`; frontmatter solo {name, description}; sin bold/HR/H4; TOC en los 2 refs >100 líneas), empaquetadas (.skill 15750 B), y commiteadas atómicamente vía Git Data API (commit 0b55775, parent 33cb7cc, autor Carlos; fuente byte-verificada: sha git de cada blob == sha local antes de mover el ref). Skill #4 COMPLETA. Detalle en §11.
+- Siguiente — `motion-system` (#5) turn 1 (Scoping).
 
 ## 10. Roadmap
 
 - **Fase 0** — scaffold del marketplace. Hecha.
-- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (3/7 redactadas; #2 `web-security-headers` 4f37a05; #3 `perf-ci-gates` 23d8388f; #4 `seo-aeo-schema` turns 1–4 hechos — veredicto/pins lockeados, siguiente = build)
+- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (4/7 redactadas; #2 `web-security-headers` 4f37a05; #3 `perf-ci-gates` 23d8388f; #4 `seo-aeo-schema` 0b55775 — COMPLETA; siguiente = #5 `motion-system` turn 1)
 - **Skill planeada (post-7) — `cms-self-edit`** (placeholder) — capacidad self-edit/CMS headless; turno de selección de herramienta primero (gap de stack-canon), luego cadencia normal; scaffold al repo diferido hasta llegar.
 - **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
 
@@ -521,3 +522,27 @@ Confianza: pins/breaking-changes/tipos schema-dts/comportamiento CSP-data-block/
 Sandbox suffix activo este chat: `sas_k4m2q9`.
 
 Siguiente: seo-aeo-schema turn 5 (Build) — autoría de SKILL.md + 5 refs (`json-ld-graph`, `meta-and-canonical`, `sitemap-config`, `robots-and-llms`, `validation-and-aeo`); leer md-house-style + skill-author primero; `quick_validate.py` (description ≤1024, sin `<`/`>`, sin `: ` mid-string; frontmatter solo {name, description}); `package_skill.py` → `.skill`; commit atómico del fuente (Git Data API). Re-verificar pins schema-dts 2.0.0 / @astrojs/sitemap 3.7.3 al inicio del build.
+
+### 2026-06-17 — seo-aeo-schema · turn 5 (Build) — HECHO · skill #4 COMPLETA
+
+Autoría + validación + empaquetado + commit atómico del fuente. Bundle = SKILL.md + 5 references. Pins re-verificados contra npm al inicio del build: `schema-dts@2.0.0` (latest, 2026-03-23) y `@astrojs/sitemap@3.7.3` (latest, 2026-05-26). Template de casa leído del repo (`web-security-headers`): SKILL.md frontmatter = name+description; refs = title/summary/last_updated/applies_to.
+
+Archivos (path · bytes · blob sha):
+- skills/seo-aeo-schema/SKILL.md · 7178 · 09fd7190c49259c17fc70d4ee69d56f6e7205a5d
+- references/json-ld-graph.md · 8642 · 15e3d64116ed480da6cbe35ecd881efaabb4df89
+- references/meta-and-canonical.md · 3585 · cfea41391a110104a9f36f18fbf7f3e5b2e1e9a8
+- references/robots-and-llms.md · 6299 · 8bbaba8e58074486afcc508350bb58cd2e9f0f61
+- references/sitemap-config.md · 4028 · 060ac7de94fb224fa530600cb751e77249a6c8a5
+- references/validation-and-aeo.md · 5032 · 04dc549152f3f07da4ed9726db924a5ff0a45117
+
+Validación: `quick_validate` → valid. description 961 chars (≤1024), sin `<`/`>`, sin `: ` mid-string. Frontmatter SKILL.md = {name, description}. House-style: bold=0, HR=0, H4=0 en los 6 archivos; TOC presente en json-ld-graph (149 líneas) y robots-and-llms (143). Las 5 refs parsean YAML OK. Empaquetado: `package_skill` → `.skill` 15750 B con los 6 archivos bajo `seo-aeo-schema/`.
+
+Commit: atómico vía Git Data API (1 commit para todo el bundle). HEAD 33cb7cc → **0b55775** (parent 33cb7cc verificado, autor+committer Carlos). base_tree mergeado → entradas previas del repo preservadas. Verificado por metadata: los 6 archivos existen en skills/seo-aeo-schema/ con los bytes exactos. El `.skill` se entregó a Carlos vía present_files (el repo guarda SOLO las fuentes, no el `.skill`).
+
+Contenido del skill (lo que codifica, resumido): @graph JSON-LD centralizado cross-@id con schema-dts 2.0.0 + render util con escape (`is:inline`, replace `<>&`); doc del límite @id (no se valida → validación runtime obligatoria); detalle CSP-exento (ld+json = data block, sin hash, no tocar scriptDirective.hashes de #2). meta/head typed (canonical derivado de Astro.site+url, OG, Twitter; seam OG dinámico satori/Workers; seam hreflang). @astrojs/sitemap opinionado (solo prerendered; endpoint custom para SSR; lastmod por serialize; bug #16838; changefreq/priority ignorados; dist/client). robots.txt con tabla de 16 tokens verificados + regla acceso≠aparición; llms.txt como B2A/agent-readiness (no SEO) + spec llms.txt vs llms-full.txt; patrón text-endpoint prerender=true compartido. Validación (RRT pierde FAQ jun-2026 vs validator.schema.org) + script CI custom `check-jsonld.mjs` exportado para que el workflow de #3 lo gatee; tabla tipos rich-result 2026 (FAQ deprecado 7-may, HowTo muerto); framing AEO honesto (Google: no special schema; match contenido visible; palancas son content-side).
+
+NOTA DE PROCESO (reusar en builds #5–#7): el commit cross-environment se hizo SIN emitir base64 (regla no-negociable). Método: autorar+validar+empaquetar en code-exec; calcular sha git de blob local de cada archivo; transportar el contenido RAW (no base64) a una celda Composio (backslashes de los snippets de código reemplazados por un centinela `ɵ` y reconstituidos con chr(92) dentro del sandbox para evitar ambigüedad de escape JSON/raw-string); crear blobs con encoding utf-8; GATE: assert sha-de-blob-devuelto == sha-local para los 6 antes de tocar el ref; luego tree(base_tree)+commit+PATCH ref. Los 6 shas matchearon a la primera. Fidelidad probada por metadata, cero base64 en output.
+
+Sandbox suffix activo este chat: `sas_k4m2q9`.
+
+Siguiente: `motion-system` (#5) turn 1 (Scoping). Semilla: 3 motores — GSAP scroll-cinematic / CSS scroll-driven animations (reveals nativos) / Motion (`useAnimate`) para islands React; el fork central es cuándo cada uno y cómo conviven con el presupuesto de JS de #3 y las islands. Pins a re-verificar al lockear: `gsap@3.15.0`, `@gsap/react@2.1.x`, `motion@12.40.0` (antes framer-motion). Cadencia de 5 turnos como siempre; tool-selection no requerido salvo que el scoping lo levante.

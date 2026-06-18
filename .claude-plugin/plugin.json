@@ -12,6 +12,7 @@
     "./skills/seo-aeo-schema",
     "./skills/motion-system",
     "./skills/webgl-atmosfera",
-    "./skills/signature-anim"
+    "./skills/signature-anim",
+    "./skills/cms-self-edit"
   ]
 }

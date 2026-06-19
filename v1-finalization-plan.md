@@ -3,12 +3,12 @@ name: web-stack-v1-finalization
 description: "Execution plan Claude works from to take ccediland/web-stack-skills from cms-self-edit complete to v1 shipped — cleanup, mechanical validation, a reference-site composition test, the integration playbook, and release — plus the v2 Lego roadmap. Use when resuming this phase in a fresh chat after cms-self-edit (#8) is authored, validated, and committed."
 title: "web-stack-skills — v1 Finalization & v2 Roadmap"
 summary: "Mortal execution plan for the post-cms-self-edit phase. Five gated phases (A cleanup, B mechanical validation, C reference-site composition test, D integration playbook, E ship v1) plus the open v2 backlog. Points at RESIDENT.md for standing facts; archived at v1 ship."
-last_updated: 2026-06-17
+last_updated: 2026-06-18
 applies_to: "ccediland/web-stack-skills · post-7-skills + cms-self-edit · pre-v1-ship"
-status: "NOT STARTED — gated on cms-self-edit (#8) authored + validated + committed + registered in plugin.json"
-phase: "A (Cleanup) is first"
+status: "IN PROGRESS — cms-self-edit (#8) completa, validada y commiteada (commits 90110a9e bundle+plugin.json, d7da1b25 RESIDENT). Gate de arranque LIBRE; Phase A siguiente."
+phase: "A (Cleanup) — lista para arrancar; gate libre"
 home_base: "chat (claude.ai); excursion to Claude Code for phases B and C"
-next_action: "Confirm cms-self-edit (#8) is done; then Phase A, step 1"
+next_action: "Phase A, step 1 — compactar §11 del RESIDENT en su lugar"
 resident: "./RESIDENT.md — canonical for all standing facts (skill verdicts, pins, decisions, state). Point, never duplicate."
 ---
 
@@ -22,12 +22,16 @@ resident: "./RESIDENT.md — canonical for all standing facts (skill verdicts, p
 - Caveat: el sitio de referencia ES el integration test. NO se construye un harness sintético de stress-tests con logs en muchos CLAUDE.md; las lecciones de campo del build real son las que llenan el playbook.
 - Principio Lego: el bundle es un catálogo de partes. Cada sitio compone un SUBCONJUNTO. Ningún sitio lleva todas las skills. Las skills nuevas amplían el alcance del catálogo, no la carga de cada sitio.
 - Las cuatro innegociables (performance, SEO/AEO, visuales, ciberseguridad) YA quedan cubiertas por el core de v1. v2 amplía alcance funcional, no el piso de calidad.
+- Estado: las 8 skills autoradas y commiteadas (`cms-self-edit` #8 cerrada). Gate de arranque de este plan LIBRE; Phase A siguiente.
+- Dos horizontes: H1 = ship v1 (8 skills + playbook + sitio de referencia); H2 = v2, capa cliente-facing, culminando en `client-discovery`.
 
 ## When to use this document
 Úsalo en un chat fresco DESPUÉS de que `cms-self-edit` (#8) esté autorada, validada, commiteada y registrada en `plugin.json`. Si #8 no está lista, este plan no arranca — termínala primero bajo la cadencia del RESIDENT. Al abrirlo: lee el state block del front matter y el front matter + §3/§9/§10 del RESIDENT, confirma la compuerta, confirma la next action con Carlos, ejecuta la fase actual, y al cerrar añade al session log sin reiniciar el plan.
 
 ## Objective
-v1 = las 7 skills fundación/visuales + `cms-self-edit` + `stack-integration-playbook`, todas instalables, con install y triggering validados en Claude Code, y UN sitio de referencia vivo en Cloudflare pasando ambas puertas de CI (LHCI + Biome) como prueba de composición. Done-criteria explícito en Phase E.
+v1 (H1) = las 7 skills fundación/visuales + `cms-self-edit` + `stack-integration-playbook`, todas instalables, con install y triggering validados en Claude Code, y UN sitio de referencia vivo en Cloudflare pasando ambas puertas de CI (LHCI + Biome) como prueba de composición. Done-criteria explícito en Phase E.
+
+v2 (H2) = extender el marketplace con la capa cliente-facing, culminando en la skill `client-discovery` (intake/descubrimiento), que depende del `stack-integration-playbook` (Phase D). v1 es el gate a v2. El backlog Lego (abajo) sigue jalado por proyectos reales; `client-discovery` es el único ítem v2 ya comprometido y especificado.
 
 ## Starting state (gate to start)
 Precondición dura antes de Phase A:
@@ -109,6 +113,8 @@ Goal: promover la skill diferida a real, llenada desde Phase C (no desde teoría
 
 Gate D→E: playbook pasa la cadencia, tiene sustancia de un sitio real, registrado en el plugin.
 
+Dependencia hacia v2: el `stack-integration-playbook` construido aquí es lo que desbloquea `client-discovery` — su fase de factibilidad corre contra la matriz de este playbook.
+
 ## Phase E — Ship v1
 Goal: v1 liberada.
 - Scope v1 = 7 skills fundación/visuales + `cms-self-edit` + `stack-integration-playbook`, todas instalables, install + triggering validados, un sitio de referencia vivo como prueba.
@@ -149,16 +155,30 @@ Invariantes que toda skill v2 debe mantener (para que el bundle siga coherente y
 
 Drift / setup-and-forget (postura honesta, ya en la revisión externa del repo): el setup-and-forget puro NO aplica a los sitios construidos sobre esto. Esperar ciclos de toque de ~12–18 meses (majors de Astro, cambios del adapter de Cloudflare). Mitigaciones: mantener los sitios tan estáticos como el brief permita; sesgar `data-layer` a build-time; cada pin con review-gate; el playbook documenta los seams frágiles. v2 mantiene esta disciplina — no elimina el mantenimiento, lo acota.
 
+### v2 priority — `client-discovery` (intake / descubrimiento del cliente)
+Único ítem v2 comprometido y especificado (el resto del backlog sigue jalado por proyecto real). Job: convertir lo que el cliente dé, en el formato que sea, en un brief estructurado y validado contra el stack, + registro de lo diferido a Carlos.
+
+Cuatro fases:
+1. Intake — qué preguntar/solicitar; banco de preguntas y plantillas por tipo de cliente/sitio.
+2. Captura por formato — escrito / dibujo / export tipo Claude Design → normaliza a un brief consciente del stack. Cada formato rutea a su destino: escrito → requisitos; dibujo → requisitos + handoff visual; export design-tool → pipeline de tokens (`astro-css-tokens`).
+3. Factibilidad — corre los deseos contra la matriz del `stack-integration-playbook` → veredicto por ítem, límites/tradeoffs, realidad-en-producción (el delta brief↔deploy).
+4. Deferral — cuando el cliente pasa la decisión a Carlos: separa estético vs funcional/UX, registra como decisión suya con contexto, no decide solo.
+
+Fronteras: captura intención, NO renderiza ni diseña (handoff a Claude Design / `visual-design-router`); la factibilidad vive en el playbook (referencia, no duplica); diferidos se registran para Carlos.
+Depende de: Phase D (playbook). Gate de arranque: v1 shipped. Estructura: SKILL.md (flujo de 4 fases + manejo por formato + esqueleto de deferral) + referencias (banco de preguntas/plantillas, captura por formato, uso de la matriz, deferral estético vs UX). Nombre tentativo `client-discovery`, sujeto a confirmación.
+
 ## Open questions / forks
 Las pocas decisiones reales; resolver al llegar al punto, no antes.
 - Audiencia de la consolidación del RESIDENT: compactar-en-su-lugar (default, una fuente de verdad) vs además un `ARCHITECTURE.md`/README expandido para visitantes del repo. Default: compactar en su lugar; agregar doc público solo si quieres legibilidad para extraños.
 - Arquetipo del sitio de referencia: corporativo-imagen vs consultoría-AI. Recomendado: el que doble como tu activo real de empresa.
 - `forms`: skill propia vs pick en stack-canon + receta en playbook. Decidir cuando data-layer/forms se jale por primera vez.
 - CMS de `cms-self-edit`: lockeado en su propio turno de selección (pre-este-plan). Este plan hereda lo elegido; solo confirmar que quedó registrado en stack-canon.
+- Resuelto: la auditoría de factibilidad se consolida DENTRO de `client-discovery` (fase 3), no como skill aparte.
+- Abierto: nombre de la skill v2 — `client-discovery` vs `design-brief-audit` vs `client-intake`. Decidir al autorarla.
 
 ## Next actions
 Para el chat fresco que abra este plan, en orden:
-1. Confirmar que `cms-self-edit` (#8) está autorada, validada, commiteada y registrada en `plugin.json`. Si no, este plan no arranca — terminarla primero.
+1. Gate LIBRE — `cms-self-edit` (#8) completa/validada/commiteada/registrada (commits `90110a9e` + `d7da1b25`). No re-confirmar.
 2. Leer front matter + §3/§9/§10 del RESIDENT para confirmar el estado actual.
 3. Iniciar Phase A, step 1 (compactar §11 del RESIDENT en su lugar).
 
@@ -166,7 +186,11 @@ Para el chat fresco que abra este plan, en orden:
 Standing instruction: al abrir este plan en un chat fresco, leer el state block del front matter + front matter del RESIDENT, confirmar la compuerta de arranque (cms-self-edit done), confirmar la next action con Carlos, y ejecutar la fase actual. Loguear incrementalmente; al cierre reescribir el estado y añadir la entrada al session log. No reiniciar el plan ni re-derivar lo que el log ya resolvió.
 
 ## Session log
-(Vacío — añadir una entrada destilada por sesión: qué se hizo, qué se decidió, dead-ends, siguiente. Mantener la entrada más reciente completa; comprimir las viejas a decisiones y punteros.)
+### 2026-06-18 — cms-self-edit (#8) cerrada; plan re-scopeado a 2 horizontes
+Hecho: autorada y commiteada la 8ª skill `cms-self-edit` (bundle + 5 refs + registro en `plugin.json`, commit `90110a9e`; RESIDENT actualizado, commit `d7da1b25`). Gate de arranque de este plan LIBRE.
+Decidido: meta a 2 horizontes (H1 ship v1, H2 capa cliente-facing). Añadida `client-discovery` al horizonte v2 como único ítem comprometido/especificado (4 fases: intake → captura por formato → factibilidad → deferral; depende del playbook de Phase D). Auditoría de factibilidad consolidada DENTRO de esa skill.
+Dead-ends: ninguno este turno.
+Siguiente: Phase A, step 1 (compactar §11 del RESIDENT en su lugar).
 
 ## Limitations & Out-of-Scope
 - NO cubre autorar #6 `webgl-atmosfera`, #7 `signature-anim`, ni `cms-self-edit` — esas terminan bajo la cadencia del RESIDENT ANTES de que arranque este plan.

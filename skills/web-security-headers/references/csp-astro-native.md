@@ -1,13 +1,13 @@
 ---
-title: Astro 6 native CSP (security.csp)
-summary: How Astro 6's stable security.csp works — config shape, runtime API, external hashes, delivery model, and incompatibilities.
-last_updated: 2026-06-17
-applies_to: astro@6.4.7
+title: Astro native CSP (security.csp)
+summary: How Astro's stable security.csp works — config shape, runtime API, external hashes, delivery model, and incompatibilities.
+last_updated: 2026-08-17
+applies_to: astro@7.2.2
 ---
 
-# Astro 6 native CSP
+# Astro native CSP
 
-Astro 6 ships a stable Content Security Policy feature under the security.csp config key (it left the experimental flag in 6.0). It is hash-based: at build time Astro computes hashes for every bundled script and style, including ones loaded dynamically, and emits them in the policy. It is not nonce-based.
+Astro ships a stable Content Security Policy feature under the security.csp config key (stable since 6.0, shape intact in 7). It is hash-based: at build time Astro computes hashes for every bundled script and style, including ones loaded dynamically, and emits them in the policy. It is not nonce-based.
 
 ## Delivery model
 
@@ -16,7 +16,7 @@ Delivery is per page and automatic, decided by whether the page is prerendered:
 - Static (prerendered) page: the policy is injected as a meta element with http-equiv set to content-security-policy, inside the head.
 - On-demand (server-rendered) page: the policy is sent as a Content-Security-Policy response header.
 
-On Cloudflare with @astrojs/cloudflare 13.7.0 the adapter does not support the staticHeaders adapter feature, so static pages keep the meta element. There is no native path to write Astro's CSP into the _headers file. If you need a real CSP header on a static-hosted Cloudflare project, the only options are a server-rendered route (middleware sets the header) or a third-party build integration that captures headers; neither is the default here.
+On Cloudflare with @astrojs/cloudflare 14.2.1 the adapter still does not support the staticHeaders adapter feature (re-verified 2026-08-17), so static pages keep the meta element. There is no native path to write Astro's CSP into the _headers file. If you need a real CSP header on a static-hosted Cloudflare project, the only options are a server-rendered route (middleware sets the header) or a third-party build integration that captures headers; neither is the default here.
 
 The meta element cannot carry frame-ancestors, report-uri, report-to, or sandbox, and cannot be report-only. Deliver those from public/_headers as a separate Content-Security-Policy header; the browser enforces the intersection of the meta policy and the header policy.
 
@@ -88,4 +88,4 @@ These additions merge with the config-level policy and are deduplicated.
 
 - This document does NOT cover the non-CSP headers (see header-inventory.md) or the _headers file mechanics (see cloudflare-headers.md).
 - Nonces are not supported by native CSP; it is hash-only. A nonce path requires a server-rendered route and a real header (see middleware-ssr.md).
-- The config shape is current as of astro@6.4.7. Re-verify on upgrade.
+- The config shape is current as of astro@7.2.2 (the 6-to-7 major kept it intact; 7.1.0 added an optional kind option for script-src-elem/-attr and style-src-elem/-attr). Re-verify on upgrade.

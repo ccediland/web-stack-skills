@@ -5,11 +5,11 @@ description: Set up a hash-based Content Security Policy and the full set of HTT
 
 # Web Security Headers for Astro 6 on Cloudflare
 
-> Deliver CSP plus the full HTTP security-header set for an Astro 6 site on Cloudflare Workers Static Assets. Astro's native CSP hashes scripts and styles per page; everything the meta element cannot carry, plus all transport and framing headers, lives in a hand-written public/_headers file.
+> Deliver CSP plus the full HTTP security-header set for an Astro 7 site on Cloudflare Workers Static Assets. Astro's native CSP hashes scripts and styles per page; everything the meta element cannot carry, plus all transport and framing headers, lives in a hand-written public/_headers file.
 
 ## TL;DR
 - Astro native CSP (security.csp) is hash-based and delivered per page automatically: a meta element on static pages, a Content-Security-Policy response header on server-rendered pages. It is not nonce-based.
-- The Cloudflare adapter (@astrojs/cloudflare 13.7.0) does not support staticHeaders, so on static pages the CSP stays a meta element. There is no built-in path to emit it as a real header on Cloudflare static output.
+- The Cloudflare adapter (@astrojs/cloudflare 14.2.1) does not support staticHeaders — gate re-verified 2026-08-17 against the adapter source; the decision stands — so on static pages the CSP stays a meta element. There is no built-in path to emit it as a real header on Cloudflare static output.
 - The meta element cannot carry frame-ancestors, report-uri, report-to, or sandbox, and cannot be report-only. Clickjacking protection and reporting therefore require a real header in public/_headers.
 - Put HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, and the Cross-Origin headers in public/_headers. That file applies only to static-asset responses, not to Worker (SSR) responses.
 - Critical caveats, repeated under Limitations: keep COEP off by default (require-corp breaks cross-origin embeds such as WebGL textures and Rive), do not ship HSTS preload by default (it is effectively permanent), and do not put custom Cache-Control in _headers (unreliable on Workers assets, issue 13164).
@@ -91,7 +91,7 @@ If any route is on-demand (SSR), public/_headers will not cover its response. Se
 
 ### 4. Subresource Integrity, optional
 
-Astro has no native SRI. For a mostly same-origin site it adds little; add it only for cross-origin resources, either by hand or with an integration scoped to SRI only. See references/sri-and-verification.md.
+Astro has no native SRI. For a mostly same-origin site it adds little; add it only for cross-origin resources, either by hand or with the small build-time hash script. See references/sri-and-verification.md. (@kindspells/astro-shield is retired from this stack — unmaintained, peer range stops at astro 4.)
 
 ### 5. Verify
 
@@ -104,9 +104,9 @@ CSP cannot be tested in astro dev. Build and preview, then check the live respon
 ## Gotchas
 
 - CSP is inert in astro dev because of the Vite dev server. Always validate with build plus preview.
-- The Cloudflare adapter does not support staticHeaders as of 13.7.0. Re-check on each adapter minor; if it lands, you can move CSP to a real header and drop the meta element.
+- The Cloudflare adapter does not support staticHeaders as of 14.2.1 (review-gate re-checked 2026-08-17: NOT triggered; the feature ships in the node, netlify, and vercel adapters only). Re-check on each adapter minor; if it lands, you can move CSP to a real header and drop the meta element.
 - The ClientRouter view-transition component and Shiki inline styles conflict with native CSP. Use Prism for code highlighting, and test the router path explicitly.
-- Do not put Cache-Control in _headers; it is unreliable on Workers assets (issue 13164, wontfix). The adapter already sets immutable Cache-Control for hashed _astro assets.
+- Do not put Cache-Control in _headers; it is unreliable on Workers assets (issue 13164, wontfix). The adapter already sets immutable Cache-Control for hashed _astro assets — but watch issue 16692 (that injection reported missing in some adapter configs): confirm the header on a deployed _astro asset.
 - COEP require-corp breaks cross-origin embeds (WebGL textures, Rive files, third-party fonts) unless each resource sends CORP. Keep COEP off unless every cross-origin resource is CORP-clean.
 - HSTS preload is effectively permanent and can lock out subdomains. Do not ship preload by default; prefer enabling HSTS zone-wide in the Cloudflare dashboard to avoid a duplicate header.
 - Cloudflare's Add security headers Managed Transform omits CSP and Permissions-Policy by design. Avoid setting the same header in both _headers and a dashboard transform.
@@ -116,5 +116,5 @@ CSP cannot be tested in astro dev. Build and preview, then check the live respon
 - This skill does NOT cover application-layer auth, CORS policy design for APIs, WAF, rate limiting, bot management, cookie flags (SameSite, Secure, HttpOnly), or the report-collection backend; it only shows how to declare report-to.
 - Performance caching strategy (Cache-Control) is out of scope and belongs to a performance or CI skill. Only the cache-quirk warning lives here.
 - Astro native CSP is hash-only; it does not support nonces. A nonce requires a server-rendered route and a real response header.
-- This targets Cloudflare Workers Static Assets with @astrojs/cloudflare 13.7.0 and Astro 6.4.7. The _headers format also applies to legacy Cloudflare Pages. Verify behavior on deploy; the Cache-Control quirk (issue 13164) is wontfix.
-- Version pins are current as of 2026-06-17. Re-verify staticHeaders support and the security.csp API shape on Astro or adapter upgrades; Astro 7 (alpha) changes build internals.
+- This targets Cloudflare Workers Static Assets with @astrojs/cloudflare 14.2.1 and Astro 7.2.2. The _headers format also applies to legacy Cloudflare Pages. Verify behavior on deploy; the Cache-Control quirk (issue 13164) is wontfix.
+- Version pins are current as of 2026-08-17. Re-verify staticHeaders support and the security.csp API shape on Astro or adapter upgrades. The 6-to-7 major left security.csp intact (additive only — 7.1.0 added an optional kind option for script-src-elem/-attr and style-src-elem/-attr).

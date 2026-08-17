@@ -1,8 +1,8 @@
 ---
 title: Cloudflare _headers for static assets
 summary: The public/_headers file on Cloudflare Workers Static Assets — syntax, path matching, the baseline header set, .assetsignore, and the Cache-Control quirk.
-last_updated: 2026-06-17
-applies_to: "@astrojs/cloudflare@13.7.0, Cloudflare Workers Static Assets"
+last_updated: 2026-08-17
+applies_to: "@astrojs/cloudflare@14.2.1, Cloudflare Workers Static Assets"
 ---
 
 # Cloudflare _headers for static assets
@@ -57,7 +57,7 @@ The Content-Security-Policy line here carries only frame-ancestors (and, if used
 
 ## Cache-Control quirk
 
-Setting Cache-Control in _headers is unreliable on Workers Static Assets (Astro issue 13164, treated as wontfix or upstream). Do not rely on it. The adapter already injects an immutable, long-lived Cache-Control on hashed _astro assets, which covers the case that matters. Leave application caching strategy to a performance or CI skill rather than fighting _headers here.
+Setting Cache-Control in _headers is unreliable on Workers Static Assets (Astro issue 13164, treated as wontfix or upstream). Do not rely on it. The adapter already injects an immutable, long-lived Cache-Control on hashed _astro assets, which covers the case that matters — but watch issue 16692: hashed assets were reported WITHOUT the injected header in some adapter configs (seen on 13.5.0), so confirm it on a deployed _astro asset with a header inspector. Leave application caching strategy to a performance or CI skill rather than fighting _headers here.
 
 ## Cloudflare Pages compatibility
 
@@ -67,4 +67,4 @@ The _headers format is identical on legacy Cloudflare Pages, so the same file po
 
 - This document does NOT cover the meaning or recommended value of each header (see header-inventory.md) or CSP hashing (see csp-astro-native.md).
 - It does NOT cover headers for server-rendered routes (see middleware-ssr.md).
-- Behavior is current as of @astrojs/cloudflare 13.7.0; re-verify on adapter upgrade, especially any new staticHeaders support.
+- Behavior is current as of @astrojs/cloudflare 14.2.1 (2026-08-17); re-verify on adapter upgrade, especially any new staticHeaders support.

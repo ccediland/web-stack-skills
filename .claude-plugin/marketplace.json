@@ -7,8 +7,8 @@
     {
       "name": "web-stack",
       "source": "./",
-      "description": "Skills for premium high-performance websites on Astro 7 plus Cloudflare Workers Static Assets — design tokens, brand-canon ingestion, native CSP, perf CI gates, schema and AEO, motion, WebGL, signature animation, and a client-editable CMS.",
-      "version": "1.0.0-rc"
+      "description": "Skills for premium high-performance websites on Astro 7 plus Cloudflare Workers Static Assets — design tokens, brand-canon ingestion, native CSP, perf CI gates, schema and AEO, motion, WebGL, signature animation, a client-editable CMS, and the composition playbook that wires them into one site.",
+      "version": "1.0.0"
     }
   ]
 }

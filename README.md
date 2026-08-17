@@ -18,6 +18,8 @@ Each skill encodes a vetted verdict, current version pins, a generic recipe, and
 | `webgl-atmosfera` | visuals | Raw-WebGL2 shader atmosphere for a hero, lazy + fallback |
 | `signature-anim` | visuals | Rive state-machine for one bespoke interactive moment |
 | `cms-self-edit` | content | Sveltia CMS so a non-technical client self-edits content, git-based, no lock-in |
+| `brand-canon-ingest` | brand | Consume a governed brand repo (tokens, schemes, assets, voice) into the site, with provenance |
+| `stack-integration-playbook` | composition | How the skills compose into ONE site — canonical order, cross-cutting seams, stack map, recipes |
 
 ## Compose per site (the Lego principle)
 
@@ -25,8 +27,13 @@ The bundle is a catalog, not a fixed system: each site composes only the subset 
 
 - **Corporate brochure site** — `astro-css-tokens` + `web-security-headers` + `perf-ci-gates` + `seo-aeo-schema`, plus `motion-system` for reveals. No WebGL, no Rive, no CMS if the content is static.
 - **Restaurant site with a self-edited menu** — the same four foundation skills, plus `cms-self-edit` (the owner edits the menu without touching GitHub) and at most ONE visual skill (`webgl-atmosfera` OR `signature-anim`) if the brief justifies it.
+- **Brand-heavy site under a governed brand repo** — start at `brand-canon-ingest` and follow composition recipe #1 in `stack-integration-playbook`.
 
-A new skill widens the catalog's reach, never each site's payload.
+A new skill widens the catalog's reach, never each site's payload. The `stack-integration-playbook` skill is the composition authority: canonical order, the seams where composed builds actually fail, and proven recipes.
+
+## Proven in composition
+
+The catalog is exercised against a permanent **integration fixture**: a real brand repo consumed by a real 8-skill composed build, with both CI gates green under active assertions (median Lighthouse 1.00 performance / accessibility / best-practices / seo on all audited pages) and a live Workers branch-preview deploy. The cross-cutting lessons that build produced — CSP versus static styles, `_headers` concatenation, vacuous CI gates, software-GL fallbacks, byte-exact ingest provenance — live in the playbook's seams reference, not in folklore.
 
 ## Install
 
@@ -35,11 +42,11 @@ This repo is a Claude Code plugin marketplace.
     /plugin marketplace add ccediland/web-stack-skills
     /plugin install web-stack@web-stack-skills
 
-Skills install at personal or project scope. There is no auto-update yet — re-running `install` pulls the latest (git is the source of truth). Manual alternative: copy `skills/<skill>` into `~/.claude/skills/`.
+Skills install at personal or project scope (verified on both). There is no auto-update yet — re-running `install` pulls the latest (git is the source of truth). Manual alternative: copy `skills/<skill>` into `~/.claude/skills/`.
 
 ## Status
 
-All 9 skills are authored and registered — the stack runs on Astro 7 and the brand-ingestion skill (`brand-canon-ingest`) is in. The roadmap in progress (see `execution-plan.md`) validates the bundle mechanically, exercises it against a permanent integration fixture, and then builds out the full capability catalog toward v2.0.0. The `stack-integration-playbook` under `deferred/` is a skeleton, intentionally excluded from the installable plugin until it has field substance.
+v1.0.0 — the 10 pieces above are authored, validated, installable, and trigger-tested; the composition playbook carries field substance from the first composed build. The roadmap in progress (see `execution-plan.md`) builds out the full capability catalog in waves (data, forms, i18n, media, a11y, edge, analytics) toward v2.0.0.
 
 ## License
 

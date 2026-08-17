@@ -12,6 +12,7 @@ applies_to: catalog v1.0.0
 ## Contents
 
 - Recipe 1 — Brand-heavy site (proven: Furever integration fixture)
+- Recipe 2 — Forms and lead capture (own file)
 - Recipe skeleton (the contract for future archetypes)
 - Pending archetypes
 
@@ -52,6 +53,10 @@ A site whose visual identity comes from a governed brand repo (interchange contr
 ### What this recipe proves
 
 The full seam catalog (seams 1–9 plus the secondary seams) — this is the maximal composition. A site of this archetype can start from this recipe verbatim and cut what its brief does not need.
+
+## Recipe 2 — Forms and lead capture (own file)
+
+Lives in `forms-lead-recipe.md` (weight earned its own file): the one-route native architecture — Astro Action on the site's own Worker + Turnstile + Supabase insert-only RLS + native email notification + LFPDPPP consent + the WhatsApp deep-link knob — with per-brief knobs, the gate amendments (CSP origins, third-party budget), and the standing flip conditions that would promote it to a `forms-lead-system` skill. Unlike recipe 1 (an archetype), recipe 2 is a CAPABILITY recipe: it composes into any archetype that captures leads.
 
 ## Recipe skeleton (the contract for future archetypes)
 

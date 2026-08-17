@@ -1,6 +1,6 @@
 ---
 name: stack-integration-playbook
-description: Composition authority for the web-stack catalog — how the skills compose into ONE site and how that site plugs into the rest of the stack. Use when composing multiple skills together, deciding which subset a brief needs, or sequencing a full build. Trigger on build the full site with this stack, in what order do I apply these skills, wire the stack together, how do tokens, CSP, motion and CI fit together, connect the site to Supabase or GitHub Actions or Cloudflare, or write a composition recipe. Provides the canonical composition order (ingest, tokens, security, gates, seo, motion, visual, cms), the cross-cutting seams with field-proven gotchas, the web-to-stack integration map, and composition recipes. Not for any single capability — tokens go to astro-css-tokens, CSP to web-security-headers, CI gates to perf-ci-gates, schema to seo-aeo-schema, animation to motion-system, shader heroes to webgl-atmosfera, Rive to signature-anim, client editing to cms-self-edit, brand-repo consumption to brand-canon-ingest.
+description: Composition authority for the web-stack catalog — how the skills compose into ONE site, how the site plugs into the rest of the stack, and the forms recipe. Use when composing multiple skills, deciding which subset a brief needs, sequencing a full build, or capturing leads. Trigger on build the full site with this stack, in what order do I apply these skills, wire the stack together, add a contact form, capture leads with spam protection, or write a composition recipe. Provides the canonical order (ingest, tokens, security, gates, seo, motion, visual, cms), the cross-cutting seams, the stack map, and recipes including lead capture (Astro Action, Turnstile, LFPDPPP consent). Not for single capabilities — tokens go to astro-css-tokens, CSP to web-security-headers, CI to perf-ci-gates, schema to seo-aeo-schema, animation to motion-system, shaders to webgl-atmosfera, Rive to signature-anim, client editing to cms-self-edit, brand repos to brand-canon-ingest, external data to data-layer.
 ---
 
 # stack-integration-playbook
@@ -14,6 +14,7 @@ This SKILL.md is the composition order and the omission rules. Load references o
 - `references/seams-and-gotchas.md` — load when wiring two or more skills together, when a composed build fails in a way no single skill explains, or when reviewing a composed site before shipping. The numbered cross-cutting seams with their field-proven failure modes.
 - `references/stack-integration-map.md` — load when the site must touch anything beyond the web layer: external data, CI secrets, deploys, rebuild triggers, email, analytics.
 - `references/recipes.md` — load when starting a new site composition (pick the closest recipe), or when documenting a finished composition as a new recipe.
+- `references/forms-lead-recipe.md` — load when the site needs a contact form or lead capture: the one-route native architecture (Astro Action + Turnstile + Supabase insert-only + native email + LFPDPPP consent), its knobs, gate amendments, and the flip conditions that would promote it to a skill.
 
 ## TL;DR
 

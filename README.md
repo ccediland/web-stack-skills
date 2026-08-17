@@ -19,7 +19,8 @@ Each skill encodes a vetted verdict, current version pins, a generic recipe, and
 | `signature-anim` | visuals | Rive state-machine for one bespoke interactive moment |
 | `cms-self-edit` | content | Sveltia CMS so a non-technical client self-edits content, git-based, no lock-in |
 | `brand-canon-ingest` | brand | Consume a governed brand repo (tokens, schemes, assets, voice) into the site, with provenance |
-| `stack-integration-playbook` | composition | How the skills compose into ONE site — canonical order, cross-cutting seams, stack map, recipes |
+| `data-layer` | data | Build-time-first external data — collection loaders over a seed or Supabase, one zod contract, rebuild-on-change |
+| `stack-integration-playbook` | composition | How the skills compose into ONE site — canonical order, cross-cutting seams, stack map, recipes (incl. lead capture) |
 
 ## Compose per site (the Lego principle)
 
@@ -46,7 +47,7 @@ Skills install at personal or project scope (verified on both). There is no auto
 
 ## Status
 
-v1.0.0 — the 10 pieces above are authored, validated, installable, and trigger-tested; the composition playbook carries field substance from the first composed build. The roadmap in progress (see `execution-plan.md`) builds out the full capability catalog in waves (data, forms, i18n, media, a11y, edge, analytics) toward v2.0.0.
+v1.1.0 — the 11 pieces above are authored, validated, installable, and trigger-tested. Wave W1 added `data-layer` (exercised on the integration fixture: a live catalog graduated from seed JSON to Supabase at build time, with webhook-triggered rebuilds) and the forms/lead-capture recipe inside the playbook (Astro Action + Turnstile + insert-only RLS + native email, proven on a live deploy). The roadmap in progress (see `execution-plan.md`) continues the capability waves (i18n, media, a11y, edge, analytics) toward v2.0.0.
 
 ## License
 

@@ -15,7 +15,7 @@ Marketplace de plugins de Claude Code (público, MIT): un plugin `web-stack` que
     skills/<nombre>/            una carpeta por skill (nombre de carpeta == name del frontmatter)
       SKILL.md                  veredicto + receta (frontmatter SOLO name + description)
       references/*.md           configs, plantillas, gotchas (progressive disclosure)
-    deferred/                   (vacío desde D) skills sin sustancia — FUERA del plugin (exclusión estructural)
+    deferred/                   (no existe hoy — se recrea al diferir) skills sin sustancia, FUERA del plugin
     RESIDENT.md                 doc vivo canónico (leer primero)
     execution-plan.md           plan mortal del roadmap en curso (full catalog v1.0.0→v2.0.0; se archiva al ship de v2)
     README.md · LICENSE

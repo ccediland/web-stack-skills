@@ -1,0 +1,5 @@
+# local Claude Code settings (plugin-test residue, machine-local)
+.claude/
+
+# packaged skill bundles are build artifacts, never committed
+*.skill

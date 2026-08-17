@@ -116,13 +116,8 @@ Three files under `tokens/`. Each `$value` is a plain string — never an object
 
 Tailwind generates utilities like `bg-primary`, `text-danger`, `text-on-surface` from these. The utility value is `var(--ds-semantic-color-primary)` — runtime-resolved, theme-switchable.
 
-## Composite $value gotcha (bug #1398/#1494)
+## Composite $value gotcha (bug #1494)
 
-Object-valued `$value` fields (e.g., `{ "value": "0.25", "unit": "rem" }`) cause SD to emit split vars:
+Dimension objects (`{ "value": "0.25", "unit": "rem" }`) compile correctly since SD 5.4.0 (#1398 closed). Typography composite `$value` objects still emit split `-value`/`-unit`-style sub-vars (#1494 open).
 
-```css
---ds-spacing-1-value: 0.25;
---ds-spacing-1-unit: rem;
-```
-
-Always use a plain string: `"$value": "0.25rem"`.
+House rule stays: use a plain string everywhere (`"$value": "0.25rem"`) — it sidesteps the composite class entirely and keeps the files portable.

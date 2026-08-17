@@ -1,8 +1,8 @@
 ---
 title: Media — repo-versus-R2 threshold and R2 setup
 summary: Decide whether media commits to the repo or to Cloudflare R2, then configure the R2 bucket, token, CORS, and public URL for direct browser uploads.
-last_updated: 2026-06-18
-applies_to: Sveltia CMS GitHub backend with Cloudflare R2 media, Astro 6 on Cloudflare
+last_updated: 2026-08-17
+applies_to: Sveltia CMS GitHub backend with Cloudflare R2 media, Astro 7 on Cloudflare
 ---
 
 # Media — repo-versus-R2 threshold and R2 setup

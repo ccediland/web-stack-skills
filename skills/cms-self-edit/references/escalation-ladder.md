@@ -1,8 +1,8 @@
 ---
 title: Escalation ladder — Pages CMS and Directus
 summary: When Sveltia is outgrown, the decision criteria for moving to Pages CMS (magic-link, client never sees GitHub) and then to Directus (relational or multi-channel content), with current licensing.
-last_updated: 2026-06-18
-applies_to: git-based CMS to database CMS escalation for Astro 6 on Cloudflare
+last_updated: 2026-08-17
+applies_to: git-based CMS to database CMS escalation for Astro 7 on Cloudflare
 ---
 
 # Escalation ladder — Pages CMS and Directus

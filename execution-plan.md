@@ -5,10 +5,10 @@ title: "web-stack-skills — Full Catalog Roadmap (v1.0.0 → v2.0.0)"
 summary: "Mortal execution plan, re-scoped 2026-08-18 by owner directive: the full backlog is BUILT, not declared — pull-by-project retired as a deliberate deviation; Lego survives at composition time. Furever is a permanent integration fixture (temp Workers deploys at gates, never a final build). Sequence: B2 validation → C fixture → D playbook (ship 1.0.0) → W1–W4 capability waves (1.1–1.4) → W5 client layer (2.0.0). Points at RESIDENT.md for standing facts; archived at v2 ship."
 last_updated: 2026-08-18
 applies_to: "ccediland/web-stack-skills · post-B1 (9 skills authored, Astro 7 baseline) · consumes ccediland/furever-brand as test fixture (contract 0.6.0)"
-status: "IN PROGRESS — Phase B2 EXECUTED and merged: plan replaced in-repo, descriptions unfrozen to Astro 7 (7 skills + both manifests), 9/9 validate+package, real install both scopes (local-path marketplace), triggering 30/30 blind with zero misfires, Sveltia 0.191.2 smoke PASS, manifests at 1.0.0-rc, tag pushed."
-phase: "C (Furever integration fixture) — ready to start"
+status: "IN PROGRESS — Phase C EXECUTED: fixture live on furever-web@claude/c-fixture (repo pre-existed with live production on main — fixture stays on its branch FOREVER, never merged), 8 skills composed, ingest vendorized @ b0a5332 (ALL-GREEN precondition), both CI gates green, native branch-preview deploy verified live, projections row R6a PASS, 20 lessons in RESIDENT §8, 3 recipe fixes applied."
+phase: "D (stack-integration-playbook v1 → ship v1.0.0) — ready to start"
 home_base: "chat (claude.ai) for adjudication only; all execution and analysis in Claude Code (Fable 5)"
-next_action: "Code: Phase C — compose the fixture subset in furever-web, decide brand-repo access (open fork: sibling clone / submodule / CI checkout), exercise the seams, CI gates, TEMP deploy to a Workers subdomain (owner names the domain if not workers.dev)"
+next_action: "Code: Phase D — promote stack-integration-playbook from deferred/ using the C lessons (RESIDENT §8 fixture block + furever-web fixture-domain recipe), register, validate, triggering vs the 9; then ship v1.0.0 (bump, tag, README)"
 resident: "./RESIDENT.md — canonical for all standing facts (skill verdicts, pins, decisions, state). Point, never duplicate."
 ---
 
@@ -123,11 +123,11 @@ Done-criteria v2.0.0: catálogo completo instalable · triggering total limpio �
 Ciclos de toque ~12–18 meses (majors Astro, adapter). Cada release de ola re-verifica pins de las skills que toca; los watches viven en RESIDENT §3. B0 fue el primer ciclo real — presupuestar los siguientes, no asumir estabilidad.
 
 ## Open questions / forks
-- Acceso del sitio al repo de marca (clone hermano / submodule / checkout CI) — decidir en C con evidencia.
+- Acceso del sitio al repo de marca — RESUELTO en C: vendorización en ingest-time (lock de chat, sostuvo contra la evidencia; CI standalone).
 - forms-lead-system: skill vs pick+recipe — Run A de W1.
 - Veredictos de hogar de W4 — Run A de W4 (leans arriba).
 - Nombre final de client-discovery — Run A de W5.
-- Subdominio de prueba para deploys del fixture (workers.dev default vs subdominio propio del dueño) — decidir en C; irreversible=no, pero el dueño nombra el dominio.
+- Subdominio de prueba — RESUELTO en C: preview nativo de rama en workers.dev (alias estable por rama, sin auth local).
 - Resueltos (2026-08-18): catálogo completo se construye (owner) · Furever = fixture permanente, deploys temporales, sin go-live · ratificación Stage-10 = gobernanza post-sprint, fuera del plan.
 
 ## Next actions
@@ -138,6 +138,9 @@ Ciclos de toque ~12–18 meses (majors Astro, adapter). Cada release de ola re-v
 Standing instruction: en chat fresco — leer state block + RESIDENT (front matter, §3, §8, §9, §10), confirmar fase y next action con Carlos, ejecutar, loguear incrementalmente, cerrar con estado + session log + hand-off. No reiniciar el plan.
 
 ## Session log
+### 2026-08-17 — Phase C ejecutada (fixture Furever) — Claude Code
+Deviations del lock con evidencia: repo YA existía (producción viva en main) → fixture en rama `claude/c-fixture`, NUNCA merge; deploy temporal = preview nativo de rama de Workers Builds (workers.dev, sin wrangler auth local). Compuesto: 8 skills (webgl por evidencia — cero `.riv` + ALGO-ATMOSPHERE-COMPOSE). Seams ejercitados de verdad: 84 violaciones CSP por style-attrs → clases → 0; COOP duplicado en `/admin/` cazado EN VIVO → detach `!`; hash manual single-sourced del no-flash; dist/server vacío → assets-only; #16692 no dispara (verificado vivo); GSAP pin + Sveltia + dark switch + data-pointer OK. Gates CI verdes; projections R6a PASS (`furever-brand@5d99526`); preview `claude-c-fixture-furever-web.carlos-872.workers.dev`. 20 lecciones (RESIDENT §8) + 3 fixes de recetas (78b92e5). Resueltos ambos forks abiertos: acceso = vendorización ingest-time (lock sostuvo); subdominio = workers.dev nativo.
+
 ### 2026-08-17 — Phase B2 ejecutada (validación mecánica) — Claude Code
 Plan reemplazado en-repo (viejo eliminado, referencias actualizadas). B2-1: 7 descriptions descongeladas a Astro 7 (censo real 7, no 6) + recorte seo (1015) + "v13" stale + hook dark-mode post-triggering en #1. B2-2: 9/9 validate+package (scripts canónicos anthropics/skills@main). B2-3: install user+project vía `claude plugin marketplace add <path-local>` (source directory, lee el checkout en vivo — sin push); 9 skills descubiertas. B2-4: 30 prompts, 10 jueces ciegos → 30/30, cero misfires; obligados todos OK; probe cross-plugin correcto (narrow) → upstream suggestion registrada (RESIDENT §9), brand-system-skills NO tocado. B2-5: smoke Sveltia 0.191.2 PASS (receta intacta). B2-6: manifiestos 1.0.0-rc + tag anotado. Detalle durable en RESIDENT §8/§9/§11.
 Siguiente: C (fixture Furever).

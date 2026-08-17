@@ -72,10 +72,11 @@ Gate as error only the metrics that are stable and meaningful in the lab; gate d
     "interactive": ["warn", { "maxNumericValue": 3800 }],
     "uses-long-cache-ttl": "off",
     "uses-http2": "off"
-  },
-  "budgetsFile": "budget.json"
+  }
 }
 ```
+
+Resource budgets go INSIDE this same `assertions` object as `resource-summary` entries (next section) — a `budgetsFile` key here crashes the assert step and the treosh action hides the crash.
 
 Performance and accessibility are errors because they are the load-bearing floors with no other hard gate in the seven skills until the SEO and visuals skills land. Best-practices and SEO are warnings so the seo-aeo-schema skill owns the hard SEO gate. Total Blocking Time stands in for INP, which the lab cannot measure. `uses-long-cache-ttl` is turned off because the staticDistDir server does not emit production cache headers, so the audit would always fail there.
 
@@ -93,30 +94,22 @@ Mobile is the Lighthouse default (a Moto-G-class device with Slow-4G throttling 
 
 Desktop ceilings should be tighter: LCP 2000, TBT 200, FCP 1500, Speed Index 2600, TTI 2900. Running both mobile and desktop yields only one GitHub status report, so if both matter, run them as two jobs or two workflow steps and read the second report from the run logs. The budget table for both form factors is in budgets-and-thresholds.md.
 
-## budget.json
+## Resource budgets — as assertions, never as budgetsFile alongside them
 
-Resource budgets are a separate file referenced by `budgetsFile`. Sizes are in kilobytes (note the unit difference: assertion `maxNumericValue` uses bytes, budget.json uses kilobytes). They fail the build when a page exceeds the byte weight or count for a resource type.
+LOAD-BEARING correction (proven on a live composed build, 2026-08-17): LHCI 0.15 REFUSES `assert.assertions` together with `assert.budgetsFile` — the assert step throws `Error: Cannot use both budgets AND assertions`. Worse, `treosh/lighthouse-ci-action@v12` swallows that crash and the job goes GREEN having asserted NOTHING — a vacuous gate that looks like a pass. Never pair the two keys; express resource budgets as `resource-summary` assertions inside the same `assertions` block (values in BYTES):
 
 ```json
-[
-  {
-    "path": "/*",
-    "resourceSizes": [
-      { "resourceType": "script", "budget": 150 },
-      { "resourceType": "stylesheet", "budget": 60 },
-      { "resourceType": "image", "budget": 400 },
-      { "resourceType": "font", "budget": 100 },
-      { "resourceType": "total", "budget": 800 }
-    ],
-    "resourceCounts": [
-      { "resourceType": "third-party", "budget": 5 },
-      { "resourceType": "total", "budget": 30 }
-    ]
-  }
-]
+"resource-summary:script:size": ["error", { "maxNumericValue": 153600 }],
+"resource-summary:stylesheet:size": ["error", { "maxNumericValue": 61440 }],
+"resource-summary:image:size": ["error", { "maxNumericValue": 409600 }],
+"resource-summary:font:size": ["error", { "maxNumericValue": 153600 }],
+"resource-summary:total:size": ["error", { "maxNumericValue": 819200 }],
+"resource-summary:third-party:count": ["error", { "maxNumericValue": 0 }]
 ```
 
-Per-route budgets are possible by adding objects with narrower `path` globs (for example a heavier budget on `/gallery/*`). Keep the `/*` default conservative for a premium marketing site; the visuals skills (WebGL, Rive, motion) push script and image weight, so tune these budgets once those land rather than fighting them per commit.
+A standalone budget.json (kilobyte units) is only valid when it is the ONLY assert mechanism — which forfeits the category floors and metric ceilings, so this stack always uses the assertion form. Verification habit the failure teaches: after any CI change, open the lighthouse job log and confirm the `Asserting` group actually ran assertions ("Checking assertions against N URL(s)") — a green job is not evidence by itself.
+
+Two more field-proven notes: (a) app-shell pages that ship by design (a CMS admin under /admin/) tank the floors (LCP ~9 s on a 1.9 MB bundle, seo 0.58 on a noindex shell) — exclude them by listing only real pages in `collect.url` (with `staticDistDir` set, LHCI serves the dir and rewrites each URL's origin to its local server, so `http://localhost/index.html` forms work); (b) brand font sets eat budget fast (five woff2 ≈ 145 KB), so set the font line per brief, not by default.
 
 ## Run count and stability
 

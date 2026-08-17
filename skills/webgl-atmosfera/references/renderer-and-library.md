@@ -55,9 +55,20 @@ export function createAtmosphere(canvas, fragmentSource, { dprCap = 1.5 } = {}) 
     antialias: false,
     alpha: true,
     powerPreference: 'low-power',
-    failIfMajorPerformanceCaveat: false,
+    // true is load-bearing for a DECORATIVE pass: when the only context available is
+    // software-rendered (SwiftShader — headless CI runners, blocklisted GPUs), getContext
+    // returns null and the static fallback shows instead. A fragment shader rendered on
+    // the CPU pegs the main thread — measured on a GPU-less CI runner as 145 s of Total
+    // Blocking Time, tanking the perf gate. Hardware GL or nothing.
+    failIfMajorPerformanceCaveat: true,
   });
   if (!gl) return null; // caller swaps in the static fallback
+
+  // The caveat flag alone is NOT sufficient: current headless Chrome hands out a
+  // SwiftShader context regardless. Probe the actual renderer and refuse software GL.
+  const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+  const renderer = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : '';
+  if (/swiftshader|llvmpipe|software|basic render/i.test(renderer)) return null;
 
   // Full-viewport triangle: three vertices covering clip space, UVs spanning 0..1.
   const vertexSource = `#version 300 es
@@ -131,6 +142,15 @@ function link(gl, vs, fs) {
   return p;
 }
 ```
+
+## The software-GL guard — two layers, both load-bearing
+
+Field-proven 2026-08-17 on a composed build: on a GPU-less CI runner the "GPU-parallel" fragment shader rendered on the CPU via SwiftShader and the rAF loop logged **145 seconds of Total Blocking Time** (each frame a ~550 ms long task), failing the perf gate — while looking perfectly fine on any developer machine with a real GPU. Neither symptom appears locally, so guard unconditionally:
+
+1. Context options set `failIfMajorPerformanceCaveat: true` AND the helper probes `WEBGL_debug_renderer_info` (above) — the flag alone no longer refuses SwiftShader on current Chrome.
+2. The caller's render loop watchdogs its own first ~10 frames: if they average over ~25 ms, cancel the loop, drop the canvas's ready class, and never restart — the static fallback stands. This catches any pathological environment the renderer-string regex cannot name.
+
+A decorative background must be GPU-rendered or absent; there is no acceptable CPU mode.
 
 ## Limitations
 

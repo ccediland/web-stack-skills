@@ -56,6 +56,8 @@ Flag off; Biome's formatter disabled for component files so it does not fight pr
 }
 ```
 
+Two additions this stack needs in practice (both surfaced by a real composed build, 2026-08-17): set `"css": { "parser": { "tailwindDirectives": true } }` or Biome errors on the Tailwind v4 entry stylesheet (`@custom-variant`, `@theme`); and extend `files.includes` with excludes for surfaces that are not lintable code — brand-ingested exact-file SVGs (the a11y SVG-title rule fires on logo files you are forbidden to edit), generated token CSS (`src/styles/tokens.css`, `theme.css`, `schemes.css`), and `!**/.wrangler` (wrangler writes an unformatted `deploy/config.json` that fails the format check).
+
 The `!**/.astro` exclude is the generated `.astro/` cache directory, not `.astro` files (which the override targets). `formatter.enabled: false` for the component globs is the load-bearing line: if Biome formats `.astro` and prettier also formats it, `biome ci` fails on every template prettier touched. Biome still lints the extracted frontmatter JS in `.astro` (with the four noisy rules off), and `organizeImports` still sorts those imports, which prettier does not do, so the two tools do not overlap.
 
 ## prettier for templates

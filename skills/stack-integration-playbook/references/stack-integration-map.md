@@ -29,7 +29,7 @@ Contact points:
 - Client-side reads (the exception, justified per brief): the browser talks to Supabase directly; this adds the project URL to CSP `connect-src` and puts the client library inside the JS byte budget — both gates must be told.
 - Apps versus content: interactive apps backed by Supabase (tracking portals, gated areas) live on their own subdomains and out of the content site's audited set; indexable content stays on the main domain in subdirectories.
 
-Depth: the `data-layer` skill (wave W1) owns loaders, freshness, and rebuild triggers; `forms-lead-system` (W1) owns write paths.
+Depth: the `data-layer` skill owns loaders, the tier ladder, freshness, and rebuild triggers (shipped W1); the write path is this skill's `forms-lead-recipe.md`.
 
 ## CI — GitHub Actions
 
@@ -65,14 +65,14 @@ The business Workspace account (not a personal one) owns the site's third-party 
 
 These stack functions touch the site but have no shipped skill yet; the map marks the seam so composition does not improvise:
 
-| Function | Contact point with the site | Future home |
+| Function | Contact point with the site | Home |
 |---|---|---|
-| Lead capture / forms | POST endpoint or action + anti-spam + storage + notification | `forms-lead-system` (W1) |
-| Transactional email | Delivery of form notifications/confirmations (stack canon Resend) | `forms-lead-system` (W1) |
+| Lead capture / forms | Astro Action on the site's Worker + Turnstile + insert-only storage + notification | RESOLVED — `forms-lead-recipe.md` in this skill (W1) |
+| Transactional email | Owner notification via Cloudflare Email Service (verified destination, free); Resend when arbitrary recipients at $0 | `forms-lead-recipe.md` email slot (W1) |
 | Analytics / measurement | Script + CSP `connect-src` + event schema (stack canon Cloudflare Web Analytics / PostHog) | `analytics-measurement` (W3) |
-| CRM handoff | Lead records flow from form storage to the CRM; the site never talks to the CRM directly | `forms-lead-system` (W1) frontier |
+| CRM handoff | Lead rows in Supabase are the system of record; a later job syncs to the CRM — the site never talks to the CRM directly | frontier (a forms flip condition) |
 | Payments | Off-site or embedded checkout; heavy CSP surface; per-project (Stripe / Mercado Pago) | unassigned — per-project decision |
-| WhatsApp / phone comms | Deep links from CTAs; no runtime integration in the static site | per-project copy/UX decision |
+| WhatsApp / phone comms | Deep links from CTAs, logged as lead events | `forms-lead-recipe.md` knob (W1) |
 
 ## The zero-secret build property
 

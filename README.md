@@ -20,6 +20,9 @@ Each skill encodes a vetted verdict, current version pins, a generic recipe, and
 | `cms-self-edit` | content | Sveltia CMS so a non-technical client self-edits content, git-based, no lock-in |
 | `brand-canon-ingest` | brand | Consume a governed brand repo (tokens, schemes, assets, voice) into the site, with provenance |
 | `data-layer` | data | Build-time-first external data — collection loaders over a seed or Supabase, one zod contract, rebuild-on-change |
+| `i18n-system` | reach | Multi-language with Astro core i18n — default locale at root, typed string dictionary, Sveltia-matched collections, hreflang |
+| `media-optimization` | reach | Build-time images with the explicit `compile` service, responsive layouts, priority LCP, and a tiered video ladder |
+| `a11y-deep` | reach | WCAG 2.2 AA beyond the Lighthouse floor — axe zero-violations in CI, codified manual smoke, WCAG-EM audits |
 | `stack-integration-playbook` | composition | How the skills compose into ONE site — canonical order, cross-cutting seams, stack map, recipes (incl. lead capture) |
 
 ## Compose per site (the Lego principle)
@@ -47,7 +50,7 @@ Skills install at personal or project scope (verified on both). There is no auto
 
 ## Status
 
-v1.1.0 — the 11 pieces above are authored, validated, installable, and trigger-tested. Wave W1 added `data-layer` (exercised on the integration fixture: a live catalog graduated from seed JSON to Supabase at build time, with webhook-triggered rebuilds) and the forms/lead-capture recipe inside the playbook (Astro Action + Turnstile + insert-only RLS + native email, proven on a live deploy). The roadmap in progress (see `execution-plan.md`) continues the capability waves (i18n, media, a11y, edge, analytics) toward v2.0.0.
+v1.2.0 — the 14 pieces above are authored, validated, installable, and trigger-tested. Wave W2 added `i18n-system`, `media-optimization`, and `a11y-deep`, all exercised on the integration fixture: a synthetic second locale with per-page hreflang (x-default included) on the live preview, a media page built under the explicit `compile` image service, and a THIRD CI gate — an axe zero-violations sweep over every built page. Wave W1 had added `data-layer` (live catalog graduated from seed JSON to Supabase at build time, webhook-triggered rebuilds) and the forms/lead-capture recipe in the playbook. The roadmap in progress (see `execution-plan.md`) continues the capability waves (edge, analytics) toward v2.0.0.
 
 ## License
 

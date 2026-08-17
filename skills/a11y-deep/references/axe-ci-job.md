@@ -54,8 +54,11 @@ const pages = files
   .filter((route) => !EXCLUDE.some((rx) => rx.test(route)));
 if (pages.length === 0) { console.error('axe: 0 pages found — vacuous gate, failing'); process.exit(1); }
 
+// AxeBuilder refuses pages from an implicit context ("Please use
+// browser.newContext()") — create the context explicitly, then the page.
 const browser = await chromium.launch();
-const page = await browser.newPage();
+const context = await browser.newContext();
+const page = await context.newPage();
 let total = 0;
 for (const route of pages.sort()) {
   await page.goto(`http://localhost:4322${route}`, { waitUntil: 'load' });

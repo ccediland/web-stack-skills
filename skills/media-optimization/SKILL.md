@@ -29,7 +29,7 @@ Images are optimized by sharp at build time — full fidelity, zero runtime quot
 
 ## Why m1 is the anchor (verified drift)
 
-- The adapter's default image service flipped from `compile` to `cloudflare-binding` in `@astrojs/cloudflare` v13.0.0 (2026-03) — two majors ago, under users' feet. The compound form `imageService: { build, runtime }` dates from v13.0.0 too; the `build: 'cloudflare-binding'` option value needs ≥14.2.0.
+- The adapter's default image service flipped from `compile` to `cloudflare-binding` in `@astrojs/cloudflare` v13.0.0 (2026-03), under users' feet — both current majors (13 and 14) carry the new default. The compound form `imageService: { build, runtime }` dates from v13.0.0 too; the `build: 'cloudflare-binding'` option value needs ≥14.2.0.
 - The default routes image work through Cloudflare Images, whose FREE tier is 5,000 unique transformations per month and FAILS CLOSED — past the cap, new transformations error (code 9422); there is no overage billing to save you. A modest catalog (500 images × 6 widths = 3,000 uniques) sits uncomfortably close to that cap.
 - For a fully prerendered site, request-time transforms buy nothing that build-time sharp does not produce for free. `compile` transforms at build; on-demand pages under it get passthrough — acceptable, because this stack's on-demand surface is endpoints, not image-bearing pages.
 - sharp is astro's own optional dependency (`^0.34 || ^0.35`) — do NOT pin sharp separately; let astro resolve it.

@@ -72,7 +72,7 @@ Gotchas y outline detallados — en cada `skills/<nombre>/SKILL.md`.
 
     .claude-plugin/
       marketplace.json     -> 1 plugin: web-stack (source ".")
-      plugin.json          -> manifiesto + "skills":[ las 8, rutas relativas ]
+      plugin.json          -> manifiesto + "skills":[ las 9, rutas relativas ]
     skills/
       astro-css-tokens/SKILL.md
       web-security-headers/SKILL.md
@@ -101,7 +101,7 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 ## 6. Reglas operativas
 
 - **Superficie por época** — en la fase de autoría (2026-06) GitHub fue TODO por Composio (Git Data API) y Claude Code quedó reservado al build final. Desde el sprint v1 (2026-08-17), Claude Code ES la superficie de ejecución (ver Surfaces del plan); Composio queda como vía alternativa para commits desde chat.
-- **Un plugin** (`web-stack`) agrupa las 8 (9 al cierre de B1). Instalación: `/plugin marketplace add ccediland/web-stack-skills` luego `/plugin install web-stack@web-stack-skills`.
+- **Un plugin** (`web-stack`) agrupa las 9. Instalación: `/plugin marketplace add ccediland/web-stack-skills` luego `/plugin install web-stack@web-stack-skills`.
 - Gobierno: **skill-author** = autoridad de arquitectura; **skill-creator** (`/mnt/skills/examples/skill-creator`, con `quick_validate.py` + `package_skill.py`) = validar/empacar; **Context7** + docs oficiales = contenido actual.
 - Naming de skills: kebab-case, ≤64, sin la palabra "claude". Description ≤1024, sin `<` ni `>`, sin dos-puntos-espacio a media cadena (rompe YAML — usar guión largo).
 - Pins del 2026-06-16 — re-verificar en turns 2/3 de cada skill.
@@ -144,7 +144,7 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - **2 citas erróneas en `astro-css-tokens`** (corregir en B0): Astro 6 nunca usó rolldown-vite — el bug real era npm hoisteando Vite 8 (pnpm/yarn no afectados); el "#19802" citado es de tailwindlabs/tailwindcss, no de rolldown-vite. Firefox scroll-driven: sigue tras flag en stable (Nightly 156 default ON; soporte global ~85.4%; watch ~oct-2026).
 - **furever-brand ya habla el contrato:** `tokens/web/{base,semantic,component}.json` es proyección string pre-emitida para SD v5 — se consume tal cual. Delta real: los 4 schemes (dark + estados, 53 roles c/u) son objetos OKLCH compuestos SIN proyección string → serializar con el patrón C-1 de `tools/tokens-project.mjs` (~50 líneas zero-dep) a bloques CSS de override a nivel rol; default light sin auto-switch (G-UX-02); overrides al tier semántico, no al base. Menores: cubicBezier arrays → envolver en `cubic-bezier()`; tokens JS-vocabulary (px/s, rootMargin) por import JSON; favicon derivable de `furever-iso-mono-*.svg`; OG raster obligatorio (G-IMG-03).
 - **Contrato brand-system-skills 0.6.0:** spine de máquina fijo + gates auto-enforced (suite copiada a cada repo emitido); web-stack-skills es el consumidor flagship (e2e verificado 2026-07-16; proyección `furever-web` ya registrada en `satellites/projections.md`). NO garantizado: schemes, component tier, fuentes bundleadas, ni stamp de versión de contrato dentro del repo emitido — el hop C-1→web ya se rompió ~6 semanas una vez → la skill #9 pinea el contrato (0.6.0 + commit del tool-repo) con review-gate y corre `run-gates.mjs` del repo de marca como precondición.
-- **Superficie de triggers de las 8:** 3 colisiones ALTAS (CSP motion↔security; inversión léxica "hash-based CSP" — 4 hermanas la nombran, la dueña no; "animated gradient background" sin hook léxico en motion-system) + cluster medio (reduced-motion, pause, lazy-load, scroll-driven, perf-budget); 4 descriptions sin frontera; cero redirects entre hermanas. Fix-pass aplicada en Phase A; la #9 agrega el eje "design tokens"/"brand" (vs `astro-css-tokens` y vs los plugins brand-system) — vigilar en el triggering test de B2.
+- **Superficie de triggers de las 8:** 3 colisiones ALTAS (CSP motion↔security; inversión léxica "hash-based CSP" — 4 hermanas la nombran, la dueña no; "animated gradient background" sin hook léxico en motion-system) + cluster medio (reduced-motion, pause, lazy-load, scroll-driven, perf-budget); 4 descriptions sin frontera; cero redirects entre hermanas. Fix-pass aplicada en Phase A; la #9 agrega el eje "design tokens"/"brand" (vs `astro-css-tokens` y vs los plugins brand-system) — vigilar en el triggering test de B2. Probes concretos que dejó la verificación de B1 (batería de 17 prompts: 16 rutean bien): (a) "set up design tokens for our new brand" compite `astro-css-tokens` vs `brand-canon-builder` sin tiebreaker textual explícito (cross-plugin; el fix viviría en descriptions de AMBOS lados — decidir en B2); (b) "dark mode" no aparece literal en ninguna description — hoy rutea por "theme"; candidato a hook léxico en #1 cuando se descongelen las descriptions "Astro 6".
 - Ecosistema de pins (detalle en §3 pins objetivo B0): Sveltia 0.191.2 pre-GA con cadencia casi diaria (single-maintainer sano; sveltia-cms-auth activo); Keystatic review-gate NO cumplido (#1515 cerró solo peer-dep vía PR #1534; #1497 sigue abierto); GSAP/`@gsap/react` sin release nuevo y 100% free confirmado; LH13 NO ha aterrizado en LHCI (issue #1136 sin respuesta); DTCG 2025.10 sigue siendo el único stable.
 
 ### 2026-08-17 — Lecciones del smoke scaffold B0 (build real Astro 7)

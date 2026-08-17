@@ -91,6 +91,7 @@ Add the site as a row in the brand repo's `satellites/projections.md` registry. 
 - Building, extending, or fixing the canon — brand-canon-builder (brand-system-skills plugin).
 - Scoping a brand in conversation — brand-canon-scoper.
 - Palette, type, or identity decisions — the canon already made them; a deviation is an owner-ratified canon change, not a site-side patch.
+- Visual rendering and page design — how a page looks and composes is design work governed by the canon's grammar and delivered by the stack's visual-layer skills; this skill only wires brand truth in.
 - The token pipeline mechanics (SD config, `@theme` bridge, dark-mode seam plumbing) — astro-css-tokens owns them; this skill layers on top.
 - Composing the full site build — stack-integration-playbook (deferred).
 - Brands with no builder-emitted repo — nothing to ingest.

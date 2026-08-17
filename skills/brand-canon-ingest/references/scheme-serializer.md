@@ -48,8 +48,8 @@ const serialize = (v) =>
 // Per-brand selector adapter. The canon names no stack: canon/canon.json > schemes declares each
 // scheme's intent (default, mode, suggested class); the consumer maps it to real selectors. Fill
 // this from that block. Object order IS emit order — the selectors tie on specificity, so source
-// order decides the cascade: the :root default MUST come first or a dark block emitted before it
-// silently wins on light pages.
+// order decides the cascade: the :root default MUST come first; emitted after the overrides, its
+// light values would win every tie and the dark/variant blocks would silently lose on their pages.
 const SELECTORS = {
   lightA: ':root',                           // default scheme — light, never auto-switched (G-UX-02)
   lightB: '.theme-lb',                       // opt-in variant classes as canon.json declares them

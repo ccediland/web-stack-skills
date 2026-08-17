@@ -3,9 +3,9 @@ name: perf-ci-gates
 description: Set up the two CI quality gates for an Astro 6 site on Cloudflare Workers — Lighthouse CI for Core Web Vitals and resource-weight budgets, and Biome as the single lint and format gate, wired into GitHub Actions. Use when adding performance budgets, gating pull requests on Lighthouse scores, wiring LHCI into CI, configuring Biome lint or format checks, or building a ci.yml with both gates. Covers serving the Astro plus Cloudflare build for collection (staticDistDir on dist/client, or astro preview for SSR routes), the lighthouserc.json assertion shape with TBT as the lab proxy for INP, regression-oriented lab budgets versus field thresholds, runner and storage choices, and Biome experimental Astro support with prettier-plugin-astro. Trigger on Lighthouse CI, performance budget, gate PRs on Core Web Vitals, LHCI in GitHub Actions, Biome CI, or biome ci. CI gates only — not for fixing runtime performance or animation weight (use motion-system) nor deep SEO (use seo-aeo-schema).
 ---
 
-# Performance and Code-Quality CI Gates for Astro 6 on Cloudflare
+# Performance and Code-Quality CI Gates for Astro on Cloudflare
 
-> Two independent gates in GitHub Actions for an Astro 6 plus Cloudflare Workers site. Lighthouse CI catches Core Web Vitals and resource-weight regressions before merge; Biome gates lint, format, and import order. Lighthouse CI is a pre-merge regression gate on stable lab signals, not the source of truth for real-user Core Web Vitals, which come from field monitoring.
+> Two independent gates in GitHub Actions for an Astro 7 plus Cloudflare Workers site. Lighthouse CI catches Core Web Vitals and resource-weight regressions before merge; Biome gates lint, format, and import order. Lighthouse CI is a pre-merge regression gate on stable lab signals, not the source of truth for real-user Core Web Vitals, which come from field monitoring.
 
 ## TL;DR
 - Run two parallel jobs in one ci.yml: a quality job (`biome ci`) and a lighthouse job (build, then LHCI collect, assert, upload). Make both required status checks for merge.
@@ -41,7 +41,7 @@ Deep SEO and schema work belongs to the seo-aeo-schema skill, and deep accessibi
 
 Point LHCI at the built static files with `staticDistDir: ./dist/client`. This is the most reproducible path for a mostly-static site: LHCI serves the files itself, no Cloudflare runtime needed. It does not replicate the adapter's immutable cache headers, which is fine because the gate measures regressions, not production cache behavior.
 
-Use `collect.startServerCommand` with `astro preview` only when on-demand (SSR) routes must be audited. In Astro 6 with `@astrojs/cloudflare` v13, `astro preview` runs on the real Cloudflare workerd runtime, so it is the production-parity path, but it is heavier and slower in CI. Do not set an absolute `site` plus `base` on the audited build: the Cloudflare build writes assets to `dist/client` without the base prefix, so they 404 when LHCI serves from a localhost port. See references/lighthouse-config.md.
+Use `collect.startServerCommand` with `astro preview` only when on-demand (SSR) routes must be audited. In Astro 7 with `@astrojs/cloudflare` v14, `astro preview` runs on the real Cloudflare workerd runtime, so it is the production-parity path, but it is heavier and slower in CI. Do not set an absolute `site` plus `base` on the audited build: the Cloudflare build writes assets to `dist/client` without the base prefix, so they 404 when LHCI serves from a localhost port. See references/lighthouse-config.md.
 
 ### Runner
 

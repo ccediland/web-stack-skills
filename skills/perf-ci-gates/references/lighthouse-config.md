@@ -1,6 +1,6 @@
 # Lighthouse CI Configuration
 
-> Full lighthouserc.json and budget.json for an Astro 6 plus Cloudflare Workers site: collection targets, assertion presets and tiers, run count, and the absolute-base trap. Sizes and metrics here are regression ceilings, not Google field thresholds.
+> Full lighthouserc.json and budget.json for an Astro 7 plus Cloudflare Workers site: collection targets, assertion presets and tiers, run count, and the absolute-base trap. Sizes and metrics here are regression ceilings, not Google field thresholds.
 
 ## Table of contents
 - Collection target
@@ -34,7 +34,7 @@ LHCI spins up its own static file server against the directory and audits every 
 }
 ```
 
-In Astro 6 with `@astrojs/cloudflare` v13, `astro preview` runs on the real Cloudflare workerd runtime, so this audits on-demand routes against a production-parity server. It is heavier and slower in CI than staticDistDir; use it only when SSR routes must be audited. List explicit `url` entries because there is no static directory to crawl.
+In Astro 7 with `@astrojs/cloudflare` v14, `astro preview` runs on the real Cloudflare workerd runtime, so this audits on-demand routes against a production-parity server. It is heavier and slower in CI than staticDistDir; use it only when SSR routes must be audited. List explicit `url` entries because there is no static directory to crawl.
 
 ## The absolute-base trap
 

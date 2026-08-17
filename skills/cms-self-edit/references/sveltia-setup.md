@@ -1,6 +1,6 @@
 ---
 title: Sveltia setup — mount, config.yml, and Astro content collections
-summary: How to mount the Sveltia admin under public/admin, write config.yml for the GitHub backend, and map Sveltia collections to Astro 6 content collections and their Zod schemas.
+summary: How to mount the Sveltia admin under public/admin, write config.yml for the GitHub backend, and map Sveltia collections to Astro 7 content collections and their Zod schemas.
 last_updated: 2026-08-17
 applies_to: Sveltia CMS 0.191.2 on Astro 7.x with @astrojs/cloudflare 14.x, GitHub backend
 ---

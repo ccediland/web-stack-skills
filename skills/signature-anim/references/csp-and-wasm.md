@@ -1,11 +1,11 @@
 ---
-title: Rive CSP and self-hosted WASM in Astro 6
-summary: The exact native Astro 6 security.csp additions to run the Rive WASM runtime under a hash-based CSP, how to self-host the WASM and the .riv so everything is same-origin, and the all-in-one variant.
+title: Rive CSP and self-hosted WASM in Astro 7
+summary: The exact native Astro 7 security.csp additions to run the Rive WASM runtime under a hash-based CSP, how to self-host the WASM and the .riv so everything is same-origin, and the all-in-one variant.
 last_updated: 2026-08-17
 applies_to: astro@7.2.2, @astrojs/cloudflare@14.2.1, @rive-app/canvas@2.40.0, Node 22
 ---
 
-# Rive CSP and self-hosted WASM in Astro 6
+# Rive CSP and self-hosted WASM in Astro 7
 
 This is the load-bearing integration. A Rive runtime compiles WebAssembly, and WebAssembly is blocked by default under a Content Security Policy that defines script-src or default-src. By default the runtime also fetches its WASM binary from a third-party CDN. Both must be resolved or the signature animation silently fails to run.
 
@@ -29,7 +29,7 @@ The Rive runtime JS chunk itself is bundled by Astro and hashed into script-src 
 
 ## The two CSP additions
 
-Express both through Astro 6 native CSP. The `resources` list overrides the default sources for script-src, so `'self'` must be re-listed; Astro's generated per-bundle hashes remain additive and are appended automatically.
+Express both through Astro 7 native CSP. The `resources` list overrides the default sources for script-src, so `'self'` must be re-listed; Astro's generated per-bundle hashes remain additive and are appended automatically.
 
 ```js
 // astro.config.mjs
@@ -62,7 +62,7 @@ import { Rive, RuntimeLoader } from '@rive-app/canvas';
 RuntimeLoader.setWasmUrl(wasmUrl);
 ```
 
-The `?url` suffix is required. A bare `.wasm` import is ambiguous under Vite: the native `?init` form returns an instantiation function, not a URL, and a plain import can be inlined as base64 below the asset inline limit. For Rive you want a URL string. Vite has built-in `.wasm` asset handling, so no extra loader or assetsInclude entry is needed for this URL path. Astro 6 runs Vite with Rolldown; verify the `?url` import compiles at build, as Rolldown asset behavior can differ.
+The `?url` suffix is required. A bare `.wasm` import is ambiguous under Vite: the native `?init` form returns an instantiation function, not a URL, and a plain import can be inlined as base64 below the asset inline limit. For Rive you want a URL string. Vite has built-in `.wasm` asset handling, so no extra loader or assetsInclude entry is needed for this URL path. Astro 7 runs Vite 8 (rolldown-powered); verify the `?url` import compiles at build, as Rolldown asset behavior can differ.
 
 The self-hosted WASM lands in dist/client and is served same-origin, satisfied by connect-src 'self'. Long-cache it: emit `Cache-Control: public, max-age=31557600, immutable` for the hashed asset path so the heavy binary is fetched once.
 

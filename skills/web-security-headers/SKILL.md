@@ -3,7 +3,7 @@ name: web-security-headers
 description: Set up a hash-based Content Security Policy and the full set of HTTP security headers for an Astro 6 site on Cloudflare Workers Static Assets. Use when adding or hardening CSP, HSTS, X-Frame-Options, frame-ancestors, Referrer-Policy, Permissions-Policy, COOP, COEP, or CORP, when deciding where each header belongs (native CSP meta element, Cloudflare _headers file, or middleware), when wiring script and style hashes, or when adding Subresource Integrity. Explains the per-page CSP delivery split (meta on static pages, header on SSR), why frame-ancestors and reporting directives need a real header, and the adapter limitation — v13 emits no static headers. Trigger on set up a hash-based CSP, add CSP to Astro, security headers on Cloudflare, _headers file, X-Frame-Options, clickjacking protection, or Astro Content Security Policy. Owns the CSP infrastructure — for one library's CSP recipe use motion-system (GSAP, Motion), webgl-atmosfera (shaders), signature-anim (Rive WASM), or seo-aeo-schema (JSON-LD).
 ---
 
-# Web Security Headers for Astro 6 on Cloudflare
+# Web Security Headers for Astro on Cloudflare
 
 > Deliver CSP plus the full HTTP security-header set for an Astro 7 site on Cloudflare Workers Static Assets. Astro's native CSP hashes scripts and styles per page; everything the meta element cannot carry, plus all transport and framing headers, lives in a hand-written public/_headers file.
 

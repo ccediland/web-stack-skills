@@ -1,11 +1,11 @@
 ---
-title: GSAP plus ScrollTrigger on Astro 6
-summary: Idiomatic loading on Astro 6 plus Cloudflare — bundled script for static pages versus useGSAP inside a React island, SSR-safety, tree-shaking imports, the lazy off-critical-path pattern, verified bundle weight, and what ScrollTrigger pin and scrub do.
+title: GSAP plus ScrollTrigger on Astro 7
+summary: Idiomatic loading on Astro 7 plus Cloudflare — bundled script for static pages versus useGSAP inside a React island, SSR-safety, tree-shaking imports, the lazy off-critical-path pattern, verified bundle weight, and what ScrollTrigger pin and scrub do.
 last_updated: 2026-08-17
 applies_to: gsap@3.15.0, @gsap/react@2.1.2, astro@7.2.2, @astrojs/cloudflare@14.2.1
 ---
 
-# GSAP plus ScrollTrigger on Astro 6
+# GSAP plus ScrollTrigger on Astro 7
 
 > Use GSAP only for scrub, pin, snap, nested orchestration, or motion paths. Load it via a bundled Astro script on static pages or the useGSAP hook inside a React island, register ScrollTrigger client-side, and lazy-load it off the critical path. GSAP and ScrollTrigger are client-only.
 

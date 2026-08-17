@@ -1,6 +1,6 @@
 # GitHub Actions Workflow
 
-> The full ci.yml for the two gates, plus the caching, branch-protection, and report-output wiring, and the runner and storage variants. Targets Astro 6 plus Cloudflare on Node 22.
+> The full ci.yml for the two gates, plus the caching, branch-protection, and report-output wiring, and the runner and storage variants. Targets Astro 7 plus Cloudflare on Node 22.
 
 ## Table of contents
 - Full ci.yml
@@ -62,7 +62,7 @@ jobs:
 | Setting | Reason |
 |---|---|
 | two parallel jobs | the quality gate is cheap and fails fast on a typo; the lighthouse gate is heavy. Separation means a lint failure does not burn a Lighthouse run, and each reports its own status |
-| node-version 22 | Astro 6 requires Node 22+; matching it in CI avoids a version skew between local and CI builds |
+| node-version 22 | Astro 7 requires Node 22+; matching it in CI avoids a version skew between local and CI builds |
 | cache: npm | caches the npm download cache keyed on package-lock.json, cutting install time. Use cache pnpm or yarn if that is the package manager |
 | fetch-depth 20 | shallow clones break LHCI git-ancestor detection and cause "Could not find hash" errors; 20 gives enough history for base-branch comparison |
 | ref pull_request.head.sha | audits the actual PR head commit rather than the merge commit GitHub creates |

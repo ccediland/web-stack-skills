@@ -2,7 +2,7 @@
 title: Security header inventory
 summary: Recommended value, rationale, and caveat for each HTTP security header in the baseline, plus the load-bearing gotchas (HSTS preload, COEP, Cloudflare Managed Transforms).
 last_updated: 2026-06-17
-applies_to: "Astro 6 on Cloudflare Workers Static Assets"
+applies_to: "Astro 7 on Cloudflare Workers Static Assets"
 ---
 
 # Security header inventory

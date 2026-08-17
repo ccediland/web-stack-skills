@@ -79,6 +79,8 @@ These additions merge with the config-level policy and are deduplicated.
 ## Incompatibilities and constraints
 
 - unsafe-inline is incompatible. Once a hash or nonce is present, modern browsers ignore unsafe-inline, so adding it does nothing and signals a misconfiguration. Do not add it.
+- Static style attributes in markup are BLOCKED. Hashes never apply to attributes (only to style elements and bundled scripts), so every `style="..."` an author writes is rejected silently at runtime while the build stays green — verified live 2026-08-17 with 84 violations on a real page. Author all styling as classes or scoped style blocks (Astro hashes those). JavaScript CSSOM writes (`el.style.prop = x`, what GSAP does) are exempt: CSP governs resource loading and markup, not the CSSOM API.
+- Inline scripts (`is:inline`) are NOT hashed by Astro — only bundled scripts are. A pre-paint script (theme no-flash) needs its hash supplied manually in `scriptDirective.hashes`; single-source the script string in a module imported by BOTH the config (to hash) and the layout (to render), or any edit silently breaks the page.
 - The ClientRouter view-transition component can break under a strict CSP. Test the router path explicitly after enabling CSP.
 - Shiki, the default code highlighter, emits inline styles that the policy will reject. Use Prism for code highlighting instead.
 - The feature does not run in astro dev because of the Vite dev server. Test with astro build then astro preview.

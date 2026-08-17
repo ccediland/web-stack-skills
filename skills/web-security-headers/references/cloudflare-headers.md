@@ -31,7 +31,15 @@ Each rule is a URL path pattern on its own line, followed by one or more indente
 - /* matches every path. Use it for site-wide headers.
 - A literal path like /admin/* matches a subtree.
 - A splat * captures the rest of a path; a placeholder written as a colon then a name captures one segment, and either can be referenced in a header value.
-- More specific rules add to or override the site-wide rule for matching paths. Keep the policy simple: a single /* block covers most static sites.
+- More specific rules ADD to the site-wide rule for matching paths — same-name headers CONCATENATE into duplicates, they do not override (verified live 2026-08-17: a `/admin/*` COOP line produced BOTH values on the response, and browsers then honor the stricter one). To genuinely override, detach the inherited header first with a `!` line, then set the new value:
+
+```
+/admin/*
+  ! Cross-Origin-Opener-Policy
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+```
+
+Keep the policy simple: a single /* block covers most static sites, with `!` detaches only where a subtree genuinely differs.
 
 ## Baseline header set
 

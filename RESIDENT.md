@@ -1,17 +1,17 @@
 ---
 title: web-stack-skills — RESIDENT (working doc / home base)
-updated: 2026-06-18
+updated: 2026-08-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: cms-self-edit (#8) — COMPLETA. Las 8 skills autoradas; bundle + registro en plugin.json commiteados a `main` (commit `90110a9e`). SIGUIENTE = BUILD FINAL de las 8 skills vía Claude Code (validación + gate de build del marketplace), según `v1-finalization-plan.md`.
+status: Sprint v1 re-scopeado (2026-08-17). Las 8 skills autoradas; análisis pre-sprint hecho y verificado adversarialmente; plan de 7 fases en `v1-finalization-plan.md` (A cleanup → B0 Astro 7 → B1 brand-canon-ingest #9 → B2 validación → C sitio Furever → D playbook → E ship). Phase A ejecutada en rama `claude/v1-sprint-rescope` (PR pendiente de OK de Carlos). SIGUIENTE = gate A→B0 (migración Astro 7, pins objetivo en §3).
 ---
 
 # web-stack-skills — RESIDENT
 
-Documento vivo y **home base** del proyecto: fuente de verdad única. Reemplaza al plan-de-ejecución original. Contiene qué es, el stack, las 7 skills y sus seeds, la cadencia de autoría, las reglas operativas, las decisiones, los descubrimientos del proceso, el estado y el log de sesiones. Quien lo lea queda al día para continuar.
+Documento vivo y **home base** del proyecto: fuente de verdad única de hechos durables. Contiene qué es, el stack, las skills y sus verdictos, la cadencia de autoría, las reglas operativas, las decisiones, los descubrimientos del proceso, el estado y el log de sesiones. Quien lo lea queda al día para continuar. (El plan mortal del sprint en curso vive en `v1-finalization-plan.md`; cita este doc, nunca lo duplica.)
 
 ## 1. Qué es
 
-Un **marketplace de plugins de Claude Code**, público y genérico (MIT), que entrega **8 skills** que codifican un stack web premium de alto rendimiento ("lo mejor de todos los mundos"). Reusable en cualquier proyecto: un proyecto origen fue el primer consumidor, **no** el alcance. Cero contenido específico de proyecto, cero marca, cero secretos. Una 8ª skill queda **diferida** como skeleton.
+Un **marketplace de plugins de Claude Code**, público y genérico (MIT), que entrega **8 skills** que codifican un stack web premium de alto rendimiento ("lo mejor de todos los mundos") — 9 al cierre del sprint v1 (`brand-canon-ingest`, en autoría). Reusable en cualquier proyecto: un proyecto origen fue el primer consumidor, **no** el alcance. Cero contenido específico de proyecto, cero marca, cero secretos. La skill de integración (`stack-integration-playbook`) queda **diferida** como skeleton hasta tener sustancia de campo.
 
 Meta: parándote en cualquier proyecto nuevo, levantar la misma arquitectura sin volver a descubrir los filos.
 
@@ -35,7 +35,7 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 
 **Diferida — `stack-integration-playbook`** (en `deferred/`, fuera de `skills/`): documenta cómo componen todos los elementos del sitio entre sí y cómo el sitio se conecta al resto del stack más allá de la web (Supabase, otros repos, Cloudflare, GitHub Actions, Infisical, Google Workspace, comms, pagos, catálogos, ads, social, analítica). Se llena "mucho después" con lecciones de campo. Excluida del plugin instalable hasta tener sustancia.
 
-**Skill #8 — `cms-self-edit`** (SELECCIÓN de herramienta HECHA · skill aún sin autorar — su cadencia de 5 turnos arranca en Turn 1 · aún NO en `skills/` ni en `.claude-plugin/`): disciplina para dar a un cliente NO técnico la capacidad de auto-editar el contenido de un sitio Astro 6 + Cloudflare Pages/Workers, sin lock-in tipo Webflow/Framer, como patrón reusable de bajo mantenimiento por sitio. Decisión por MÉRITO puro (sin lente de stack-canon — dropeado por Carlos: no existe / el stack no es fijo). **Veredicto:** ganador = **Sveltia** — CMS git-based client-side puro, montado como `public/admin/index.html`, sin backend; contenido = Markdown/YAML en el repo; OAuth GitHub vía el Worker oficial gratis `sveltia-cms-auth`; media en Cloudflare R2 (SigV4 browser→R2); i18n first-class + DeepL; `/admin` se mantiene como archivo estático en `public/` para esquivar la CSP `<meta>` de #2; publicar vía rama `drafts` + check CI antes de merge (Editorial Workflow aún no es GA). Runner-up = **Pages CMS** — git-based, magic-link por email (el editor NO necesita cuenta GitHub), media R2; pero reintroduce dependencia: app hosteada de terceros con acceso al repo, O self-host con Postgres+BetterAuth. Diseño = **escalera de 3 etapas**: Etapa 1 (default) Sveltia · Etapa 2 (cliente jamás ve GitHub) Pages CMS · Etapa 3 (contenido relacional / multi-canal / publicación instantánea / workflow editorial pesado) Directus (motor por sitio: VPS+Postgres+S3 ~$200/mes; licencia MSCL, OIG libre si <$5M ingresos Y <50 empleados). **Descartados:** Keystatic = roto en Astro 6 (peer-dep `@keystatic/astro@5.0.6` tope astro 2–5, admin truena con error de React hook; issue #1515 ABIERTO, PR #1527 sin merge) + bug OAuth en Cloudflare (#1497 ABIERTO) + sin i18n → review-gate (reconsiderar si #1515 cierra fixed Y #1497 cierra; el cero-i18n sigue siendo tapón MX); EmDash = v0.1.0 dev-preview, contenido en DB/Portable-Text (no archivos), sandbox requiere CF de pago; Tina = pesado (motor+DB o Tina Cloud), Astro experimental, sin i18n nativo; Decap = abandonado (Sveltia es su sucesor); Sanity / headless-DB self-host (Directus/Strapi/Payload/PocketBase) = overkill salvo Etapa 3. Pins a RE-VERIFICAR en build: `@sveltia/cms@0.167.2` (beta, GA mid-2026), `astro@6.x`, `@astrojs/cloudflare@13.x`, Node 22; Worker `sveltia-cms-auth` (gratis) + GitHub OAuth App (`ALLOWED_DOMAINS` = hostname del sitio); bucket R2 + token (Object R/W) + CORS al dominio del CMS + `public_url`. Bundle propuesto: `SKILL.md` (veredicto + escalera + receta Sveltia + gotchas + limits) + references/ {`sveltia-setup`, `cloudflare-auth-worker`, `media-r2`, `escalation-ladder` (Pages CMS + frontera git-vs-DB), `i18n-and-publishing`}. Caveats: Sveltia es beta de un solo mantenedor (riesgo bajo por portabilidad de archivos); la interacción CSP×`/admin` es INFERIDA (verificar en build); Keystatic es time-sensitive (re-chequear). Registro = §11 (selección de herramienta); reporte de research completo = artefacto del chat de decisiones.
+**Skill #8 — `cms-self-edit`** (COMPLETA — autorada, validada y registrada en `plugin.json`; commits `a8c0948` selección / `90110a9` bundle): disciplina para dar a un cliente NO técnico la capacidad de auto-editar el contenido de un sitio Astro 6 + Cloudflare Pages/Workers, sin lock-in tipo Webflow/Framer, como patrón reusable de bajo mantenimiento por sitio. Decisión por MÉRITO puro (sin lente de stack-canon — dropeado por Carlos: no existe / el stack no es fijo). **Veredicto:** ganador = **Sveltia** — CMS git-based client-side puro, montado como `public/admin/index.html`, sin backend; contenido = Markdown/YAML en el repo; OAuth GitHub vía el Worker oficial gratis `sveltia-cms-auth`; media en Cloudflare R2 (SigV4 browser→R2); i18n first-class (DeepL DESHABILITADO en Sveltia — traducción vía Google Cloud Translation / Gemini / Mistral); `/admin` se mantiene como archivo estático en `public/` para esquivar la CSP `<meta>` de #2; publicar vía rama `drafts` + check CI antes de merge (Editorial Workflow aún no es GA). Runner-up = **Pages CMS** — git-based, magic-link por email (el editor NO necesita cuenta GitHub), media R2; pero reintroduce dependencia: app hosteada de terceros con acceso al repo, O self-host con Postgres+BetterAuth. Diseño = **escalera de 3 etapas**: Etapa 1 (default) Sveltia · Etapa 2 (cliente jamás ve GitHub) Pages CMS · Etapa 3 (contenido relacional / multi-canal / publicación instantánea / workflow editorial pesado) Directus (motor por sitio: VPS+Postgres+S3 ~$200/mes; licencia MSCL, OIG libre si <$5M ingresos Y <50 empleados). **Descartados:** Keystatic = roto en Astro 6 (peer-dep `@keystatic/astro@5.0.6` tope astro 2–5, admin truena con error de React hook; issue #1515 ABIERTO, PR #1527 sin merge) + bug OAuth en Cloudflare (#1497 ABIERTO) + sin i18n → review-gate (reconsiderar si #1515 cierra fixed Y #1497 cierra; el cero-i18n sigue siendo tapón MX); EmDash = v0.1.0 dev-preview, contenido en DB/Portable-Text (no archivos), sandbox requiere CF de pago; Tina = pesado (motor+DB o Tina Cloud), Astro experimental, sin i18n nativo; Decap = abandonado (Sveltia es su sucesor); Sanity / headless-DB self-host (Directus/Strapi/Payload/PocketBase) = overkill salvo Etapa 3. Pins a RE-VERIFICAR en build: `@sveltia/cms@0.167.2` (beta, GA mid-2026), `astro@6.x`, `@astrojs/cloudflare@13.x`, Node 22; Worker `sveltia-cms-auth` (gratis) + GitHub OAuth App (`ALLOWED_DOMAINS` = hostname del sitio); bucket R2 + token (Object R/W) + CORS al dominio del CMS + `public_url`. Bundle propuesto: `SKILL.md` (veredicto + escalera + receta Sveltia + gotchas + limits) + references/ {`sveltia-setup`, `cloudflare-auth-worker`, `media-r2`, `escalation-ladder` (Pages CMS + frontera git-vs-DB), `i18n-and-publishing`}. Caveats: Sveltia es beta de un solo mantenedor (riesgo bajo por portabilidad de archivos); la interacción CSP×`/admin` es INFERIDA (verificar en build); Keystatic es time-sensitive (re-chequear). Registro = §11 (selección de herramienta); reporte de research completo = artefacto del chat de decisiones.
 
 ### Pins (2026-06-16 — re-verificar en el research de cada skill)
 
@@ -49,13 +49,28 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 | webgl-atmosfera | Default = raw WebGL2 vendorizado (helper 0-dep, WebGL2 universal/Baseline). Alternativas: `ogl@1.0.11` (latest verificado; ~1 año sin publish; README sigue "alpha"; 0 deps; Core ~8 KB minzip, subset fullscreen una fracción — tree-shaken sin cifra publicada, medir en build) vendorizando Core subset (Renderer/Triangle/Program/Mesh), sin `^`; `twgl@7.0.0` (mantenido, 0 deps). WebGPU OUT (fitness; MDN no-Baseline may-2026; gpuweb: Firefox Linux/Android pendiente, Safari OS-gated). `astro@6` experimental.csp + scriptDirective.hashes. WCAG 2.2.2 (A) pausa obligatoria + 2.3.3 (AAA) scroll. Review-gates: ogl post-1.0.11 sin "alpha" → reconsiderar dep npm; WebGPU pasa Baseline MDN + se necesita compute → reabrir; set-LCP (canvas excluido) confirmar en build. Verificado 2026-06-18 |
 | signature-anim | `@rive-app/canvas@2.38.1` (default) · `@rive-app/canvas-lite@2.37.3` (tren lite va atrás) · `@rive-app/webgl2@2.38.1` · `@rive-app/canvas-single@2.38.0` · `@rive-app/react-canvas@4.28.0` · `@rive-app/webgl` legacy (evitar). Gates: re-pin semanal; medir WASM brotli servido (261 KB@v2.0.0 vs ~640 KB@v2.38.1) y presupuestar contra lo medido; CSP solo build+preview; `?url` bajo Rolldown-Vite; evitar `base` no-root (#16276). Verificado 2026-06-18 |
 
+### Pins objetivo B0 (2026-08-17 — re-pin audit verificado adversarialmente; aplicar en la migración B0 del sprint v1)
+
+| Paquete | Pin vigente | Objetivo B0 | Nota |
+|---|---|---|---|
+| `astro` | 6.4.7 | **7.2.2** | 7.0.0 stable desde 2026-06-22; `security.csp` sobrevive el major (solo aditivo — opción `kind` en 7.1.0) |
+| `@astrojs/cloudflare` | 13.7.0 | **14.2.1** | peer `astro ^7.2.0` — migración acoplada; `staticHeaders` sigue SIN aterrizar en el adapter (review-gate de #2 NO dispara); watch #16692 — hashed assets sin Cache-Control immutable en algunas configs (reportado en 13.5.0), re-verificar bajo 14.2.1 en B0/C |
+| `tailwindcss` | 4.3.1 | **4.3.3** | + **switch-back a `@tailwindcss/vite`** — review-gate #16542 dispara con Astro 7 (verificado empíricamente); la ruta `@tailwindcss/postcss` pasa a nota histórica |
+| `style-dictionary` | 5.4.4 | **5.5.1 — JAMÁS 5.5.0** | 5.5.0 = GHSA-xmr7-549p-98w3 (prototype pollution HIGH; npm audit puede no verla). #1398 cerrado desde 5.4.0; #1494 abierto → workaround string solo para typography |
+| `@biomejs/biome` | 2.5.0 | **2.5.8** | patch-only; flag `.astro` sigue experimental — se mantiene "OFF + prettier-plugin-astro" |
+| `@rive-app/canvas` / `@rive-app/webgl2` | 2.38.1 | **2.40.0** | webgl2 −11.5% de tamaño (Emscripten 4.0.23 + -Os) |
+| `@sveltia/cms` | 0.167.2 | **0.191.2** | 24 minors adelante; pre-GA (milestone 1.0 RC cerca) → smoke-test del admin al bump |
+| `motion` | 12.40.0 | **13.1.0** | único breaking = @emotion/is-prop-valid (no nos toca); trae `animateView` (View Transitions) |
+| `@kindspells/astro-shield` | 1.7.1 | **RETIRAR** | abandonado (último publish nov-2024, peer astro ^4) → SRI custom pequeña dentro de #2, en B0 |
+| gsap · @gsap/react · schema-dts · @astrojs/sitemap · @lhci/cli · treosh@v12 | — | **sin cambio** | todos siguen latest; #16838 (lastmod sitemap-index) ya está fijo en el pin 3.7.3 |
+
 Gotchas y outline detallados — en cada `skills/<nombre>/SKILL.md`.
 
 ## 4. Estructura del repo
 
     .claude-plugin/
       marketplace.json     -> 1 plugin: web-stack (source ".")
-      plugin.json          -> manifiesto + "skills":[ las 7, rutas relativas ]
+      plugin.json          -> manifiesto + "skills":[ las 8, rutas relativas ]
     skills/
       astro-css-tokens/SKILL.md
       web-security-headers/SKILL.md
@@ -64,9 +79,10 @@ Gotchas y outline detallados — en cada `skills/<nombre>/SKILL.md`.
       motion-system/SKILL.md
       webgl-atmosfera/SKILL.md
       signature-anim/SKILL.md
+      cms-self-edit/SKILL.md
     deferred/
       stack-integration-playbook/SKILL.md   (excluido del plugin)
-    README.md  LICENSE  RESIDENT.md
+    README.md  LICENSE  RESIDENT.md  CLAUDE.md  v1-finalization-plan.md
 
 Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) **y** registradas en `plugin.json`. La diferida vive en `deferred/` = imposible de shippear hasta tener sustancia.
 
@@ -82,8 +98,8 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 
 ## 6. Reglas operativas
 
-- **GitHub = TODO por Composio** (Git Data API vía `proxy_execute` en el workbench). **Claude Code queda reservado estrictamente para el build final** (cuando estén las 7 literal). No abrir Claude Code antes — ni para probar instalación.
-- **Un plugin** (`web-stack`) agrupa las 7. Instalación: `/plugin marketplace add ccediland/web-stack-skills` luego `/plugin install web-stack@web-stack-skills`.
+- **Superficie por época** — en la fase de autoría (2026-06) GitHub fue TODO por Composio (Git Data API) y Claude Code quedó reservado al build final. Desde el sprint v1 (2026-08-17), Claude Code ES la superficie de ejecución (ver Surfaces del plan); Composio queda como vía alternativa para commits desde chat.
+- **Un plugin** (`web-stack`) agrupa las 8 (9 al cierre de B1). Instalación: `/plugin marketplace add ccediland/web-stack-skills` luego `/plugin install web-stack@web-stack-skills`.
 - Gobierno: **skill-author** = autoridad de arquitectura; **skill-creator** (`/mnt/skills/examples/skill-creator`, con `quick_validate.py` + `package_skill.py`) = validar/empacar; **Context7** + docs oficiales = contenido actual.
 - Naming de skills: kebab-case, ≤64, sin la palabra "claude". Description ≤1024, sin `<` ni `>`, sin dos-puntos-espacio a media cadena (rompe YAML — usar guión largo).
 - Pins del 2026-06-16 — re-verificar en turns 2/3 de cada skill.
@@ -94,12 +110,20 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - Público + genérico + MIT. Un repo-marketplace, un plugin que agrupa las 7.
 - 8ª skill diferida como skeleton; excluida del instalable hasta tener sustancia.
 - Skills bajo `skills/<nombre>/`; manifiesto `plugin.json` agregado; skills registradas explícitamente en `plugin.json`; diferida fuera de `skills/`.
+- **El activo durable es el MÉTODO, no las skills** (motor portable: este RESIDENT + cadencia 5-turn + caso contrario + source-priority + log); las skills son perecederas y reconstruibles desde docs. El `stack-integration-playbook` diferido concentra el valor irremplazable (lecciones de composición de campo) — su prioridad de llenado sube en cuanto haya sustancia. (Revisión externa 2026-06-17, adoptado.)
+- **Disciplina de perecederos:** cada pin duro y cada workaround por issue-number lleva review-gate; solo + sin auto-update = half-life corto → presupuestar mantenimiento activo, no asumir estabilidad.
+- **Capa visual = doble filo** (gana el pitch, arriesga CWV/a11y/lectura B2B): UNA por sitio, cuando el brief la justifique, nunca default.
+- **§6 sin cambios** ante la sugerencia externa de smoke-test temprano de install (decisión de Carlos, 2026-06-17: No).
+- **Tesis comercial/GTM fuera del repo público** (vive en notas privadas de Carlos); el README puede nombrar el nicho como posicionamiento si Carlos lo decide.
+- **Auth de cms-self-edit:** Sveltia default salvo que los clientes rechacen GitHub como norma (fork abierto, llamada de Carlos; sin respuesta, queda Sveltia).
 
 ## 8. Descubrimientos del proceso (2026-06-16/17)
 
 - **Layout de plugin** (verificado vs docs oficiales): skills van bajo `skills/<n>/SKILL.md` (no en raíz); hace falta `.claude-plugin/plugin.json`; las skills deben **registrarse** en `plugin.json` vía `"skills":["./skills/..."]` — el auto-discovery solo no basta.
 - **Quirk de GitHub** (verificado en ejecución): en repo recién creado **vacío**, la Git Data API (`git/trees`) da 409 "Git Repository is empty" → bootstrapear con un commit inicial (Contents API) y luego reemplazar el árbol completo.
 - Poner la 8ª en `deferred/` (fuera de `skills/`) la excluye **estructuralmente** — más limpio que listas de exclusión en el manifiesto.
+- **raw.githubusercontent y el render de GitHub sirven copias stale** del repo — leer el estado real vía clon local o Contents API, nunca el raw/render.
+- **Commits cross-environment (Git Data API) sin base64:** transferir archivo por archivo (el payload de una sola celda truena ~31 KB), gate sha-git-de-blob == local ANTES de mover el ref, y parentear sobre el HEAD vivo (puede avanzar por commits web entre turnos).
 
 ### 2026-06-17 — research astro-css-tokens (verificado, fuente primaria)
 
@@ -112,544 +136,83 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - **DTCG estabilizó 2025.10** (28-oct-2025, primera versión estable); SD da soporte.
 - Ref de implementación SD→`@theme`: `tokens-studio/sd-tailwindv4` (~15★, README admite patrones no-DTCG; minar por forma, no como dependencia).
 
+### 2026-08-17 — Hallazgos pre-sprint (verificados contra fuentes primarias; re-checados adversarialmente)
+
+- **Astro 7.2.2 stable** (7.0.0 el 2026-06-22); `@astrojs/cloudflare@14.2.1` exige `astro ^7.2.0` — migración acoplada. `security.csp` sobrevive el major (cambios aditivos). Mina activa en Astro 6: npm puede hoistear Vite 8 junto a Astro 6 y romper el build hoy (mitigación temporal: overrides `{"vite":"^7"}`). Node 20 se dropeó desde Astro **6.1.0**, no en 7.
+- **2 citas erróneas en `astro-css-tokens`** (corregir en B0): Astro 6 nunca usó rolldown-vite — el bug real era npm hoisteando Vite 8 (pnpm/yarn no afectados); el "#19802" citado es de tailwindlabs/tailwindcss, no de rolldown-vite. Firefox scroll-driven: sigue tras flag en stable (Nightly 156 default ON; soporte global ~85.4%; watch ~oct-2026).
+- **furever-brand ya habla el contrato:** `tokens/web/{base,semantic,component}.json` es proyección string pre-emitida para SD v5 — se consume tal cual. Delta real: los 4 schemes (dark + estados, 53 roles c/u) son objetos OKLCH compuestos SIN proyección string → serializar con el patrón C-1 de `tools/tokens-project.mjs` (~50 líneas zero-dep) a bloques CSS de override a nivel rol; default light sin auto-switch (G-UX-02); overrides al tier semántico, no al base. Menores: cubicBezier arrays → envolver en `cubic-bezier()`; tokens JS-vocabulary (px/s, rootMargin) por import JSON; favicon derivable de `furever-iso-mono-*.svg`; OG raster obligatorio (G-IMG-03).
+- **Contrato brand-system-skills 0.6.0:** spine de máquina fijo + gates auto-enforced (suite copiada a cada repo emitido); web-stack-skills es el consumidor flagship (e2e verificado 2026-07-16; proyección `furever-web` ya registrada en `satellites/projections.md`). NO garantizado: schemes, component tier, fuentes bundleadas, ni stamp de versión de contrato dentro del repo emitido — el hop C-1→web ya se rompió ~6 semanas una vez → la skill #9 pinea el contrato (0.6.0 + commit del tool-repo) con review-gate y corre `run-gates.mjs` del repo de marca como precondición.
+- **Superficie de triggers de las 8:** 3 colisiones ALTAS (CSP motion↔security; inversión léxica "hash-based CSP" — 4 hermanas la nombran, la dueña no; "animated gradient background" sin hook léxico en motion-system) + cluster medio (reduced-motion, pause, lazy-load, scroll-driven, perf-budget); 4 descriptions sin frontera; cero redirects entre hermanas. Fix-pass aplicada en Phase A; la #9 agrega el eje "design tokens"/"brand" (vs `astro-css-tokens` y vs los plugins brand-system) — vigilar en el triggering test de B2.
+- Ecosistema de pins (detalle en §3 pins objetivo B0): Sveltia 0.191.2 pre-GA con cadencia casi diaria (single-maintainer sano; sveltia-cms-auth activo); Keystatic review-gate NO cumplido (#1515 cerró solo peer-dep vía PR #1534; #1497 sigue abierto); GSAP/`@gsap/react` sin release nuevo y 100% free confirmado; LH13 NO ha aterrizado en LHCI (issue #1136 sin respuesta); DTCG 2025.10 sigue siendo el único stable.
+
 ## 9. Estado
 
-- Fase 0 (scaffold) — completada.
-- astro-css-tokens turns 1–4 — hechos (scoping, pre-research, research verificado, decisiones cerradas). Veredicto y pins reescritos arriba (§3).
-- 1/7 skills redactadas (`astro-css-tokens` — turn 5 completo).
-- `astro-css-tokens` y `web-security-headers` — completas, 5/5 turns cada una. 2/7 redactadas. Fuentes de web-security-headers en commit 4f37a05 (SKILL.md + 5 references).
-- `perf-ci-gates` (#3) turn 1 (Scoping) — HECHO. Alcance = gate de CI de dos puertas (LHCI + Biome en GitHub Actions). Tool-selection ya lockeado por stack-canon (no requiere turno de selección). 10 forks abiertos (F1–F10), caso-contrario nombrado, checklist de research de 9 puntos.
-- `perf-ci-gates` (#3) turn 2 (Pre-research) — HECHO. `pre-research` corrida: 8 búsquedas (entre turns 1–2) + fuentes primarias; pre-brief de 8 subtasks armado para Research mode. Hallazgos clave a verificar en turn 3 (abajo en §11).
-- `perf-ci-gates` (#3) turns 3–4 (Research + Decisions) — HECHOS. Research mode entregó reporte verificado contra fuentes primarias. Forks F1–F10 lockeados (detalle en §11). 2 reversals vs leans previos: F4 (raw autorun → treosh action) y F5 (flag `.astro` ON → OFF + prettier-plugin-astro). Caso contrario derrotado; claim CWV 2.0s confirmado FALSO.
-- `perf-ci-gates` (#3) turn 5 (Build) — HECHO. Bundle (SKILL.md + 4 refs) autorado, `quick_validate` PASS (description 998/1024, sin `<`/`>`, sin `: `, body house-style limpio), `.skill` empacado (15.3 KB), fuente commiteada atómica (Git Data API) en `23d8388f`. Stub sobrescrito. (Turn 5 se reanudó tras un corte; el bundle del run cortado persistió en el contenedor de code-exec, se verificó contra los forks lockeados y se re-validó antes de commitear.)
-- `seo-aeo-schema` (#4, fundación) turn 1 (Scoping) — HECHO. Alcance IN/PARTIAL/OUT; 10 forks (F1–F10) con leans; caso contrario doble; seam CSP×JSON-LD (×#2) load-bearing; checklist de research. Tool-selection NO requerido.
-- `seo-aeo-schema` (#4) turn 2 (Pre-research) — HECHO. Skill `pre-research` corrida; F1 resuelto IN; pre-brief de 8 subtasks entregado.
-- `seo-aeo-schema` (#4) turn 3 (Research) — HECHO. Research mode entregó reporte verificado (fuentes primarias). De-risking clave: el seam CSP×JSON-LD (×#2) se RESUELVE como NO-ISSUE — `ld+json` es data block exento de script-src, no necesita hash. schema-dts@2.0.0 vivo (caso contrario primario derrotado) pero NO valida @id cross-refs. Detalle en §11.
-- `seo-aeo-schema` (#4) turn 4 (Decisiones) — HECHO. F2–F10 lockeados; §3 veredicto/pins reescritos. Detalle en §11.
-- `seo-aeo-schema` (#4) turn 5 (Build) — HECHO. SKILL.md + 5 refs autoradas, validadas (quick_validate OK; description 961 chars; sin `<`/`>`; frontmatter solo {name, description}; sin bold/HR/H4; TOC en los 2 refs >100 líneas), empaquetadas (.skill 15750 B), y commiteadas atómicamente vía Git Data API (commit 0b55775, parent 33cb7cc, autor Carlos; fuente byte-verificada: sha git de cada blob == sha local antes de mover el ref). Skill #4 COMPLETA. Detalle en §11.
-- `motion-system` (#5, visuales) turns 1–4 — HECHOS (scoping, pre-research, research verificado fuente primaria, lock). Reframe = árbol de 3 motores native-first (CSS scroll-driven / GSAP scrub / Motion solo-islas). F1–F10 lockeados; veredicto/pins reescritos en §3. Caso contrario doble (GSAP-only ↔ CSS-only, en tensión) derrotado en la frontera de capacidad medida. Seams: CSP×motion favorable (bundled hasheado, is:inline bloqueado, `element.style` CSSOM exento de style-src); peso ~45 KB GSAP vs 2.3 KB Mini × budget #3; reduced-motion por motor × a11y 0.95 #3.
-- `motion-system` (#5) turn 5 (Build) — HECHO. Bundle (SKILL.md + 5 refs) autorado, validado (quick_validate OK; description 886 chars; frontmatter solo {name, description}; sin bold/HR/H4; TOC en gsap-astro 112 líneas), empaquetado (.skill 14114 B), commiteado atómico vía Git Data API en `1bd35f1585b8c35bc634b71b3faf4893067c3736` (sha-git de blob == local para los 6 antes de mover el ref). Skill #5 COMPLETA. Detalle en §11.
-- `webgl-atmosfera` (#6, visuales) turns 1–4 — HECHOS (scoping/10 forks, pre-research, research verificado fuente primaria, lock). 4 reversals vs leans de turn 1: F1 motor (OGL → raw WebGL2 vendorizado default, native-first), F5 fallback (gradiente CSS → AVIF/WebP estático astro:assets primario), F6 carga (client:visible → init manual rIC+IntersectionObserver; canvas no elegible-LCP), F7 a11y (aria-hidden+reduced-motion → + control pausa OBLIGATORIO SC 2.2.2). CC-A (just-use-CSS) acotado no derrotado; CC-B (OGL estancado) aceptado (movió F1). Seams: CSP×shader paridad #5/#2 (bundled hasheado, template-literals sin connect-src); scroll→uniform por rAF+listener pasivo (0 libs) × #5; reduced-motion × a11y 0.95 #3.
-- `webgl-atmosfera` (#6) turn 5 (Build) — HECHO. Bundle (SKILL.md + 5 refs) autorado por md-house-style + skill-author, validado (quick_validate OK; description 951/1024; frontmatter solo {name, description}; sin bold/HR/H4; TOC en los 2 refs >100 líneas), empaquetado (.skill 17707 B, 6 archivos), commiteado atómico vía Git Data API en `22f805c5ca1275f4198ff788e16cd2d7ded74a38` (parent 1881820f; sha-git de blob == local para los 6 antes de mover el ref). Skill #6 COMPLETA. Detalle en §11.
-- 6/7 redactadas.
-- Siguiente — `cms-self-edit` (#8) turn 1 (Scope) en chat nuevo (cadencia de la skill; selección de herramienta ya hecha); al cierre del turn 5, BUILD FINAL de las 8 skills vía Claude Code (quick_validate + package las 7, probar marketplace add/install/triggering); luego empezar a llenar el deferred `stack-integration-playbook`.
+- Skills #1–#8: autoradas, validadas y commiteadas (commit por skill en §11). 8/8.
+- Análisis pre-sprint 2026-08-17: hecho y verificado (re-pin audit → §3 pins objetivo B0; hallazgos durables → §8; solape de triggers auditado → fix-pass en Phase A).
+- Sprint v1 en curso por `v1-finalization-plan.md` (7 fases): **Phase A ejecutada** en rama `claude/v1-sprint-rescope` (plan re-scopeado + RESIDENT compactado + durables migrados + descriptions fix-pass + CLAUDE.md + README Lego) — PR pendiente de OK de Carlos.
+- Precondición externa de B1-build: Carlos ratifica el canon v2 de `furever-brand` (Stage-10; gates 20/20 verdes, falta la firma).
+- Siguiente: OK del PR de Phase A → gate A→B0 → migración Astro 7 (B0).
 
 ## 10. Roadmap
 
-- **Fase 0** — scaffold del marketplace. Hecha.
-- **Skills 1–7** — autoría por la cadencia de 5 turnos, orden fundación → visuales. (7/7 redactadas; #7 `signature-anim` 26576412; #2 `web-security-headers` 4f37a05; #3 `perf-ci-gates` 23d8388f; #4 `seo-aeo-schema` 0b55775; #5 `motion-system` 1bd35f15; #6 `webgl-atmosfera` 22f805c5 — COMPLETA; siguiente = #7 `signature-anim` turn 1)
-- **Skill #8 — `cms-self-edit`** — selección de herramienta HECHA (Sveltia default / Pages CMS runner-up / Directus Etapa 3); la cadencia de autoría de la skill (5 turnos) arranca en Turn 1 (Scope); ver §3 y §11. Scaffold al repo se hace en el build (turn 5).
-- **Build final (Claude Code)** — `quick_validate` + `package` de las 7, prueba de `marketplace add` / `install` + triggering; después empezar a llenar la skill diferida con lecciones de campo.
+### v1 (H1) — sprint en curso
+Fase 0 + skills #1–#8: HECHAS. El sprint corre por `v1-finalization-plan.md` (doc mortal): A cleanup/docs → B0 migración Astro 7 (pins objetivo en §3) → B1 `brand-canon-ingest` (#9) → B2 validación mecánica de las 9 → C sitio Furever (integration test real) → D `stack-integration-playbook` (promover de `deferred/`) → E ship 1.0.0. Decisiones adjudicadas 2026-08-17: migrar antes de validar; ingestión de marca = skill nueva; sitio de referencia = Furever.
+
+### Principio Lego (regla permanente del catálogo)
+El bundle es un catálogo, no un sistema fijo. Cada sitio compone solo el SUBCONJUNTO que su brief necesita; ningún sitio lleva todas las skills; la capa visual entra UNA vez, cuando el brief la justifica, nunca por default. Una skill nueva amplía el alcance del catálogo, no el payload de cada sitio.
+
+### v2 (H2) — backlog Lego (jalado por proyectos reales, no por brainstorm)
+Prioridad comprometida: **`client-discovery`** (intake/descubrimiento del cliente) — único ítem v2 especificado. Job: convertir lo que el cliente dé, en el formato que sea (escrito / dibujo / export design-tool), en un brief estructurado y validado contra el stack, + registro de lo diferido a Carlos. 4 fases: intake (banco de preguntas/plantillas) → captura por formato (escrito→requisitos; dibujo→requisitos+handoff visual; export→pipeline de tokens) → factibilidad (corre contra la matriz del playbook; veredicto por ítem, límites, delta brief↔deploy) → deferral (separa estético vs funcional/UX; registra como decisión de Carlos con contexto). Fronteras: captura intención, NO renderiza ni diseña; la factibilidad vive en el playbook (referencia, no duplica); diferidos se registran. Depende de Phase D (playbook); gate de arranque: v1 shipped. Nombre final al autorarla.
+
+| Skill candidata | Tier | Build-trigger |
+|---|---|---|
+| `data-layer` (datos externos, filtros/búsqueda, live data, lógica de negocio) | 1 | un proyecto pide menú/catálogo/datos dinámicos — sesgar a build-time (candidato natural: el sitio Furever en Phase C) |
+| `forms-lead-system` (o pick de herramienta + receta en playbook) | 1 | un proyecto necesita captura/leads/contacto (candidato: Furever en C) |
+| a11y profundo (más allá del piso 0.95 de perf-ci-gates) | 2 | un cliente exige WCAG AA formal |
+| `i18n-system` | 2 | un proyecto multi-idioma real |
+| `media-optimization` | 2 | un sitio image/video-heavy lo exige |
+| `edge-logic` (Workers: A/B, redirects, geo, feature flags) | 2 | un proyecto necesita lógica en el edge |
+| `analytics-measurement` (privacy-friendly + eventos) | 2 | un cliente pide medición real |
+| view-transitions / conversion-patterns / content-modeling / speculation-rules / auth-simple / legal-compliance / component-scaffolding / visual-regression-ci | 3 | especulativas — solo si un proyecto las jala |
+| `stack-governance` | ✗ | NO es skill — la cadencia ya hace review-gates; vive como disciplina de este RESIDENT (§7) |
+
+Invariantes de toda skill v2: native-first (declarar qué opción nativa se descartó y por qué) · una herramienta por trabajo, sin solape · review-gate en cada pin duro y cada workaround por issue-number · description filosa y sin solape (la superficie de discoverability) · buy/configure sobre custom-build (custom = excepción documentada) · regla Lego.
+
+Drift honesto (postura registrada): el setup-and-forget puro NO aplica a los sitios construidos sobre esto — esperar ciclos de toque de ~12–18 meses (majors de Astro, cambios del adapter). Mitigaciones: sitios tan estáticos como el brief permita; `data-layer` sesgada a build-time; review-gates en cada pin; el playbook documenta los seams frágiles. B0 (Astro 7) es el primer ciclo real — presupuestar los siguientes.
 
 ## 11. Log de sesiones
 
+Historial compactado en su lugar (2026-08-17, Phase A del sprint v1): cada sesión destilada a qué se hizo, commit y decisión clave. Los verdictos completos viven en §3; decisiones en §7; descubrimientos en §8; el detalle turno-por-turno original queda en la historia de git (pre-compactación).
+
 ### 2026-06-16/17 — Fase 0 (scaffold) — hecha
+Repo público creado; 13 archivos vía Composio/Git Data API (scaffold `a4bd7f0`, registro de las 7 en `plugin.json` `b24c124`; bootstrap previo por el quirk de repo vacío → §8).
 
-- Identidad confirmada (`ccediland`). Repo público creado.
-- 13 archivos pusheados por Composio (Git Data API), commit scaffold `a4bd7f0`; bootstrap previo por el quirk de repo vacío.
-- `plugin.json` parcheado para registrar las 7 (`"skills":[...]`), commit `b24c124`.
-- Frontmatter de los 8 SKILL.md validado inline (el `quick_validate.py` real corre en el build).
-- Descubrimientos en §8.
-- Siguiente: `astro-css-tokens` turn 1 en chat nuevo.
+### 2026-06-17 — astro-css-tokens (#1) — COMPLETA · commit `9b182b0`
+Decisiones clave: SD v5 + `@tailwindcss/postcss` (NO vite — #16542, review-gate) + bridge `@theme inline` sobre capa `:root --ds-*`; OKLCH sin fallback; `$value` string plano (#1398/#1494); build por prebuild script; dark = costura `[data-theme="dark"]`. Research verificado → §8. Bundle SKILL.md + 5 refs.
 
-### 2026-06-17 — astro-css-tokens · turn 1 (Entendimiento) — hecho
+### 2026-06-17 — web-security-headers (#2) — COMPLETA · commit `4f37a05`
+Pivote verificado en source: el adapter CF 13.x NO soporta `staticHeaders` → CSP estático = `<meta>` hash-based; `frame-ancestors`/report/sandbox → `public/_headers`; middleware solo SSR; hash-only (sin nonce); COEP OFF default (rompe assets cross-origin de #6/#7); SRI = astro-shield ≥1.3.2 solo cross-origin con review-gate. Bundle + 5 refs.
 
-- Alcance delimitado. Dentro: tokens.json DTCG (fuente única) -> SD v4 -> 2 salidas (CSS vars planas + bloque @theme) · 3 capas base/semantic/component vía alias DTCG · OKLCH · wiring Astro (global.css, @tailwindcss/vite, dónde corre el build) · config SD que emite ambas salidas · gotchas. Parcial: dark/multi-tema (solo la costura), dims no-color (ejemplo mínimo). Fuera: estilo a nivel componente, diseño de paleta, stacks no-Astro, migración.
-- Forks abiertos (resolver turn 4): (1) dark/multi-tema — costura inline vs build multi-tema de SD como reference; (2) ejemplo solo color vs +spacing/tipografía; (3) ejemplo como código fenced en references vs archivos en assets/. Sesgos: costura inline · sí dim extra mínima · fenced en references.
-- Estructura del bundle propuesta: SKILL.md (veredicto + receta + gotchas + punteros) + references/ {style-dictionary-config, tokens-example, astro-tailwind-wiring, color-oklch, gotchas}. Calls menores: gotchas inline si ≤~8; posible fusión config+wiring en build-setup.md.
-- Checklist de research (turns 2/3): re-verificar pins (tailwindcss/@tailwindcss/vite 4.3.1?, style-dictionary 4.x, astro 6.x) · soporte DTCG en SD v4 (flag usesDtcg/preprocessor, sintaxis $value/$type, alias {group.token}) · custom format SD->@theme (SD v4 no lo trae de fábrica) · @theme vs @theme inline (sostiene la tesis no-lock-in) · OKLCH default + fallback · @reference "tailwindcss" para @apply scoped · @astrojs/tailwind muerto en v4 · dónde corre style-dictionary build (sesgo: prebuild script, native-first).
-- CASO CONTRARIO a defender en research: Tailwind v4 @theme ya genera CSS vars solo -> ¿para qué SD? La skill debe justificar SD por multi-output + transforms + portabilidad DTCG, o se reescribe el veredicto a @theme + CSS vars hand-authored.
-- Siguiente: astro-css-tokens turn 2 (Pre-research) en chat nuevo.
+### 2026-06-17 — Revisión externa (dev front-end senior) — registrada (filtrada)
+Adoptado → §7 (el método es el activo; el playbook concentra el valor; disciplina de perecederos; visuales doble filo). Smoke-test temprano de install: Carlos decidió No (§6 sin cambios). Tesis comercial/GTM mantenida fuera del repo público.
 
-### 2026-06-17 — astro-css-tokens · turns 2–4 (pre-research · research · decisiones) — hechos
+### 2026-06-17 — perf-ci-gates (#3) — COMPLETA · commit `23d8388f`
+Dos puertas: LHCI vía `treosh@v12` (REVERSAL vs autorun crudo — la GitHub App era MÁS integración, no menos), `staticDistDir ./dist/client`, preset no-pwa, floors perf 0.9 / a11y 0.95 error, mediana de 5, TBT proxy de INP ‖ Biome `ci --reporter=github`, flag `.astro` OFF + `prettier-plugin-astro` (REVERSAL — formatter HTML experimental, no matchea Prettier). Claim "CWV LCP 2.0s" confirmado FALSO (2.5/200/0.1 vigentes). Turn 5 recuperado tras corte, sin re-autoría a ciegas.
 
-**Turn 2 (pre-research):** pre-brief armado. Caso contrario resuelto — SD se justifica solo con ≥2 consumidores / portabilidad; si no, `@theme` nativo basta. Detectado el build-break de Astro 6.
+### 2026-06-17 — seo-aeo-schema (#4) — COMPLETA · commit `0b55775`
+Crux desactivado: CSP×JSON-LD = NO-ISSUE (`ld+json` es data block exento de script-src). schema-dts 2.0.0 vivo pero `@id` NO se type-checkea → validación runtime + script exportado al gate de #3. llms.txt = B2A/agent-readiness, NO palanca SEO; robots.txt = surface real de control AI-crawler (16 tokens verificados). Sitemap solo prerendered; SSR vía endpoint propio. Bundle + 5 refs.
 
-**Turn 3 (research, verificado fuente primaria):** seis subtasks cerrados → descubrimientos en §8.
+### 2026-06-17 — motion-system (#5) — COMPLETA · commit `1bd35f15`
+Árbol de 3 motores native-first: CSS scroll-driven default (~83% caniuse, NO Baseline, production-viable) → GSAP+ScrollTrigger solo scrub/pin/snap/timelines anidadas (~45 KB gzip; "7 KB" falso) → Motion solo islas React existentes (Mini 2.3 KB). CSP favorable: bundled hasheado, `element.style` CSSOM exento de style-src. GSAP 100% free verificado (claim "Club" falso). Bundle + 5 refs.
 
-**Turn 4 — decisiones cerradas (spec para el build):**
-- Compilador: **Style Dictionary v5** (5.4.4), drop-in desde v4.
-- Install Tailwind en Astro 6: **`@tailwindcss/postcss`** + `postcss.config.mjs`; NO `@tailwindcss/vite` (#16542 abierto). Review gate: volver a vite cuando #16542 cierre + repro verde.
-- Bridge: **`@theme inline`** sobre capa `:root --ds-*` (fuente de verdad CSS pura); no `@theme` plano. Un solo override point; sirve utilities + CSS a mano + 2º consumidor.
-- Color: OKLCH **sin fallback** (Baseline 2025-11-09). Transforms SD solo-nombre; NUNCA `color/css`.
-- Tokens DTCG: `$value` **string plano** (evita split #1398/#1494). Capas base→semantic→component, alias `{…}`, `outputReferences:true`, `usesDtcg:true`.
-- Build SD: **prebuild script** (`node build.mjs`), native-first.
-- Dark mode: solo la costura — `@custom-variant dark (&:where([data-theme="dark"], …))` + `[data-theme="dark"]{ --ds-color-*: oklch(oscuro) }`.
+### 2026-06-18 — webgl-atmosfera (#6) — COMPLETA · commit `22f805c5`
+4 reversals vs leans de scoping: motor = raw WebGL2 vendorizado (no OGL como dep npm); fallback primario = AVIF/WebP `astro:assets` (no gradiente CSS); carga = init rIC+IntersectionObserver manual (canvas NO elegible-LCP; no `client:visible` above-fold); a11y = control de pausa OBLIGATORIO (WCAG 2.2.2-A). WebGPU OUT por fitness. Runtime: DPR ≤1.5, ~30fps, pausa offscreen. Bundle + 5 refs.
 
-**Arquitectura fijada:** `tokens.json` → SD v5 → `tokens.css` (`:root --ds-*`, css/variables) + `theme.css` (`@theme inline { --color-*: var(--ds-color-*) }`). Utilities/CSS/2º consumidor leen `--ds-*`.
+### 2026-06-18 — signature-anim (#7) — COMPLETA · commit `26576412`
+Rive Canvas2D para UN momento interactivo bespoke; gate de uso DURO (runtime ~840 KB gzip); CSP load-bearing: `wasm-unsafe-eval` + self-host de WASM y `.riv` → `connect-src 'self'`; lazy vía IntersectionObserver + dynamic-import; a11y DIY (Rive no trae reduced-motion). Proceso: transferencia archivo-por-archivo con gate de sha y parenteo sobre HEAD vivo (→ §8). Bundle + 4 refs.
 
-**Veredicto reescrito** (reemplaza al del seed): un `tokens.json` DTCG → SD v5 → capa `:root --ds-*` (fuente de verdad framework-independiente) + bridge `@theme inline` delgado que la referencia. Justificado con ≥2 consumidores / portabilidad; si no, `@theme` solo basta. En Astro 6 vía `@tailwindcss/postcss`.
+### 2026-06-18 — cms-self-edit (#8) — selección + skill COMPLETAS · commits `a8c0948` / `90110a9` / `d7da1b2`
+Selección por mérito puro (stack-canon dropeado por Carlos como autoridad): Sveltia ganador · Pages CMS runner-up (magic-link) · Directus Etapa 3; Keystatic OUT (#1515/#1497, review-gate), EmDash/Tina/Decap OUT. Build: `/admin` estático en `public/` esquiva la CSP `<meta>`; publicación vía rama `drafts` + CI; correcciones del build promovidas a §3 (DeepL deshabilitado; COOP de `/admin` = `same-origin-allow-popups`; latencia "~2-3 min" sin fuente — medir en sitio real). Con esto 8/8 autoradas.
 
-**Forks turn 1 cerrados:** dark = costura inline (sin multi-tema build); ejemplo = color+spacing+font+radius mínimos; ejemplo como código fenced en `references/` (no `assets/`).
-
-**Estructura del bundle (sin cambio):** SKILL.md + references/{style-dictionary-config, tokens-example, astro-tailwind-wiring, color-oklch, gotchas}.
-
-**Pendiente de verificar en el build:** patches exactos en npm (`tailwindcss`/`@tailwindcss/postcss` mostraron 4.3.1 vs 4.3.0; SD npm 5.4.4 vs tag GitHub 5.4.2).
-
-Siguiente: astro-css-tokens turn 5 (Build).
-
-### 2026-06-17 — astro-css-tokens · turn 5 (Build) — HECHO · commit 9b182b0
-
-Bundle autoreado y commiteado en un commit atómico (Git Data API):
-
-- `skills/astro-css-tokens/SKILL.md` (108 líneas) — veredicto, diagrama de arquitectura, tabla de versiones pinadas, 3 capas, setup en orden (5 pasos), gotchas, limitaciones, pointers a references.
-- `skills/astro-css-tokens/references/style-dictionary-config.md` (114 líneas) — `build.mjs` verificado completo: `TW_NAMESPACE`, `UTILITY_LAYERS`, formato custom `css/tailwind-theme`, config SD v5, tabla de partes, hooks `package.json`, extensión, gotchas SD.
-- `skills/astro-css-tokens/references/tokens-example.md` (128 líneas) — `tokens/base.json` + `tokens/semantic.json` + `tokens/component.json` en DTCG verificado; reglas de autoría; output compilado `tokens.css` + `theme.css`; gotcha `$value` objeto.
-- `skills/astro-css-tokens/references/astro-tailwind-wiring.md` (99 líneas) — por qué `@tailwindcss/postcss`, `postcss.config.mjs`, orden de imports `global.css`, script no-flash `is:inline`, `@reference "tailwindcss"` para `@apply` en scoped styles, switch-back trigger #16542.
-- `skills/astro-css-tokens/references/color-oklch.md` (39 líneas) — OKLCH perceptualmente uniforme, Baseline 2025-11-09 (sin fallback), preservación en SD (transforms solo-nombre), escape hatch legacy.
-
-Validado: `quick_validate PASS` | Empaquetado: `astro-css-tokens.skill` 8.7 K.
-Commit: [9b182b0](https://github.com/ccediland/web-stack-skills/commit/9b182b00b3595d2b755cbf27e485e90870aa7c56)
-
-Siguiente: web-security-headers turn 1 (Scoping).
-
-### 2026-06-17 — web-security-headers · turn 1 (Scoping) — HECHO
-
-**Reframe que reordena el bundle** (verificado, blog Astro 6 + config reference): el CSP de Astro 6 es **estable** (salió de `experimental:`), **basado en hashes**, e inyectado como `<meta http-equiv="content-security-policy">` en el HTML — **no** como response header. Hashea scripts/estilos bundleados (incl. cargados dinámicamente); funciona estático y SSR; imágenes responsivas ya cubiertas. Consecuencias duras: (a) el CSP de Astro **NO pasa por `_headers`**; (b) `<meta>` **ignora** `frame-ancestors`, `report-to`/`report-uri` y `sandbox` → esas directivas obligan un **header real**; (c) el **nonce** deja de ser el eje y pasa a escape hatch de nicho (Astro es hash-first; issue #377: nonces en `<style>` se eliminan).
-
-**Alcance IN:** CSP nativo Astro 6 (`security.csp`, hashes, cómo añadir hashes externos); set de security headers vía Cloudflare `_headers` (HSTS, X-Frame-Options + `frame-ancestors`, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, Cross-Origin-* según necesidad); el split `<meta>` vs header real; middleware de Astro (`src/middleware.ts`) como escape hatch dinámico (headers por-ruta, CSP como header real, ruta de nonce); SRI para externos; `.assetsignore` (higiene Workers Static Assets); baseline copy-paste + verificación (curl, securityheaders.com, CSP evaluator, consola).
-
-**Alcance OUT (pointer, sin desarrollo):** CORS de APIs / WAF / rate-limit / bots; cookies (SameSite/Secure/HttpOnly, capa app); Cache-Control / headers de perf (→ `perf-ci-gates` #3, fork F6); backend de reportes CSP; nonce como vía SSR principal.
-
-**Estructura preliminar** (granularidad final en build): `SKILL.md` + `references/`: `csp-astro-native.md`, `cloudflare-headers.md`, `middleware-and-nonce.md`, `header-inventory.md`, `sri-and-verification.md` (5 refs tentativas).
-
-**Checklist de research (turn 2→3):** 1) config exacta `security.csp` estable vs flag viejo, ¿opción de header real en adapter Cloudflare? 2) `@astrojs/cloudflare@13.x` / Workers Static Assets — ¿emite headers reales o siempre meta-CSP + `_headers`? 3) directivas ignoradas en `<meta>` en navegadores actuales; 4) sintaxis/precedencia/límites de `_headers` en WSA, confirmar static-only; 5) `.assetsignore` propósito exacto con adapter; 6) ¿Astro 6 genera SRI auto o manual?; 7) ruta de nonce por middleware (¿soportado o hash-only?); 8) HSTS preload + conflicto con HSTS de dashboard Cloudflare; 9) baseline Permissions-Policy; 10) COOP/COEP/CORP (COEP rompe embeds → interacción #6 OGL/#7 Rive); 11) ¿Cloudflare inyecta headers por default que choquen?; 12) re-verificar pins `astro@6.4.7`, `@astrojs/cloudflare@13.x`.
-
-**Forks abiertos (turn 4):** F1 entrega CSP (`<meta>` hashes default vs header real) → default meta + header solo para frame-ancestors/report-to. F2 headers no-CSP (`_headers` vs middleware) → `_headers` canónico, middleware solo dinámico. F3 nonce (documentar escape hatch vs hash-only) → hash-only + nota. F4 COOP/COEP/CORP (default vs opt-in) → opt-in con nota. F5 SRI (paso doc vs pointer) → depende de research #6. F6 cache headers (incluir en `_headers` vs ceder a #3) → pointer a #3. F7 granularidad refs (4 vs 5). F8 Pages vs Workers Static Assets → target WSA (RESIDENT), notar compat Pages.
-
-**Discrepancias reconciliadas:** seed de chat decía "+ `.astro` middleware"; veredicto RESIDENT §3 decía "+ `.assetsignore` + SRI" → alcance cubre la **unión** (middleware + .assetsignore + SRI). Pages (seed) vs Workers Static Assets (RESIDENT) → canónico WSA, compat Pages notada (F8).
-
-**Descubrimiento de proceso:** `raw.githubusercontent.com` sirve copia cacheada/vieja del RESIDENT (mostró Fase 0 / 0/7 mientras el HEAD real iba 1/7). Para leer el estado real del RESIDENT, usar **Contents API vía Composio** (`proxy_execute GET .../contents/RESIDENT.md` → content+sha), no el raw. Sandbox suffix activo este chat: `axpx`.
-
-Siguiente: web-security-headers turn 2 (Pre-research).
-
-### 2026-06-17 — web-security-headers · turn 2 (Pre-research) — HECHO
-
-Skill `pre-research` corrida: pre-investigación (8 búsquedas + fuentes primarias) + pre-brief para turn 3 (Research mode on). Hallazgos clave (**pre-investigación, a verificar en turn 3**):
-
-- **Entrega del CSP en Astro 6 es por modo de página, automática:** páginas estáticas → `<meta http-equiv="content-security-policy">`; páginas on-demand (SSR) → header `Content-Security-Policy`. No es elección libre (changelog 5.9.3 + blog Astro 6 + config reference).
-- **`experimentalStaticHeaders` = Astro Adapter Feature:** si el adapter lo soporta, Astro deja de emitir el `<meta>` en estáticas y entrega los headers vía hook `astro:build:generated` (`experimentalRouteToHeaders`) para que el adapter escriba un archivo de config (p.ej. `_headers`). Fuentes listan Vercel/Netlify/Node con soporte; **Cloudflare NO confirmado** → pivote del research (decide F1/F2).
-- **`<meta>` CSP ignora `frame-ancestors`, `report-uri`/`report-to` y `sandbox`** (W3C CSP2 §, CSP3, OWASP, MDN) y no soporta `-Report-Only` → esas directivas + clickjacking obligan **header real** (en `_headers` o middleware). Confirma el split CSP/headers del turn 1.
-- **Cloudflare `_headers`:** archivo de texto sin extensión en `public/`, parseado por la plataforma (no servido como asset), aplica a respuestas de assets estáticos; static-only (sin per-request). Quirk conocido de cache en Workers assets (issue withastro/astro #13164).
-- **SRI no es nativo en Astro:** lo provee `@kindspells/astro-shield` (SRI on-by-default en estático + CSP headers) o se hace manual; astro-shield tuvo CVE-2024-30250 (parchado 1.3.2) y su rol de CSP ahora **solapa** con el nativo de Astro 6 → su valor único hoy es SRI. Alternativa: `abemedia/astro-static-headers` (captura `Astro.response.headers.set` → escribe `_headers`; requiere `prerenderEnvironment: 'node'` con `@astrojs/cloudflare` v13+). SRI importa sobre todo para recursos cross-origin.
-
-**Subtasks de research (7 — versión completa en el pre-brief del chat):** 1) ¿`@astrojs/cloudflare@13` soporta `experimentalStaticHeaders`?; 2) shape de `security.csp` en `astro@6.4.7` (`directives`, `scriptDirective`/`styleDirective`, `strictDynamic`, hash algo) + runtime API `Astro.csp.*`; 3) `_headers` en Workers Static Assets (sintaxis/matching/precedencia/estado del quirk de cache); 4) `.assetsignore` con cloudflare@13 (propósito, qué listar, ¿lo genera Astro?); 5) SRI nativo vs astro-shield (mantenimiento 2026, overlap con CSP nativo, CVE resuelto, alcance); 6) ruta de nonce para inline de terceros (¿hash-only?) + estado issue #377; 7) baseline 2026 de headers no-CSP (HSTS `includeSubDomains`/`preload`, Permissions-Policy, COOP/COEP/CORP — impacto en embeds de #6 OGL/#7 Rive, Referrer-Policy) + ¿Cloudflare inyecta headers por default que choquen?
-
-**Source priority:** Astro docs oficiales > Cloudflare Developer docs > W3C CSP3 + MDN > OWASP CSP Cheat Sheet > GitHub repos/changelogs (`withastro/astro`, `@astrojs/cloudflare`) > integraciones de terceros (`astro-shield`, `astro-static-headers` — marcar SECONDARY, verificar mantenimiento + CVEs) > blogs técnicos [SECONDARY].
-
-Siguiente: web-security-headers turn 3 (Research — Research mode + Context7; re-verificar pins `astro@6.4.7`, `@astrojs/cloudflare@13.x`).
-
-### 2026-06-17 — web-security-headers · turn 3 (Research) — HECHO · informe completo en chat
-
-Research mode + web/source verification. Informe completo en el chat del turn 3; aquí el esqueleto decisión-relevante (turn 4 reescribe veredicto/pins en §3).
-
-**Pins verificados (npm, 2026-06-17):** `astro@6.4.7` (CSP estable bajo `security.csp`, "Added in astro@6.0.0"); `@astrojs/cloudflare@13.7.0`. Watch: Astro 7 alpha (Vite 8, compilador Rust default) ya tageado — puede cambiar internals de CSP/adapter en un major futuro.
-
-**Pivote (F1/F2) resuelto — `@astrojs/cloudflare@13.7.0` NO soporta `staticHeaders`/`experimentalStaticHeaders`:** verificado contra el source del adapter (la interfaz `Options` y el bloque `adapterFeatures` no lo declaran, y no consume el map `astro:build:generated`/`routeToHeaders`). El core añadió la feature (PR #13926) y la estabilizó como `staticHeaders` (PR #15258, ejemplos Netlify/Node); el blog Astro 5.11 prometió Cloudflare "coming soon… vía `_headers`" pero NO ha shippeado. Consecuencia: en Cloudflare estático el CSP de Astro queda como `<meta>`; no hay path nativo para emitirlo como header a `_headers`. `abemedia/astro-static-headers` sí puede, pero exige `cloudflare({ prerenderEnvironment: 'node' })`.
-
-**`security.csp` (shape estable):** `algorithm` (SHA-256/384/512), `directives[]` (NO admite `script-src`/`style-src` aquí → usar las sub-claves), `scriptDirective`/`styleDirective` cada una con `hashes[]` + `resources[]`, `scriptDirective.strictDynamic`. Runtime API `Astro.csp.insertDirective/insertScriptResource/insertStyleResource`. Recursos externos = hashes manuales. No corre en `dev` (usar `build`+`preview`). Incompatibles: `unsafe-inline`, `<ClientRouter/>` view transitions, Shiki (estilos inline → usar `<Prism/>`). Imágenes responsivas: cubiertas.
-
-**`<meta>` no expresa `frame-ancestors`, `report-uri`, `sandbox` ni report-only** (W3C/MDN; reproducido en Astro #13896) → obligan header real en `_headers`.
-
-**`_headers` (Workers Static Assets):** texto plano en `public/`, aplica SOLO a respuestas de assets estáticos (NO a respuestas del Worker/SSR), mismo formato que Pages. Quirk #13164 (Cache-Control no aplicaba) = `wontfix`/upstream; pero el adapter v13 auto-inyecta Cache-Control immutable para `_astro/*` hasheados. `.assetsignore` (sintaxis .gitignore, raíz de assets) excluye `_worker.js`/`_routes.json`/`_headers` de servirse; lo maneja adapter/wrangler.
-
-**SRI:** no nativo en Astro 6. `@kindspells/astro-shield` 1.7.1 (CVE-2024-30250 CVSS 7.5, parchado en 1.3.2); su rol CSP solapa con el nativo → usarlo SOLO para SRI, sobre todo cross-origin. **Nonce:** hash-only; no hay modo nonce; nonce en `<style>` se elimina (#377) → inline de tercero = agregar su hash en `scriptDirective.hashes`; nonce real exige header desde SSR.
-
-**Baseline no-CSP:** HSTS `max-age=63072000; includeSubDomains` (preload OFF por default — OWASP avisa consecuencias permanentes; en CF preferir HSTS zone-wide en dashboard); `X-Content-Type-Options: nosniff`; `Referrer-Policy: strict-origin-when-cross-origin`; `X-Frame-Options: DENY` + `frame-ancestors 'none'` (en `_headers`); Permissions-Policy apagar features no usados; COOP `same-origin` OK, **COEP OFF por default** (`require-corp` rompe assets cross-origin de OGL #6 / Rive #7), CORP `same-origin`. CF Managed Transform "Add security headers" omite CSP+Permissions-Policy; evitar duplicar headers entre `_headers` y dashboard.
-
-**Recomendaciones F1–F8 (entran a turn 4):** F1 `<meta>` hashes default, sin forzar header en CF; frame-ancestors/report en `_headers`. F2 `_headers` canónico (estático) + middleware solo en rutas SSR. F3 hash-only. F4 COOP on, COEP opt-in. F5 astro-shield ≥1.3.2 solo para SRI cross-origin; si no, manual. F6 caching de assets hasheados lo hace el adapter; Cache-Control custom mínimo/evitar (#13164); diferir perf a otra skill. F7 split de 5 references soportado. F8 Workers Static Assets canónico (Pages removido en v13); `_headers` porta a Pages.
-
-**Caveats:** el veredicto "CF no soporta staticHeaders" se apoya en el source de `main` + ausencia en changelog (no se leyó el changelog línea por línea) → si un release futuro lo agrega, F1 cambia. Algunos blogs 2026 confunden entrega por `<meta>` (sí funciona) con header (no) → poco fiables. #13164 verificar empíricamente en deploy real. CSP no testeable en `dev`.
-
-Siguiente: web-security-headers turn 4 (Decisiones — cerrar F1–F8, reescribir §3).
-
-### 2026-06-17 — Revisión externa (dev front-end senior) — REGISTRADO (filtrado)
-
-Revisión externa del stack como artefacto terminado y como método. Se registran SOLO los takeaways genéricos/de proceso; este RESIDENT es público y el repo es charter "cero secretos / genérico", así que la tesis comercial/GTM se mantuvo deliberadamente FUERA (ver más abajo).
-
-Adoptado (genérico, rationale de diseño):
-- **El activo durable es el MÉTODO, no las 7 skills.** El motor portable (este RESIDENT + cadencia 5-turn + caso-contrario + source-priority + log) sobrevive a cualquier stack/dominio; las skills son perecederas y reconstruibles desde docs (con costo de verificación no trivial — cf. el pivote del turn 3, que salió del source, no de docs). El repo se organiza alrededor del motor a propósito.
-- **La skill diferida `stack-integration-playbook` concentra el valor irremplazable** (lecciones de composición de campo), no las 7 fundación/visuales. Justifica subir su prioridad de alimentación cuando haya sustancia de campo.
-- **Disciplina de perecederos:** cada pin duro y cada workaround por issue-number lleva review-gate (como #16542 en skill #1), no solo "re-verificar". Solo + sin auto-update = half-life corto → presupuestar mantenimiento activo, no asumir estabilidad.
-- **La capa de visuales (WebGL/Rive/scroll) es de doble filo:** gana el pitch pero puede dañar los CWV que LHCI gatea, exige `prefers-reduced-motion` (si no, pasivo de accesibilidad) y parte del B2B lo lee como forma-sobre-fondo. Regla: UNA, cuando el brief lo justifique; nunca default. Refuerza el "3 motores por trabajo" de motion-system (#5).
-
-Decisión abierta (choca con regla vigente §6):
-- El dev recomienda probar `marketplace add`/install/triggering YA con la 1 skill existente (las `description` son la superficie más propensa a fallar; no reservar todo el riesgo de install al final). Esto choca con §6 ("Claude Code reservado estrictamente para el build final; no abrir antes ni para probar instalación"). PENDIENTE de decisión de Carlos: mantener §6, o abrir una excepción de smoke-test de install temprano. No se toca §6 hasta que decida.
-
-Registrado pero NO adoptado:
-- "Shippear un sitio real antes de autorar las 7" (el dev lo marca como sugerencia, no crítico). Tensión: las fundaciones (security-headers, perf-gates, tokens) deben existir para shippear bien → huevo-gallina; y vamos a mitad (1/7 + 1 en curso). Se mantiene la cadencia; opción anotada, no ejecutada.
-
-Mantenido FUERA del RESIDENT (público), en notas privadas de Carlos (Plan de Vida / Argos):
-- Tesis de rentabilidad, fulfillment-vs-demanda, reuse-compression como métrica, nicho/segmento objetivo, CMS como definición de mercado, postura de gama/ticket y el criterio de cierre del objetivo "modelo rentable". Es inteligencia comercial específica de Carlos; no pertenece a un repo público. (El README sí podría nombrar el nicho como posicionamiento de producto si Carlos lo decide — eso no es secreto.)
-
-### 2026-06-17 — web-security-headers · turn 4 (Decisiones) — HECHO
-
-F1–F8 cerrados sobre el research del turn 3. Veredicto y pins reescritos en §3. Decisiones lockeadas:
-
-- **F1 — entrega CSP:** `<meta>` hash-based nativo de Astro en estático (default). NO se fuerza header real en Cloudflare — `@astrojs/cloudflare@13.7.0` no soporta `staticHeaders`. `frame-ancestors`/`report-to`/`sandbox`/report-only van en `public/_headers`. Review-gate: revisar `staticHeaders` en cada minor del adapter; si aterriza, reconsiderar header unificado.
-- **F2 — headers no-CSP:** `public/_headers` canónico (todos los assets estáticos). Middleware (`src/middleware.ts`) SOLO para rutas on-demand/SSR (donde `_headers` no aplica).
-- **F3 — nonce:** hash-only. Inline de tercero → hash en `scriptDirective.hashes`. Nonce real exige SSR + header; fuera de alcance del `<meta>` nativo.
-- **F4 — COOP/COEP/CORP:** COOP `same-origin` en baseline; **COEP OFF por default** (`require-corp` rompe assets cross-origin de OGL #6 / Rive #7); CORP `same-origin` (aflojar a `cross-origin` para assets embebibles). Documentar cómo prender COEP solo si todo cross-origin manda CORP.
-- **F5 — SRI:** no nativo. Para un sitio premium mayormente same-origin, SRI es OPCIONAL: documentar `integrity=` manual + `@kindspells/astro-shield@≥1.3.2` (1.7.1) como integración SOLO cross-origin y SOLO para SRI (su CSP solapa el nativo). Review-gate por CVE/mantenimiento.
-- **F6 — cache:** el adapter v13 ya inyecta Cache-Control immutable para `_astro/*`. NO meter Cache-Control custom en `_headers` (quirk #13164, poco fiable). Caching de perf se difiere a `perf-ci-gates` (#3).
-- **F7 — granularidad references:** 5 archivos — `csp-astro-native.md`, `cloudflare-headers.md` (incl. `.assetsignore`), `header-inventory.md` (tabla valor-por-header), `middleware-ssr.md`, `sri-and-verification.md`. `SKILL.md` carga veredicto + split `<meta>`/header + baseline `_headers` + config mínima.
-- **F8 — Pages vs Workers Static Assets:** Workers Static Assets canónico (Pages removido en adapter v13); `_headers` porta a Pages.
-
-Gobierno (decisiones de Carlos este turn):
-- §6 SIN CAMBIOS: no se abre Claude Code para smoke-test temprano de install (resuelve el pendiente del entry de revisión externa — Carlos decidió No).
-- Skill **`cms-self-edit`** (placeholder) planeada post-7: turno de selección de herramienta primero (gap de stack-canon — no hay CMS web), luego cadencia normal; scaffold al repo diferido. Registrada en §3 y §10.
-
-Siguiente: web-security-headers turn 5 (Build — autoría del bundle → `quick_validate` → `package` → commit).
-
-### 2026-06-17 — web-security-headers · turn 5 (Build) — HECHO
-
-Bundle autoreado y commiteado (Git Data API, commit atómico de 6 archivos, sha 4f37a05): `skills/web-security-headers/SKILL.md` + 5 references.
-
-- SKILL.md (120 líneas): veredicto + split meta/header-real + tabla de capas + receta de 5 pasos (security.csp mínimo, `public/_headers` baseline, middleware SSR, SRI opcional, verificación) + gotchas + limitations. Frontmatter solo name+description (validador); description 953 chars. Cuerpo en md-house-style — sin bold/itálicas/hr, solo #/##/###, "load when relevant".
-- references: `csp-astro-native.md` (security.csp, runtime API, hashes externos, incompatibles, dev caveat), `cloudflare-headers.md` (_headers sintaxis/matching + `.assetsignore` + quirk #13164 + compat Pages), `header-inventory.md` (tabla valor-por-header + HSTS preload + trío cross-origin + XFO vs frame-ancestors + Managed Transforms), `middleware-ssr.md` (headers en rutas on-demand + CSP header real SSR + nonce), `sri-and-verification.md` (SRI manual/astro-shield ≥1.3.2 + verificación). Cada una con front matter ligero y una dirección de profundidad.
-- Validación: reproducidas las reglas EXACTAS de `quick_validate.py` (un solo SKILL.md; frontmatter solo {name, description, license, allowed-tools, metadata, compatibility}; name kebab ≤64; description ≤1024 sin `<`/`>`) → PASS. El entorno de este chat es solo-Composio; el script canónico de skill-creator (`quick_validate` + `package_skill` reales) corre en el container local. La validación canónica + empaque oficial quedan para el BUILD FINAL de las 7 vía Claude Code (ya en plan, §6 y §9) — gate único, no per-skill.
-- Empaque: `web-security-headers.skill` (zip del árbol, raíz `web-security-headers/`, 12.9 KB) subido como artefacto descargable para Carlos. El repo guarda las FUENTES, no el `.skill`.
-
-Siguiente: perf-ci-gates turn 1 (Scoping).
-
-### 2026-06-17 — perf-ci-gates · turn 1 (Scoping) — HECHO
-
-Skill #3 (fundación). Tema: Lighthouse CI + Biome en GitHub Actions. Tool-selection ya lockeado por stack-canon (§2) → la skill codifica el CÓMO, no el QUÉ; NO requiere turno de selección (a diferencia de `cms-self-edit`). Sin discrepancia seed/§2/§3 este turno.
-
-Reframe: la skill es un **gate de CI de dos puertas independientes** — (a) LHCI (`@lhci/cli`) gatea CWV/peso/categorías; (b) Biome gatea lint+format+import-order. Ambas en un `ci.yml`, jobs paralelos.
-
-Orientación verificada (búsqueda ligera, re-verificar pins en turn 3):
-- `@lhci/cli` 0.15.x trae Lighthouse 12.6.1; ~2M dl/mo; mantenido (abr-2026). PWA fuera desde LH12. LH13 exige Node 22.19+ y aún NO está en LHCI → watch de versión de Node.
-- `treosh/lighthouse-ci-action` = action canónica (budget.json, numberOfRuns, `temporary-public-storage` default público 7 días). Es 3rd-party → SECONDARY vs `lhci autorun` crudo.
-- Biome v2.4 (feb-2026); `biome ci` = lint+format+import-sort en un comando.
-- **GOTCHA load-bearing — Biome × .astro es EXPERIMENTAL** (2.3+ landed, 2.4 mejoró): parse/lint/format de HTML/`<style>` exige `experimentalFullHtmlSupportEnabled:true`; reglas de lint cross-embedded "not supported yet". Decide F5.
-
-Alcance — IN: config LHCI (`lighthouserc.json` + `budget.json`, assertions, target de colección, upload), config Biome (`biome.json`, `biome ci`, manejo .astro), el workflow `ci.yml`, targets de budget CWV 2026 + caveats de proxy de lab, control de flake (mediana-de-N, tiers warn/error), cómo servir un build Astro+Cloudflare para colección, wiring de status-checks. PARCIAL: `@lhci/server` self-host (solo la costura); run post-deploy contra preview URL (nombrado, no default). OUT (pointer): caching/`Cache-Control` runtime más allá del adapter (punt entrante de web-security-headers F6 → ver F8), SEO/schema profundo (→#4), a11y profundo + `prefers-reduced-motion` (→#5/#6/#7), RUM/field (CF Web Analytics, runtime no CI).
-
-Forks abiertos (resolver turn 4) con sesgo:
-- F1 target de colección LHCI: `staticDistDir:./dist` (sitio estático premium) · server-command (wrangler/preview) para rutas SSR · preview-URL post-deploy opcional.
-- F2 estrategia de assertions: capas — category-score floors + budgets de métrica CWV + `budget.json` resource budgets. Lab NO mide INP → gatear **TBT** como proxy.
-- F3 target de upload: `temporary-public-storage` default (cero infra, encaja en skill pública) · `@lhci/server` self-host en PikaPods como upgrade de historia durable.
-- F4 runner LHCI: `npx @lhci/cli autorun` crudo (native-first, sin capa 3rd-party) vs `treosh` action (ergonómica, PR comments). Sesgo: crudo, honra "layers are a cost"; reconsiderar turn 4.
-- F5 Biome en .astro: activar `experimentalFullHtmlSupportEnabled` (template completo) CON review-gate vs acotar Biome a script/TS/CSS/JSON + `prettier-plugin-astro` para template. El research decide.
-- F6 invocación Biome en CI: `npx @biomejs/biome ci` vía script pnpm + `--reporter=github` (sin setup action extra).
-- F7 forma del workflow: un `ci.yml`, dos jobs paralelos — `quality` (Biome, barato) ‖ `lighthouse` (build→serve→assert).
-- F8 frontera cache/runtime: gate-only. Nota de una pantalla "qué perf asume el gate" (adapter hace `_astro/*` immutable; preload/preconnect; estrategia de imágenes). NO se vuelve workstream de config runtime — satisface el punt F6 mínimamente.
-- F9 overlap de gating a11y/SEO con #4: asertar las 4 category floors de LH aquí (mismo run barato); SEO profundo→#4, a11y profundo→skills de visuales. Coarse-gate-aquí / deep-impl-en-otra.
-- F10 granularidad references: ~4 — `lighthouse-config.md`, `github-actions-workflow.md`, `biome-setup.md`, `budgets-and-thresholds.md`. SKILL.md = veredicto + split de dos puertas + receta mínima.
-
-Estructura del bundle propuesta: `SKILL.md` + references/{lighthouse-config, github-actions-workflow, biome-setup, budgets-and-thresholds}.
-
-CASO CONTRARIO a defender en research:
-- Primario: LHCI es lab-sintético y flakea en runners compartidos; el stack ya trae CF Web Analytics (RUM) con CWV de campo. Un gate pre-merge persigue un número que no matchea el campo y agrega fricción → solo Biome + RUM. La skill debe justificar LHCI como **gate de regresión pre-merge** (RUM es post-hoc, no bloquea un merge malo) y probar que se hace no-flaky (mediana-de-N, budgets en audits estables + tamaños de recurso, tiers warn/error, TBT-no-INP en lab). Si el research no lo defiende → veredicto pivota a "Biome gate duro + CF RUM; LHCI como run programado/manual opcional, no merge blocker".
-- Secundario (tooling): soporte .astro de Biome aún experimental; ESLint+Prettier lintea mejor el template hoy. Research confirma si Biome 2.4 basta como herramienta única o si lo honesto mantiene `prettier-plugin-astro` para format de template (parte F5).
-
-Checklist de research (turns 2→3): 1) re-verificar pins (`@lhci/cli`/LH/Node floor; Biome ≥2.4; `treosh`). 2) servir build Astro+`@astrojs/cloudflare@13` para LHCI — ¿`astro build` emite `dist/` estático→`staticDistDir`, o `_worker.js`? wrangler dev vs astro preview (F1). 3) shape de assertions LHCI 2026 + confirmar proxies de lab (TBT↔INP) (F2). 4) thresholds CWV 2026 (LCP ≤2.5s, INP ≤200ms, CLS ≤0.1) + budgets de lab sensatos + mitigación de flake (numberOfRuns, throttling). 5) Biome .astro en 2.4 — ¿qué tan bueno `experimentalFullHtmlSupportEnabled`? cobertura de lint del template? ¿aún `prettier-plugin-astro`? (F5). 6) comportamiento exacto `biome ci` + GitHub/multi-reporter (2.4) (F6). 7) `temporary-public-storage` vs `@lhci/server` self-host en PikaPods (F3). 8) `lhci autorun` crudo vs `treosh` action — delta de features, story de PR-comments, peso native-first (F4). 9) qué cachea `@astrojs/cloudflare@13` auto vs qué queda (acota F8).
-
-Decisión de Carlos pendiente (1): confirmar frontera F8 — `perf-ci-gates` se queda como gate de CI y el punt de caching entrante se satisface con nota "perf asumida", NO workstream de caching runtime (sesgo fuerte; caching runtime es homeless en las 7, probablemente pertenece al playbook diferido).
-
-Sandbox suffix activo este chat: `pcg_9jv35m`.
-
-Siguiente: perf-ci-gates turn 2 (Pre-research).
-
-### 2026-06-17 — perf-ci-gates · turn 2 (Pre-research) — HECHO
-
-Skill `pre-research` corrida (4 fases). Phase 1 = proceder con supuestos (sin preguntas; F8 se lleva como supuesto declarado — gate-only, nota "perf asumida", no workstream de caching). Phase 2 = pre-investigación substantiva (8 búsquedas entre turns 1–2 + fuentes primarias). Pre-brief de 8 subtasks entregado en chat para Research mode (turn 3). TODO LO DE ABAJO ES PRE-INVESTIGACIÓN — re-verificar en turn 3.
-
-Hallazgos clave (pre-investigación):
-- **LHCI vivo y canónico, lab-only por diseño:** `@lhci/cli` 0.15.x trae Lighthouse 12.6.1; ~2M dl/mo; mantenido (abr-2026). PWA fuera desde LH12. LH13 exige Node 22.19+ y NO está aún en LHCI; 0.15.x corre en Node 18+. Runners Ubuntu traen Chrome en `/usr/bin/google-chrome`. **INP es field-only — lab usa TBT como proxy.** FCP/TBT solo-lab; LCP/INP/CLS pueden estar en ambos pero solo el percentil de campo cuenta para CWV. → Responde el caso contrario: LHCI = gate de regresión pre-merge sobre señales de lab estables (TBT, CLS, resource budgets) + proxies (LCP/FCP); CF RUM = verdad de campo post-deploy. "Passing beats perfection": no perseguir score perfecto.
-- **Serving path Astro 6 + CF más rico que en turn 1:** `astro preview` ahora corre en **workerd** (paridad de producción, v13) y `astro dev`/`preview` usan el Cloudflare Vite plugin (workerd, no Node). Con worker presente, los assets estáticos viven en `dist/client/*` (no `dist/`). → Fork de colección LHCI: `astro preview` (paridad workerd, captura headers immutable del adapter) vs `staticDistDir: ./dist/client` (determinista, sin worker). Trampa que favorece el server path: build con base URL absoluta + LHCI sirviendo en puerto random de localhost → assets 404.
-- **Biome `.astro` real pero experimental opt-in:** v2.3 metió soporte full Vue/Svelte/Astro (lint/format de JS/TS en script + CSS en style + template por reglas HTML de Biome), gated en `html.experimentalFullSupportEnabled`. Flag OFF = solo extrae JS/TS, ignora el resto. v2.4 mejoró parsing + bajó falsos positivos (noUnusedVariables/useConst/useImportType/noUnusedImports) SOLO con el flag ON. Caveat honesto (hilo contrario ESLint+Prettier): reglas cross-embedded aún no soportadas, formatting puede no matchear; roadmap 2026 lista "HTML stable + matchear Prettier + reglas HTML-ish" como pendientes. `biome ci` = formatter+linter+import-sort en un pase. OJO build: la key canónica es `html.experimentalFullSupportEnabled`; un blog v2.4 escribe `experimentalFullHtmlSupportEnabled` — verificar spelling en turn 3.
-- **El runner casi no afecta el artefacto de config:** ambos consumen el mismo `lighthouserc.json` + `budget.json`. `lhci autorun` crudo pone PR status vía LHCI GitHub App (status a nivel PR/commit, link "Details", SIN artifacts/anotaciones GH-Actions). `treosh/lighthouse-ci-action@v12` (con el equipo Lighthouse + Treo) guarda resultados como action artifacts, soporta budgets que fallan el build, runs paralelos, `serverBaseUrl`/`serverToken` para server privado. Gotchas duros: `fetch-depth: 20`+ (shallow clone rompe detección de ancestro → "Could not find hash"); checkout del head sha en PRs. Storage default skill pública = `temporary-public-storage` (público, borra a 7 días); upgrade durable = `@lhci/server` self-host (Docker → PikaPods, encaja sesgo stack-canon).
-- **CONFLICTO de fuentes a resolver:** mayoría 2026 mantiene LCP "good" <2.5s (LCP <2.5s, INP <200ms, CLS <0.1 @ p75). Un blog SEO (abr-2026) afirma que Google bajó LCP a 2.0s + subió INP a señal primaria (Search Central 18-mar-2026). Minoría vs varias fuentes → Research reconcilia contra primaria web.dev/Search Central, no resolver en silencio.
-
-Subtasks de research (8, cap del skill) — versión completa en el pre-brief del chat:
-1. Serving path (F1): `astro preview` workerd headless en CI + headers immutable, vs `staticDistDir ./dist/client`; caveat base-absoluta→404.
-2. Shape de assertions LHCI + proxies (F2): `lighthouserc.json` 2026 (preset vs category minScore vs `maxNumericValue` FCP/LCP/TBT/CLS) + `budget.json` resource-summary; INP ausente en lab (TBT); mobile/desktop + límite de un solo status por run.
-3. Thresholds CWV — reconciliación primaria (F4-threshold): LCP 2.0 vs 2.5 + reclasif INP contra web.dev/Search Central; traducir a budgets de LAB (más laxos, orientados a regresión).
-4. Biome `.astro` en v2.4 (F5): confirmar key del flag, qué lintea/formatea ON vs OFF, fidelidad de format de template vs Prettier, `biome.json` recomendado (+ reglas a apagar si OFF).
-5. `biome ci` + GitHub reporter (F6): semántica + exit codes, `--reporter=github` + multi-reporter 2.4, script pnpm.
-6. Pins + Node floor (#1): `@lhci/cli`/LH/Node, Biome ≥2.4, `treosh@v12`, Astro 6/adapter 13.
-7. Storage + mecánica de PR-status (F3): tokens autorun (LHCI GitHub App + PAT `repo:status`) vs treosh artifacts; esfuerzo de self-host `@lhci/server` (Docker→PikaPods).
-8. Frontera de caching (F8): qué cachea `@astrojs/cloudflare@13` auto (`_astro/*` immutable confirmado) vs qué queda al autor → acota la nota de una pantalla.
-
-(F7 forma del workflow, F9 overlap de category-floor con #4, F10 granularidad de refs = decisiones de turn 4, NO subtasks de research.)
-
-Source priority: 1) docs primarias (docs.astro.build adapter CF, biomejs.dev config/language-support/v2.4, GoogleChrome/lighthouse-ci docs, web.dev/Search Central CWV); 2) repos/changelogs fuente (`withastro/astro`, `@astrojs/cloudflare`, `biomejs/biome`, `treosh/lighthouse-ci-action`); 3) Context7 (`@lhci/cli`, `biome`, `@astrojs/cloudflare`); 4) npm pins; 5) [SECONDARY] unlighthouse.dev (mismo autor, verificar), DEV/Medium, blogs SEO (el claim LCP-2.0 es uno de estos → lead, no hecho).
-
-Estado del pre-brief: entregado con línea de confirmación. Carlos decide Continuar / Refinar / Abortar antes de turn 3 (toggle de Research mode es acción suya en la UI).
-
-Sandbox suffix activo este chat: `pcg_9jv35m`.
-
-Siguiente: perf-ci-gates turn 3 (Research — Research mode ON + Context7; re-verificar pins `@lhci/cli`/LH/Node, Biome ≥2.4, `astro@6.x`, `@astrojs/cloudflare@13.x`).
-
-### 2026-06-17 — perf-ci-gates · turns 3–4 (Research + Decisions) — HECHOS
-
-Research mode (turn 3) entregó reporte técnico verificado contra fuentes primarias (docs.astro.build, biomejs.dev, GoogleChrome/lighthouse-ci, treosh README, web.dev/Search Central, npm). Turn 4 lockea forks F1–F10.
-
-Forks LOCKEADOS:
-- F1 colección: `staticDistDir: ./dist/client` (sitio mostly-static premium; el adapter CF default es `output:'server'` → assets en `dist/client`, no `dist`). `startServerCommand`/`astro preview` (corre en workerd en Astro 6) SOLO si hay rutas SSR que auditar. Trampa #16276: con `base`/`site` absoluto los assets quedan en `dist/client/*` sin prefijo → 404 al servir literal; evitar `base` en el build auditado.
-- F2 assertions: capas — preset `lighthouse:no-pwa` (PWA fuera desde LH12, no-pwa más seguro que recommended) + floors de categoría (performance error 0.9, accessibility error 0.95) + `maxNumericValue` por métrica (LCP/TBT/CLS error; FCP/SI/TTI warn) + `budget.json` resource budgets. OJO unidades: budget.json en KB, assertions LHCI en bytes/ms. INP NO medible en lab → TBT proxy (verificado web.dev).
-- F3 upload: `temporary-public-storage` (público, borra a 7 días) + `uploadArtifacts`. Self-host `@lhci/server` (Docker → PikaPods; build token write-only seguro en repos públicos) = upgrade documentado para historia durable.
-- F4 runner: **`treosh/lighthouse-ci-action@v12`** (REVERSAL del lean turn-1 "raw autorun por native-first"). Razón: raw `autorun` necesita la LHCI GitHub App instalada para PR status (MÁS integración externa, no menos); treosh no necesita app, guarda artifacts de Actions + public storage nativo, y consume el MISMO `lighthouserc.json` portable → cero lock-in del config (swappable a raw autorun después). Una action de marketplace es uso idiomático de Actions, no una capa de orquestación extra.
-- F5 Biome `.astro`: flag **`html.experimentalFullSupportEnabled` OFF** + `prettier-plugin-astro` para format del template + 4 overrides cuando flag OFF (`style.useConst`, `style.useImportType`, `correctness.noUnusedVariables`, `correctness.noUnusedImports` → off para `.astro`/`.svelte`/`.vue`). (REVERSAL del lean turn-1/2 "flag ON con review-gate"). Razón: el formatter HTML de Biome sigue experimental, mete diffs breaking, y NO matchea Prettier (roadmap 2026 de Biome). Determinismo > bleeding-edge para una skill que codifica el stack. Split de ownership: Biome dueño de JS/TS/CSS/JSON; prettier-plugin-astro dueño del format de template `.astro`. EXCEPCIÓN stack-canon (dos formatters) — narrow, documentada; flipea a Biome-only cuando Biome marque HTML estable (review-gate). Carlos puede redirigir a flag-ON si prefiere comerse lo experimental. Key correcta = `html.experimentalFullSupportEnabled` (el blog v2.4 escribe `experimentalFullHtmlSupportEnabled` — INCORRECTO).
-- F6 Biome CI: `npx @biomejs/biome ci --reporter=github` (el reporter debe ser explícito — auto-detección NO implementada, bug #9109). Biome pineado `--save-exact` como devDep. `biome ci` = formatter+linter+import-sort en un pase, sin `--write`, exit ≠0 en error. v2.4+ multi-reporter + `--reporter-file` opcional.
-- F7 workflow: un `ci.yml`, 2 jobs paralelos — `quality` (Biome, barato) ‖ `lighthouse` (build→collect→assert→upload), ambos required checks para merge. Node 22, `npm ci`, `fetch-depth: 20` (shallow rompe detección de ancestro LHCI → "Could not find hash"), checkout del PR head SHA, `numberOfRuns: 5` (mediana de 5 = 2x más estable que 1 run; Chrome preinstalado en runners Ubuntu en `/usr/bin/google-chrome`).
-- F8 caching: GATE-ONLY (lean turn-1 confirmado, Carlos no objetó). Nota de una pantalla "perf asumida": adapter auto-inyecta `Cache-Control` immutable (~1 año) en assets hasheados `_astro/*`; assets NO-hasheados vía `public/_headers` pero limitado por quirk de Workers Static Assets (#13164, wontfix/has-workaround: `_headers` Cache-Control no honrado para assets estáticos, vuelve `max-age=0, must-revalidate`). Watch: #16692 (hashed assets no cacheados en algunas configs adapter 13.5.0). NO workstream de caching runtime.
-- F9 overlap con #4: floors coarse aquí — performance+accessibility `error`, best-practices+seo `warn` (deja el gate duro de SEO a #4). Deep SEO/schema → #4; deep a11y + prefers-reduced-motion → skills de visuales (#5/#6/#7).
-- F10 refs: 4 — `lighthouse-config.md` (lighthouserc + budget.json + serving path), `github-actions-workflow.md` (ci.yml completo, ambos jobs, caching, fetch-depth, status checks), `biome-setup.md` (biome.json + flag .astro + biome ci), `budgets-and-thresholds.md` (CWV 2026, proxies de lab TBT↔INP, control de flake). SKILL.md = veredicto + split de dos puertas + receta mínima + gotchas + limits.
-
-Caso contrario DERROTADO:
-- Primario (LHCI flaky/redundante con CF RUM): LHCI = gate de regresión PRE-MERGE (mediana de 5, budgets de lab orientados a regresión, TBT como proxy de INP); CF RUM = verdad de CAMPO post-deploy. Complementarios, no redundantes. "Passing beats perfection" — no perseguir score perfecto.
-- Conflicto de fuentes RESUELTO: claim "LCP a 2.0s / INP reclasificado a primario / post Search Central 18-mar-2026" = FALSO. Ninguna fuente primaria de Google lo confirma; web.dev y Search Central (últ. act. 2025-12-10) mantienen LCP 2.5s / INP 200ms / CLS 0.1 @ p75. INP es CWV completo desde el swap FID→INP del 12-mar-2024. digitalapplied.com (citada por los blogs SEO) ella misma desmiente el 2.0s. El "alertar a 80% del threshold (LCP 2.0/INP 160)" es un buffer auto-impuesto, no un threshold de Google — origen probable de la confusión. Veredicto rechaza 2.0s explícitamente.
-
-Pins verificados 2026-06-17 (npm/repos, con fechas): `astro@6.4.7` (Node 22+; watch 7.0.0-alpha.2/beta.3); `@astrojs/cloudflare@13.7.0` (solo Workers, no Pages; peer wrangler@^4.83); `@lhci/cli@0.15.1` (LH 12.6.1; piso histórico Node ≥18 pero Astro 6 fuerza 22; LH13 exige Node 22.19+ y NO está aún en LHCI); `@biomejs/biome@2.5.0` (508 reglas, cross-file lint; conservador 2.4.16 del 2026-05-27); `treosh/lighthouse-ci-action@v12` (tag vivo → 12.6.2, node24, LH 12.6).
-
-Confianza: pins/thresholds/key-de-flag/quirk #13164/mecánica de tokens (`LHCI_GITHUB_TOKEN` PAT `repo:status` vs `LHCI_GITHUB_APP_TOKEN`)/gotchas de CI = VERIFICADO (fuentes primarias). Números de budget de lab = INFERIDO (calibrar al valor medido real del sitio, ~110-115% del actual, luego ratchet down).
-
-Artefacto de research (reporte completo) generado en el chat de este turno — reusar en turn 5 para los 4 refs.
-
-Sandbox suffix activo este chat: `pcg_9jv35m`.
-
-Siguiente: perf-ci-gates turn 5 (Build) — autoría de SKILL.md + 4 refs, `quick_validate` (description ≤1024, sin `<`/`>`, sin `: ` mid-string; frontmatter solo {name, description, license, allowed-tools, metadata, compatibility}), package `.skill`, commit del fuente. Re-verificar pins al inicio del build.
-
-### 2026-06-17 — perf-ci-gates · turn 5 (Build) — HECHO · skill #3 COMPLETA
-
-NOTA DE RECUPERACIÓN: turn 5 se reanudó tras un corte a mitad del commit. El run cortado YA había autorado los 5 archivos (vía code-exec) y empacado el `.skill`; esos archivos persistieron en el contenedor de code-exec (entorno distinto al sandbox de Composio). En la reanudación se confirmó por API que el commit de fuente NO había aterrizado (HEAD seguía en turn-4 `cf93847`, y `skills/perf-ci-gates/` solo tenía el stub de 1459 B sin references). Se reusaron los archivos persistidos tras verificarlos uno por uno contra los forks F1–F10 lockeados, se re-validó y se commiteó. Cero reautoría a ciegas.
-
-Bundle: `skills/perf-ci-gates/SKILL.md` (13.4 KB, 215 líneas) + `references/` (lighthouse-config.md, github-actions-workflow.md, biome-setup.md, budgets-and-thresholds.md). Convenciones de casa seguidas (frontmatter name+description solo; body `#/##/###`, sin bold/italics/HR; tablas; TOC en los 3 refs >100 líneas; budgets-and-thresholds 55 líneas sin TOC). Refleja los forks lockeados exactamente: F1 `staticDistDir ./dist/client` (+ astro preview SSR, trampa base absoluta); F2 assertions en capas, preset `no-pwa`, floors perf/a11y error + best-practices/seo warn, métricas LCP/TBT/CLS error + FCP/SI/TTI warn, `budget.json` (KB vs bytes); F3 `temporary-public-storage` + uploadArtifacts, self-host `@lhci/server` documentado; F4 `treosh/lighthouse-ci-action@v12` (sin lock-in, variante raw autorun + mecánica de tokens en ref); F5 flag `.astro` OFF + `prettier-plugin-astro` + formatter Biome OFF para `.astro` + 4 overrides; F6 `biome ci --reporter=github` explícito; F7 un `ci.yml`, 2 jobs, fetch-depth 20, PR head SHA, numberOfRuns 5; F8 nota gate-only (#13164); F9 floors coarse. CWV sin cambio (2.5/200/0.1), claim 2.0s rechazado, INP→TBT.
-
-Validación: `quick_validate` → "Skill is valid!". description 998/1024, frontmatter keys = {name, description}, sin `<`/`>`, sin `: ` mid-string. Lint house-style propio = 0 issues reales (2 falsos positivos por asteriscos de globs `**/*.astro` dentro de inline-code). `package_skill.py` → `.skill` 15319 B (15.3 KB), validó adentro, árbol completo (SKILL.md + 4 refs).
-
-Commit de fuente: atómico vía Git Data API (5 blobs → tree sobre base `238ede14` → commit → update ref). Commit `23d8388f`, autor Carlos A. Cedillo L. / carlos@venturedge.com.mx. main → `23d8388f`. Verificado por API: SKILL.md (sha 3e8f9c, stub sobrescrito) + 4 refs presentes en `references/`.
-
-Estado del repo: 3/7 skills redactadas y commiteadas (#1 astro-css-tokens, #2 web-security-headers 4f37a05, #3 perf-ci-gates 23d8388f). El `.skill` empacado se entrega al usuario en el chat (present_files). Recordatorio de gobernanza: Claude Code sigue reservado para el BUILD FINAL de las 7 juntas — no se abrió.
-
-Sandbox suffix activo este chat: `pcg_9jv35m`.
-
-Siguiente: `seo-aeo-schema` (#4, fundación) turn 1 (Scoping). Tema sembrado: `schema-dts` `@graph` tipado (`@id` cruzados) + `@astrojs/sitemap` + `llms.txt`. Pins sembrados a re-verificar: `schema-dts`, `@astrojs/sitemap`.
-
-### 2026-06-17 — seo-aeo-schema · turn 1 (Scoping) — HECHO
-
-Skill #4 (fundación). Tema sembrado: `schema-dts` `@graph` tipado (cross-`@id`) + `@astrojs/sitemap` + `llms.txt`. Tool-selection NO requerido (el stack-canon ya cubre el QUÉ; la skill codifica el CÓMO). Sin discrepancia seed/§3 este turno.
-
-Reframe: la skill es la **capa de descubribilidad machine-readable** (qué es la página y cómo se relaciona con el resto del sitio, sin tocar un pixel). De los 3 pilares, solo schema.org JSON-LD tiene payoff probado hoy; sitemap = plumbing table-stakes; `llms.txt` = apuesta a un estándar no ratificado. El esfuerzo se pondera así.
-
-Alcance — IN: `schema-dts` `@graph` centralizado por página (cross-`@id`: Organization↔WebSite↔WebPage↔Breadcrumb↔entidad) + render util tipado; `@astrojs/sitemap` opinionado; `robots.txt` generado (ref al sitemap + directivas AI-crawler); `llms.txt` (provisional — ver caso contrario); canonical + componente meta/OG/Twitter typed mínimo (F1, decisión de Carlos); receta de validación JSON-LD. PARCIAL (seam): i18n/hreflang; OG image dinámico (satori, constraint Workers). OUT (pointer): RSS (`@astrojs/rss`, content concern); catálogo exhaustivo de tipos schema; el GATE de SEO (se queda en #3 — F9 puso seo a `warn`; #4 autorea+valida, #3 gatea el merge).
-
-Forks abiertos (resolver turn 4) con lean:
-- F1 alcance meta/head: incluir componente `<Head>` typed mínimo (title/desc/canonical/OG/Twitter, hand-rolled, sin `astro-seo`) vs punt. **Lean: incluir** — DECISIÓN DE CARLOS pendiente (scope-expansion).
-- F2 forma de emisión JSON-LD: `@graph` centralizado cross-`@id` vs bloques dispersos. Lean: centralizado.
-- F3 herramienta de autoría schema: `schema-dts` + render util vs wrapper (`astro-seo-schema`) vs JSON a mano. Lean: schema-dts + util (sin wrapper); gated por caso contrario.
-- F4 profundidad sitemap config: defaults vs opinionado (filter, serialize/lastmod, i18n seam). Lean: opinionado.
-- F5 disposición `llms.txt`: shippear build-generated por default vs documentar-opcional vs omitir. Lean provisional: shippear flagged low-consensus; depende de research #5.
-- F6 robots.txt + política AI-crawler: incluir (generado, ref sitemap, directivas UA) vs punt. Lean: incluir mínimo — robots.txt es el home *real* y aplicable del control de AI-crawlers (a diferencia de llms.txt).
-- F7 validación schema en build: receta + check opcional (invocable por #3) vs solo receta. Lean: receta + check; el merge-gate se queda en #3.
-- F8 OG image + RSS: out→pointer vs in. Lean: out→pointer.
-- F9 i18n/hreflang: solo seam vs desarrollar. Lean: solo seam.
-- F10 granularidad refs: ~4 — `meta-and-canonical.md`, `json-ld-graph.md`, `sitemap-config.md`, `robots-and-llms.md` (posible 5º catálogo de tipos en build).
-
-CASO CONTRARIO (doble) a romper/defender en research:
-- Primario — schema-dts es ceremonia sin valor runtime (solo tipos TS; los `@id` cross-ref se tipan como strings planos, sin chequeo referencial real). Un sitio con ~5 tipos podría autorar un JSON a mano y soltar la dep. La skill debe justificar schema-dts por seguridad de typo/refactor a escala de `@graph`, autocomplete sobre el vocabulario, mantenibilidad — o el veredicto pivota a JSON-LD a mano con shape tipado. Si schema-dts está stale/sin mantener → pivote forzado.
-- Secundario — `llms.txt` es apuesta a estándar no adoptado (a jun-2026, ningún AI-crawler mayor ha confirmado honrarlo — INFERIDO, verificar). Shippear por default puede ser cargo-cult. La skill debe justificarlo como insurance barato de posicionamiento presente, o degradarlo a opcional y liderar AEO con lo que sí funciona (HTML semántico + JSON-LD + meta + sitemap + control AI-crawler en robots.txt).
-
-Seams cross-skill (no perder):
-- **JSON-LD × CSP (#2) — LOAD-BEARING.** JSON-LD se shippea inline (`<script type="application/ld+json">`); `script-src` aplica a esos bloques por spec CSP aunque no ejecuten. Si el CSP hash-based de Astro 6 NO hashea bloques `ld+json`, un `script-src` estricto de #2 puede BLOQUEAR la structured data en silencio. Tope del research.
-- SEO floor (#3): #3 puso `best-practices`/`seo` a `warn` (coarse); #4 autorea+valida (deep). Componen: coarse-gate en #3, deep aquí.
-
-Checklist de research (turns 2→3): 1) pins (`schema-dts` last-publish/mantenimiento; `@astrojs/sitemap` vs astro@6.4.7/Node22). 2) typing `@graph` de schema-dts (`WithContext`/`Graph`, si los `@id` cross-ref se tipan o son strings, render helper, gotchas de profundidad/union, `@context`). 3) `@astrojs/sitemap` bajo astro@6 + cloudflare@13 (opciones, descubrimiento de páginas, static-vs-SSR — adapter default `output:'server'`, ¿qué rutas entran?, output path `dist/client`?, entryLimit/index, i18n, lastmod). 4) **CSP×JSON-LD (×#2)**: ¿Astro 6 hashea `ld+json` inline? ¿`script-src` los gatea? failure mode + fix. 5) `llms.txt` 2026 (estado del spec + adopción real por AI-crawlers mayores — verificar; `llms.txt` vs `llms-full.txt`; generación static vs endpoint Astro desde content collections). 6) robots.txt + control AI-crawler (tokens UA exactos: GPTBot, ClaudeBot, Google-Extended, PerplexityBot, CCBot — verificar; generado vs static; ref sitemap; ¿robots.txt es el surface real vs llms.txt?). 7) payoff schema.org 2026 (tipos de rich-result vivos — verificar deprecación FAQ/HowTo; Article/Product/Breadcrumb/Organization/WebSite+SearchAction; evidencia de que AI Overviews/Perplexity/ChatGPT search consumen JSON-LD). 8) validación (Rich Results Test + Schema Markup Validator actuales; validación de JSON-LD en build invocable por #3). 9) patrón de static-endpoint Astro bajo cloudflare@13 para emitir text files (robots.txt, llms.txt): `prerender = true`, `GET → Response(text)`, dónde aterriza, vs drop estático en `public/`.
-
-Estructura del bundle propuesta: `SKILL.md` + references/{meta-and-canonical, json-ld-graph, sitemap-config, robots-and-llms} (4; posible 5º).
-
-Decisión de Carlos pendiente (1): F1 — ¿expandir alcance a componente meta/head typed mínimo (lean) o mantener #4 estricto a schema+sitemap+llms?
-
-Sandbox suffix activo este chat: `sas_k4m2q9`.
-
-Siguiente: seo-aeo-schema turn 2 (Pre-research).
-
-### 2026-06-17 — seo-aeo-schema · turn 2 (Pre-research) — HECHO
-
-Skill `pre-research` corrida (4 fases). Phase 1 = proceder con supuestos (sin preguntas; F1 resuelto, territorio claro). **F1 RESUELTO → IN** (decisión de Claude, delegada por Carlos): la skill incluye componente meta/head typed mínimo (title/desc/canonical/OG/Twitter, hand-rolled, sin `astro-seo`). Phase 2 = pre-investigación substantiva (5 búsquedas + 1 fetch + fuentes primarias). Pre-brief de 8 subtasks + source priority entregado en chat. TODO LO DE ABAJO ES PRE-INVESTIGACIÓN — re-verificar en turn 3.
-
-Hallazgos clave (pre-investigación, con citas en el chat del turn):
-- **schema-dts NO está stale — lo contrario.** Major fresco 2.0.0 (23-mar-2026, npm), mantenimiento healthy, ~0.95–1.16M dl/semana. Expone `WithContext<T>`, interfaz `Graph` (estructuras interconectadas con refs `@id`), `Role<T,P>`. → DERROTA en gran parte el caso contrario primario ("schema-dts muerto, autorar a mano"). Resta: ¿vale el dep el surface de 2.0.0?, ¿los `@id` cross-ref se type-checkean o son strings planos?, pin 2.0.0 vs conservador 1.1.5.
-- **@astrojs/sitemap 3.7.3** (~3 sem, core-team, actualizado a Astro 6). LIMITACIÓN DURA: NO genera entradas para rutas dinámicas en SSR mode ni analiza el source de la página. Como el adapter CF default es `output:'server'`, solo rutas prerendered entran al sitemap → rutas SSR necesitan `customPages`/`serialize` o endpoint custom. Output `sitemap-index.xml` + `sitemap-0.xml`. Opciones: `filter`, `serialize`, `entryLimit` (45000), `namespaces` (3.6.0+), changefreq/priority (IGNORADOS por Google). CAUTION: 3.7.1 tuvo regresión de build ('reduce' undefined, #15894) → verificar 3.7.3 limpio en astro@6.4.7.
-- **Seam CSP×JSON-LD (×#2) — REAL y SIN RESOLVER.** Astro CSP hashea SUS scripts bundleados (islands); scripts externos NO soportados de fábrica (provees tu hash). JSON-LD inline autorado NO es "bundled script" → ¿Astro lo hashea? Abierto. Por spec, `script-src` gobierna scripts inline (allow vía unsafe-inline/nonce/hash que matchee) — PERO JSON-LD es data block que NO ejecuta; si los browsers aplican `script-src` a data blocks es EL crux. Compone con #2: si solo el `<meta>` lleva hashes, el script se permite solo donde header Y meta permiten; el `<meta>` solo puede restringir más. Trampa de determinismo: hashes de inline-scripts por-página varían en CI por chunk boundaries de Vite (pero un bloque ld+json estático tiene hash content-stable). → TOP del research turn 3.
-- **llms.txt: contested; el framing honesto INVIERTE el instinto del seed.** Consenso (varios estudios may-2026): ningún proveedor LLM mayor ha comprometido públicamente honrar llms.txt como señal en producción; Google (Illyes, jul-2025) dijo NO explícitamente; interés de crawler negligible (408 de 500M+ eventos; ~10.13% adopción de dominios); Semrush sin correlación estadística. COMO SEO play = inútil. PERO el uso legítimo es otro: capa Business-to-Agent (routing para agentes); OpenAI/Anthropic/Stripe/Cloudflare/Vercel usan llms.txt como routing layer para agentes de coding; Chrome Lighthouse 13.3 (7-may-2026) ahora lo audita. → F5 resuelve hacia: SHIPPEAR, framed como posicionamiento B2A barato, NO como palanca SEO; liderar AEO con lo que sí funciona. NOTA: una fuente (whatsmygeoscore) afirma "plataformas comprometidas para contenido post-ene-2026" — choca con las fuentes fuertes y conflaciona llms.txt con bloqueo de crawlers; LOW-RELIABILITY, verificar contra docs primarios de vendor.
-- **robots.txt = el surface REAL (aunque imperfecto) de control AI-crawler.** Bots reputables lo honran; scrapers agresivos lo ignoran. Tokens surfaced (verificar exactos turn 3): GPTBot + OAI-SearchBot + ChatGPT-User (OpenAI), ClaudeBot + Claude-SearchBot (Anthropic), Google-Extended (Google), PerplexityBot, CCBot (Common Crawl), Meta-ExternalAgent (Meta), Applebot-Extended (Apple), Bingbot (MS). NUANCE CRÍTICO: bloquear un crawler ≠ mantener la página fuera de una respuesta AI — para excluir del todo usar noindex/auth; no contradecir robots.txt vs llms.txt.
-- **Payoff de schema 2026 más estrecho y actual de lo que asumía el seed.** Google deprecó FAQ rich results el 7-may-2026 (RRT pierde FAQ jun-2026, Search Console API ago-2026; FAQPage sigue válido como tipo y parseado; rankings NO afectados). HowTo ya muerto; 7 tipos retirados jun-2025 (Book Actions, Course Info, Claim Review, Estimated Salary, Learning Video, Special Announcement, Vehicle Listing). SIGUEN dando rich results: Product, Review/AggregateRating, Article, Recipe, Video, Organization, LocalBusiness, BreadcrumbList, Event. HECHO AEO-definitorio (guía de Google): NO se necesita schema especial para AI Overviews / AI Mode, aunque la structured data debe matchear el contenido visible. Organization/Person = esenciales para reconocimiento de entidad en sistemas AI. → Valor honesto del JSON-LD = reconocimiento de entidad + rich results sobrevivientes + parseo correcto, NO palanca mágica de ranking AI. Palancas AEO reales son content-side: citas/quotes/estadísticas suben visibilidad hasta 40% (Princeton/Georgia Tech); 86% de citas AI vienen de fuentes brand-controlled (Yext).
-
-Subtasks de research (8, cap del skill — versión completa en el pre-brief del chat):
-1. schema-dts 2.0.0: breaking changes vs 1.x, `WithContext`/`Graph`/`Role`, ¿`@id` type-checked o strings?, pin 2.0.0 vs 1.1.5.
-2. **CSP×JSON-LD (×#2) LOAD-BEARING**: ¿`script-src` bloquea data blocks `ld+json`? ¿Astro 6 `security.csp` hashea ld+json inline autorado o solo sus bundled? fix si hace falta hash. → patrón ship-safe bajo el `<meta>` CSP de #2.
-3. @astrojs/sitemap 3.7.3 en el stack: regresión 3.7.1 fija?, límite SSR + cómo incluir rutas SSR (serialize/customPages vs endpoint), output path (dist/client?), surface de opciones.
-4. llms.txt: ¿algún vendor lo honra en prod (docs primarios)?, Lighthouse 13.3 audita?, framing B2A + `llms.txt` vs `llms-full.txt`, patrón de generación en Astro (public/ vs endpoint prerendered desde content collections).
-5. robots.txt: tokens UA exactos de cada vendor (docs oficiales), surface enforceable + nuance disallow-≠-fuera-de-respuestas.
-6. payoff schema 2026 + `@graph` canónico: tipos de rich-result vivos + estado deprecación (Search Central), guía AI-features "no special schema, match visible content", entity graph baseline (Organization↔WebSite[+SearchAction]↔WebPage↔BreadcrumbList↔entidad).
-7. validación + factibilidad CI: estado de Rich Results Test (pierde FAQ jun-2026) vs Schema Markup Validator; ¿validador JSON-LD programático/CI invocable por `ci.yml` de #3?, o validación type-time + manual. Dónde vive (#3 vs #4).
-8. patrón text-endpoint Astro (cloudflare@13) para robots.txt + llms.txt (`prerender = true`, `GET → Response(text)`), dónde aterriza, endpoint-from-collections vs drop static en public/.
-
-Source priority (completa en chat): 1) docs primarios (docs.astro.build `security.csp`/sitemap/endpoints/build-with-ai, @astrojs/cloudflare; Google Search Central structured-data/AI-features/crawlers/rich-results; W3C CSP3 + MDN; schema.org + validator; spec llms.txt llmstxt.org). 2) docs de crawler de vendor (OpenAI/Anthropic/Google-Extended/Perplexity/Common Crawl). 3) repos/changelogs (`withastro/astro` sitemap CHANGELOG + CSP #14798/#6407 + roadmap #377; `google/schema-dts` 2.0.0 notes; `@astrojs/cloudflare`). 4) Context7 (@astrojs/sitemap, schema-dts, astro, @astrojs/cloudflare). 5) npm pins. 6) [SECONDARY] estudios GEO con metodología nombrada (Limy, SE Ranking, OtterlyAI, paper Princeton/Georgia Tech, Yext) solo para cifras de adopción; claims de blogs SEO "plataformas comprometidas con llms.txt" = leads low-reliability.
-
-Estado del pre-brief: entregado con línea de confirmación (Continuar / Refinar / Abortar). Carlos decide antes de turn 3; el toggle de Research mode es acción suya en la UI.
-
-Sandbox suffix activo este chat: `sas_k4m2q9`.
-
-Siguiente: seo-aeo-schema turn 3 (Research — Research mode ON + Context7; re-verificar pins schema-dts 2.0.0 vs 1.1.5, @astrojs/sitemap 3.7.3, astro@6.4.7, @astrojs/cloudflare@13.7.0, Node 22).
-
-### 2026-06-17 — seo-aeo-schema · turns 3–4 (Research + Decisions) — HECHOS
-
-Research mode (turn 3) entregó reporte técnico verificado contra fuentes primarias (google/schema-dts releases, docs.astro.build, Google Search Central, W3C/MDN, llmstxt.org, docs de crawler de vendors, npm). Turn 4 lockea F2–F10 y reescribe §3 veredicto/pins. Reporte completo en el chat del turn 3 (reusar en turn 5 para los 5 refs).
-
-Hallazgos VERIFICADOS (fuente primaria salvo nota):
-- **Pins (npm/GitHub, jun-2026):** `schema-dts@2.0.0` (23-mar-2026, ~1.7M dl/sem, TS-only, sin runtime); `@astrojs/sitemap@3.7.3`; `astro@6.4.7`; `@astrojs/cloudflare@13.7.0`; Node 22.
-- **schema-dts 2.0.0 — breaking vs 1.x** (release v2.0.0, commit a6aad64): Role no-recursivo (#205); Quantity ahora DataType core (Schema.org v30) → asignaciones antes legales pueden errar; soporta Schema.org v30; añade `WithActionConstraints<T>`, `MergeLeafTypes`, tipos `…Leaf`; schema-dts-gen ahora depende de nuevo paquete `schema-dts-lib` (#213). Tipos: `WithContext<T> = T & {"@context"}` (en 2.0.0 SOLO intersección — ya NO puede ser Graph; importar `Graph` aparte); `interface Graph { "@context"; "@graph": readonly Thing[] }`; `Role<T,P>`. Import: `import type { WithContext, Graph, Person } from 'schema-dts'`.
-- **CRÍTICO — @id NO se type-checkea** (verificado contra source + README): `@id` es `IdReference = {"@id": string}`, string plano. Cero validación referencial — no verifica que el `@id` referenciado exista en el graph ni que apunte al tipo correcto. Props objeto se generan como `SchemaValue<T | IdReference>` → cualquier string pasa. NET: el dep compra seguridad de prop/tipo POR NODO; el wiring del graph es responsabilidad del autor + validación runtime. Gotcha de profundidad: uniones discriminadas en `@type` son grandes; multi-tipo via `MergeLeafTypes<[ProductLeaf, …Leaf]>`.
-- **CSP × JSON-LD (×#2) — RESUELTO: NO-ISSUE.** (a) `<script type="application/ld+json">` es data block (HTML spec) que NO ejecuta → CSP `script-src` gobierna ejecución → browsers NO lo bloquean, NO dispara violación (W3C/WHATWG + MDN; confirmado por análisis canónico de Mathias Bynens). (b) Astro `security.csp` hashea solo scripts ejecutables que bundlea (islands, define:vars) — NO hashea ld+json autorado, y NO hace falta. (c) Fix requerido: NINGUNO para ld+json. En Cloudflare 13.7.0 (sin staticHeaders) el CSP va por `<meta>` — OK porque no hay hash involucrado. (d) El drift CI/local de hashes (chunk boundaries de Vite) NO afecta a un bloque ld+json estático (sin hash). PATRÓN SHIP-SAFE: `<script type="application/ld+json" set:html={escape(JSON.stringify(graph))} />` con escape de `<>&` (XSS/tag-breakout); habilitar `security.csp` para scripts ejecutables; NO tocar `scriptDirective.hashes` por el ld+json. → El riesgo #1 del skill queda desactivado.
-- **@astrojs/sitemap 3.7.3:** regresión 3.7.1 #15894 ('reduce' undefined) fija; 3.7.3 builda en astro@6.4.7 (MEDIUM en el commit exacto). Límite duro (docs): NO analiza source de página → NO descubre rutas dinámicas/SSR (`output:'server'`). `customPages` espera array estático (función async → error). Incluir rutas SSR: (1) `customPages:[...]`; (2) endpoint `sitemap.xml` prerendered propio desde content collections; (3) mantener rutas prerendered. Opciones: `site` (en config raíz, NO en `sitemap()`), `filter`, `serialize`, `entryLimit` (45000), changefreq/lastmod/priority (changefreq+priority IGNORADOS por Google), `namespaces` (3.6.0: news/xhtml/image/video), `i18n`, `prefix`, `customPages`, + `xslURL`/`customSitemaps`/`chunks` (3.7.0). BUG #16838 (repro ≤3.7.2): `<lastmod>` no se escribe en entries de `sitemap-index.xml` aunque serialize lo ponga por-URL. lastmod via `serialize(item){ item.lastmod = new Date(date) }` desde fecha de collection/git mtime. Output: `dist/client` bajo el adapter server (consistente con #1–#3; MEDIUM, confirmar en build).
-- **llms.txt — CONFLICTO resuelto contra primaria:** claims de blogs SEO ("plataformas comprometidas post-ene-2026") NO respaldados por docs de vendor. Google (Illyes, Search Central Deep Dive Bangkok jul-2025, vía Schwartz): Google NO crawlea ni soporta llms.txt, sin planes; Mueller ~ keywords meta tag; la guía AI de Google (may-2026) lo lista en mythbusting. Adopción ≠ consumo: SE Ranking (300k dominios) = 10.13% adopción; Ahrefs (137k dominios) = 97% nunca leídos, bots AI = 1% de requests; Limy (500M+ visitas bot/90d) = 408 a llms.txt (negligible). Lighthouse 13.3 (7-may-2026) SÍ añadió audit de llms.txt (categoría Agentic Browsing, default config; chequea presencia + H1 + links + no muy corto; "Not Applicable" en 404; ratio fraccional, NO score 0–100; agent-readiness, NO ranking). `llms.txt` = índice Markdown curado (H1 nombre, blockquote resumen, H2 de links, sección Optional); `llms-full.txt` = doc entera inlined. Uso legítimo B2A: agentes de coding / docs-sites (Cloudflare, Vercel, Anthropic, Mintlify auto-genera ambos; formato co-desarrollado Mintlify+Anthropic). Generación Astro: endpoint prerendered desde content collections (mejor) o `public/llms.txt` estático. VEREDICTO F5: SHIPPEAR como agent-readiness/B2A/Lighthouse, NO palanca SEO; framing honesto "no hace nada para superficies AI de Google".
-- **robots.txt — tokens verificados (jun-2026):** OpenAI — GPTBot (training), OAI-SearchBot (índice ChatGPT search/citas), ChatGPT-User (fetch user). Anthropic (support.claude.com art. 8896518) — ClaudeBot (training), Claude-SearchBot (índice search), Claude-User (fetch user); legacy: Claude-Web, anthropic-ai. Google — Googlebot (search; debe ir allow para AI Overviews/AI Mode), Google-Extended (token robots, NO crawler; opt-out de training/grounding Gemini/Vertex; NO afecta ranking ni saca de AI Overviews). Perplexity — PerplexityBot (índice/citas), Perplexity-User (puede NO obedecer robots.txt). Common Crawl — CCBot. Meta — Meta-ExternalAgent (training/índice), FacebookBot; NO bloquear facebookexternalhit (previews). Apple — Applebot (search), Applebot-Extended (opt-out Apple Intelligence). MS — Bingbot. NUANCES: (1) robots.txt = surface enforceable (vs llms.txt que no es mecanismo de acceso). (2) bloquear crawler ≠ fuera de respuestas AI → usar noindex/auth/nosnippet. (3) Googlebot debe ir allow para que AI features de Google usen el contenido; Google-Extended solo gobierna training. (4) fetchers user-initiated inconsistentes. VEREDICTO F6: baseline allow search + AI-search; training opt-out = decisión documentada (comentada).
-- **Schema 2026 payoff (Google Search Central):** rich results vivos — Product, Review/AggregateRating, Article, Recipe, Video, Organization, LocalBusiness, BreadcrumbList, Event. FAQ deprecado 7-may-2026 (RRT pierde FAQ jun-2026; SC API ago-2026; FAQPage sigue válido y parseado; rankings NO afectados). HowTo muerto. 7 tipos retirados jun-2025. AI-features (quotes directos): "no additional requirements to appear in AI Overviews or AI Mode", "no special schema.org structured data you need to add", "you don't need to create new machine readable files… or markup"; PERO la structured data debe matchear contenido visible. Organization/Person = clave para entity recognition. @graph canónico cross-@id: Organization(#org) ← WebSite(#website, publisher→#org, + SearchAction) ← WebPage(#webpage, isPartOf→#website, breadcrumb→#breadcrumb) + BreadcrumbList(#breadcrumb) + entidad por página (Article #article, isPartOf/mainEntityOfPage→#webpage, publisher→#org). QAPage (multi-respuesta de usuarios) vs FAQPage (Q&A del owner) — no confundir. FRAMING AEO: JSON-LD NO da inclusión directa en AI Overviews/AI Mode/citas; da elegibilidad de rich results + claridad de entidad; las superficies AI extraen del texto visible (que debe matchear). Palancas AEO reales = content-side (citas/quotes/stats +40% Princeton/GT; 86% citas de fuentes brand-controlled, Yext).
-- **Validación:** Rich Results Test (solo tipos Google; pierde FAQ jun-2026) vs validator.schema.org (sintaxis/compliance, sin elegibilidad Google). Validadores programáticos: `sdtt`/structured-data-testing-tool (CLI+lib, presets, Jest/headless) PERO deps ~2019 — verificar mantenimiento; schema-dts = solo compile-time. VEREDICTO F7: codificar (1) safety compile-time schema-dts + (2) checks manuales documentados + EXPORTAR script custom (extrae ld+json del HTML built → JSON.parse → required props por tipo, sin dep stale) para que el `ci.yml` de #3 lo gatee. El workflow vive en #3, NO en #4.
-- **Endpoint de texto (cloudflare@13.7.0):** por el `output:'server'` default, un endpoint de texto debe `export const prerender = true`. `export const GET: APIRoute = ({ site }) => new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })`. robots.txt estático o llms.txt construido desde `getCollection()`. Prerendered → aterriza en `dist/client`, servido como asset estático (sin invocar Worker). Tradeoff vs `public/`: endpoint puede construir desde collections (build-time); `public/` es fijo. Caveats CF: `.assetsignore` en `public/`; `public/_headers` controla headers de assets (sin staticHeaders en 13.7.0); cuidar que routing/.assetsignore no oculten robots/llms/sitemap.
-
-FORKS LOCKEADOS:
-- F1 (turn 2) meta/head: IN. F2 emisión: @graph centralizado cross-@id. F3 tool: `schema-dts@2.0.0` + render util tipado con escape; sin wrapper; documentar límite @id. F4 sitemap: opinionado; SSR vía endpoint propio; lastmod por serialize; namespaces prune. F5 llms.txt: SHIPPEAR como B2A/agent-readiness vía endpoint prerendered, NO SEO. F6 robots: incluir; tokens verificados; training opt-out documentado/comentado. F7 validación: schema-dts compile-time + manual + script custom exportado a #3 (sin sdtt stale); gate en #3. F8 OG/RSS: out→pointer (OG dinámico satori con constraint Workers; RSS = content concern). F9 i18n/hreflang: solo seam. F10 refs: 5 — `json-ld-graph`, `meta-and-canonical`, `sitemap-config`, `robots-and-llms` (incl. patrón text-endpoint prerender=true compartido), `validation-and-aeo` (validación + framing AEO honesto + tipos rich-result 2026 + deprecación FAQ).
-
-CASO CONTRARIO (doble) — RESUELTO:
-- Primario (schema-dts muerto, autorar a mano): DERROTADO — 2.0.0 fresco, ~1.7M dl/sem, zero-runtime. Se mantiene schema-dts. Matiz nuevo: NO valida @id cross-refs → el skill lo dice claro y compensa con validación.
-- Secundario (llms.txt cargo-cult SEO): CONFIRMADO como SEO play inútil PERO con uso legítimo B2A/agent-readiness → se shippea con framing honesto, no como palanca SEO.
-
-Seams cross-skill: (1) CSP×JSON-LD (×#2) CERRADO favorable — ld+json exento, #2 no rompe structured data. (2) Validación (→#3): #4 exporta script, #3 lo gatea — seam nuevo limpio. (3) llms.txt×LH13: el audit vive en LH13, aún no en LHCI (#3 corre LH12) → no gateable en #3 hoy, anotado.
-
-Confianza: pins/breaking-changes/tipos schema-dts/comportamiento CSP-data-block/deprecación FAQ+quotes AI-features/postura llms.txt+LH13/límite SSR sitemap/patrón endpoint = VERIFICADO (primaria). INFERIDO/MEDIUM: commit exacto de la fix 3.7.3; path exacto `dist/client` + interacción .assetsignore/_headers; mantenimiento actual de sdtt.
-
-Sandbox suffix activo este chat: `sas_k4m2q9`.
-
-Siguiente: seo-aeo-schema turn 5 (Build) — autoría de SKILL.md + 5 refs (`json-ld-graph`, `meta-and-canonical`, `sitemap-config`, `robots-and-llms`, `validation-and-aeo`); leer md-house-style + skill-author primero; `quick_validate.py` (description ≤1024, sin `<`/`>`, sin `: ` mid-string; frontmatter solo {name, description}); `package_skill.py` → `.skill`; commit atómico del fuente (Git Data API). Re-verificar pins schema-dts 2.0.0 / @astrojs/sitemap 3.7.3 al inicio del build.
-
-### 2026-06-17 — seo-aeo-schema · turn 5 (Build) — HECHO · skill #4 COMPLETA
-
-Autoría + validación + empaquetado + commit atómico del fuente. Bundle = SKILL.md + 5 references. Pins re-verificados contra npm al inicio del build: `schema-dts@2.0.0` (latest, 2026-03-23) y `@astrojs/sitemap@3.7.3` (latest, 2026-05-26). Template de casa leído del repo (`web-security-headers`): SKILL.md frontmatter = name+description; refs = title/summary/last_updated/applies_to.
-
-Archivos (path · bytes · blob sha):
-- skills/seo-aeo-schema/SKILL.md · 7178 · 09fd7190c49259c17fc70d4ee69d56f6e7205a5d
-- references/json-ld-graph.md · 8642 · 15e3d64116ed480da6cbe35ecd881efaabb4df89
-- references/meta-and-canonical.md · 3585 · cfea41391a110104a9f36f18fbf7f3e5b2e1e9a8
-- references/robots-and-llms.md · 6299 · 8bbaba8e58074486afcc508350bb58cd2e9f0f61
-- references/sitemap-config.md · 4028 · 060ac7de94fb224fa530600cb751e77249a6c8a5
-- references/validation-and-aeo.md · 5032 · 04dc549152f3f07da4ed9726db924a5ff0a45117
-
-Validación: `quick_validate` → valid. description 961 chars (≤1024), sin `<`/`>`, sin `: ` mid-string. Frontmatter SKILL.md = {name, description}. House-style: bold=0, HR=0, H4=0 en los 6 archivos; TOC presente en json-ld-graph (149 líneas) y robots-and-llms (143). Las 5 refs parsean YAML OK. Empaquetado: `package_skill` → `.skill` 15750 B con los 6 archivos bajo `seo-aeo-schema/`.
-
-Commit: atómico vía Git Data API (1 commit para todo el bundle). HEAD 33cb7cc → **0b55775** (parent 33cb7cc verificado, autor+committer Carlos). base_tree mergeado → entradas previas del repo preservadas. Verificado por metadata: los 6 archivos existen en skills/seo-aeo-schema/ con los bytes exactos. El `.skill` se entregó a Carlos vía present_files (el repo guarda SOLO las fuentes, no el `.skill`).
-
-Contenido del skill (lo que codifica, resumido): @graph JSON-LD centralizado cross-@id con schema-dts 2.0.0 + render util con escape (`is:inline`, replace `<>&`); doc del límite @id (no se valida → validación runtime obligatoria); detalle CSP-exento (ld+json = data block, sin hash, no tocar scriptDirective.hashes de #2). meta/head typed (canonical derivado de Astro.site+url, OG, Twitter; seam OG dinámico satori/Workers; seam hreflang). @astrojs/sitemap opinionado (solo prerendered; endpoint custom para SSR; lastmod por serialize; bug #16838; changefreq/priority ignorados; dist/client). robots.txt con tabla de 16 tokens verificados + regla acceso≠aparición; llms.txt como B2A/agent-readiness (no SEO) + spec llms.txt vs llms-full.txt; patrón text-endpoint prerender=true compartido. Validación (RRT pierde FAQ jun-2026 vs validator.schema.org) + script CI custom `check-jsonld.mjs` exportado para que el workflow de #3 lo gatee; tabla tipos rich-result 2026 (FAQ deprecado 7-may, HowTo muerto); framing AEO honesto (Google: no special schema; match contenido visible; palancas son content-side).
-
-NOTA DE PROCESO (reusar en builds #5–#7): el commit cross-environment se hizo SIN emitir base64 (regla no-negociable). Método: autorar+validar+empaquetar en code-exec; calcular sha git de blob local de cada archivo; transportar el contenido RAW (no base64) a una celda Composio (backslashes de los snippets de código reemplazados por un centinela `ɵ` y reconstituidos con chr(92) dentro del sandbox para evitar ambigüedad de escape JSON/raw-string); crear blobs con encoding utf-8; GATE: assert sha-de-blob-devuelto == sha-local para los 6 antes de tocar el ref; luego tree(base_tree)+commit+PATCH ref. Los 6 shas matchearon a la primera. Fidelidad probada por metadata, cero base64 en output.
-
-Sandbox suffix activo este chat: `sas_k4m2q9`.
-
-Siguiente: `motion-system` (#5) turn 1 (Scoping). Semilla: 3 motores — GSAP scroll-cinematic / CSS scroll-driven animations (reveals nativos) / Motion (`useAnimate`) para islands React; el fork central es cuándo cada uno y cómo conviven con el presupuesto de JS de #3 y las islands. Pins a re-verificar al lockear: `gsap@3.15.0`, `@gsap/react@2.1.x`, `motion@12.40.0` (antes framer-motion). Cadencia de 5 turnos como siempre; tool-selection no requerido salvo que el scoping lo levante.
-
-
-### 2026-06-17 — motion-system · turn 1 (Scoping) — HECHO
-
-Skill #5 (visuales, primera de las 3). Tool-selection NO requerido (stack-canon ya nombra los motores; el "3 vs colapsar a 2" lo decide research por job-fit). Reglas operativas de este chat: Composio APAGADO en turns 1–4 (solo turn 5 para commit); RESIDENT acarreado por Claude y commiteado completo en el turn 5 (Carlos no pega bloques). Sandbox suffix: ms_7t2k4p.
-
-Reframe: NO es "una librería de animación" — es un árbol de 3 motores, cada uno justificado por una restricción distinta — CSS scroll-driven (native-first / 0 JS, default de reveals) · GSAP ScrollTrigger (scrub cinemático/pin que los otros no expresan) · Motion useAnimate (solo si ya pagas React en esa isla).
-
-Alcance — IN: matriz de los 3 motores · GSAP ScrollTrigger (scrub/pin/carga en Astro) · CSS scroll-driven (animation-timeline, reveals, default) · Motion useAnimate (solo islas React existentes) · prefers-reduced-motion por motor (gate #3) · coexistencia con budget JS de #3 · carga en islands. PARCIAL (seam): scroll-driving de uniform WebGL (→#6) · momento Rive (→#7). OUT (pointer): transiciones de página (ClientRouter — routing + choca CSP #2) · Lottie/video · micro-interacciones UI hover/focus (CSS suelto).
-
-Forks con lean: F1 capa default reveals = CSS scroll-driven SI Baseline lo permite. F2 GSAP estrecho (scrub/pin). F3 carga por contexto. F4 Motion solo islas. F5 reduced-motion obligatorio. F6 progressive enhancement, no polyfill. F7 budget regla dura. F8 WebGL/Rive pointer-only. F9 transiciones out→pointer. F10 ~4 refs (posible 5º). Caso contrario doble (en tensión): primario GSAP-only; secundario CSS-only. Decisión pendiente resuelta al lean: frontera = solo scroll/entrance/cinemático.
-
-### 2026-06-17 — motion-system · turn 2 (Pre-research) — HECHO
-
-Skill pre-research (4 fases). Phase 1 = proceder con supuesto (frontera = scroll/entrance/cinemático; micro-interacciones OUT). Phase 2 = 5 búsquedas + 1 fetch (MDN). Pre-brief de 8 subtasks + source priority + confirmación. Hallazgos preliminares (a verificar turn 3): CSS scroll-driven amplio salvo Firefox-flag, fallback @supports limpio, animation-trigger Chrome-only; GSAP 100% free incl. plugins (mata el contrario de costo); Motion = ex framer-motion (motion/react), Mini ~90% más chico; seam CSP afinado a 2 ángulos (carga de script + element.style CSSOM); peso GSAP en conflicto (resolver turn 3).
-
-### 2026-06-17 — motion-system · turns 3–4 (Research + Lock) — HECHOS
-
-Research mode entregó reporte verificado fuente primaria (MDN/caniuse/WebKit/Chrome, gsap.com + greensock, motion.dev, W3C/MDN CSP, bundlephobia, npm). VERIFICADO: CSS scroll-driven Chrome/Edge 115+, Safari 26.0+, Firefox tras flag layout.css.scroll-driven-animations.enabled; ~83% caniuse, NO Baseline; fallback @supports deja estado final accesible; quirk Firefox = animation-duration no-cero (1ms); scroll-DRIVEN (animation-timeline) amplio vs scroll-TRIGGERED (animation-trigger) Chrome-only → no usar. Frontera CSS↔GSAP: CSS hace reveals/parallax/progress/sticky/stagger/horizontal; GSAP obliga para scrub multi-elemento/pin+scrub con content-lock/snap/timelines anidadas/motion-path. GSAP en Astro: script bundled o useGSAP en isla (auto-cleanup gsap.context, SSR-safe); tree-shake por plugin; nunca en frontmatter/render. CSP×motion RESUELTO: bundled lo hashea Astro (is:inline bloqueado); element.style CSSOM EXENTO de style-src (cssText/setAttribute sí governados) → sin unsafe-inline/hashes; CSS scroll-driven cero CSP. Peso: gsap core ~27 KB gzip, ScrollTrigger ~18 KB gzip (≈45 KB; "7 KB" falso). Motion: Mini useAnimate 2.3 KB, full 34 KB. reduced-motion: @media / gsap.matchMedia() / useReducedMotion — gate a11y 0.95 #3.
-
-Forks LOCKEADOS: F1 CSS scroll-driven default (no se descarta por no-Baseline). F2 GSAP estrecho. F3 por contexto (lazy). F4 Motion solo islas. F5 reduced-motion obligatorio. F6 progressive enhancement. F7 budget ~45 KB. F8 pointer-only. F9 out→pointer. F10 = 5 refs (CSP×motion y reduced-motion cross-cutting → ref propia). Caso contrario DERROTADO en la frontera medida. Pins verificados: gsap@3.15.0 (SplitText free desde abr-2025, claim "Club" FALSO), @gsap/react@2.1.2, motion@12.40.0. Confianza: support/pins/CSSOM/pesos/frontera = VERIFICADO; gzip exacto ScrollTrigger = single-source.
-
-### 2026-06-17 — motion-system · turn 5 (Build) — HECHO · skill #5 COMPLETA
-
-Bundle = SKILL.md + 5 references (motor-decision-matrix, css-scroll-driven, gsap-astro, motion-islands, csp-and-reduced-motion). Autorado en code-exec por md-house-style + skill-author (frontmatter SKILL.md = name+description; refs = title/summary/last_updated/applies_to; body #/##/### sin bold/itálicas/HR/H4; tablas; TOC en gsap-astro 112 líneas). Refleja los forks lockeados. Sin backslashes ni triple-comillas (transporte seguro).
-
-Validación: quick_validate OK; description 886/1024 (recortada de 1078, quitada la oración "Covers…"); frontmatter keys = {name, description}; sin `<`/`>`; sin `: ` mid-string; lint house-style 0 issues. package_skill → motion-system.skill 14114 B, 6 archivos bajo motion-system/.
-
-Commit: DOS commits atómicos vía Git Data API (Composio, toolkit github), patrón probado (HEAD del RESIDENT ≠ sha del bundle). (1) Bundle = 6 blobs (sha-git == local para los 6 ANTES de mover el ref) → tree sobre base_tree de HEAD → commit (parent HEAD, autor+committer Carlos A. Cedillo L. / carlos@venturedge.com.mx) = 1bd35f1585b8c35bc634b71b3faf4893067c3736. (2) RESIDENT traído por Contents API (no raw), editado en sandbox con guardas assert-exactly-once, blob sobre el tree del bundle → commit (parent 1bd35f1585b8c35bc634b71b3faf4893067c3736) → PATCH refs/heads/main. Cero base64 emitido a chat. El .skill se entregó vía present_files (el repo guarda SOLO fuentes).
-
-Repo: 5/7 skills commiteadas (#1 9b182b0, #2 4f37a05, #3 23d8388f, #4 0b55775, #5 1bd35f1585b8c35bc634b71b3faf4893067c3736). Claude Code reservado al build final de las 7 — no se abrió.
-
-Siguiente: webgl-atmosfera (#6) turn 1 (Scoping). Semilla: OGL + shader GLSL custom para atmósfera de hero (lazy + fallback); WebGPU descartado. Seam con #5: scroll-driving un uniform del shader. Pin a re-verificar: ogl@1.0.11 (dep estancada — vendorizar). Cadencia 5 turnos.
-
-
-### 2026-06-18 — webgl-atmosfera · turn 1 (Scoping) — HECHO
-
-Reframe = atmósfera como progressive enhancement disciplinado; la disciplina vive en las restricciones (CSP de #2, budget de #3, WCAG), no en el GLSL. 10 forks abiertos (F1–F10): motor/librería, vendorizado, WebGPU, técnica de shader, fallback, lazy/LCP, a11y, CSP, scroll seam, runtime/budget. 2 casos contrarios (CC-A existencial usa-CSS; CC-B OGL-estancado). Seams con #1 (tokens→colores del shader, gradiente fallback), #2 (CSP del módulo), #3 (budget), #5 (scroll→uniform).
-
-### 2026-06-18 — webgl-atmosfera · turn 2 (Pre-research) — HECHO
-
-Skill `pre-research` corrida; 5 búsquedas. Terreno: OGL shader-first 0-dep, README aún alpha; WebGPU cruzó Baseline ene-2026 según industria pero MDN (may-2026) dice NO Baseline (conflicto sin resolver); gradiente CSS animado = trampa de paint, shader en GPU ~2-5%; canvas NO en el set de elementos LCP; Astro client:visible dispara de inmediato above-fold. Pre-brief de subtasks armado para Research mode.
-
-### 2026-06-18 — webgl-atmosfera · turns 3–4 (Research + Lock) — HECHOS
-
-Research mode entregó reporte verificado (fuentes primarias). Forks LOCKEADOS con 4 reversals vs leans de turn 1. F1 motor: REVERSADO OGL → raw WebGL2 vendorizado default (winner neutral para 1 shader: 0 dep, 0 KB-lib, WebGL2 universal, native-first); OGL `1.0.11` Core vendorizado (latest verificado, ~1yr stale, alpha, 0 deps, Core ~8 KB minzip — subset una fracción, medir tree-shaken en build) = alternativa ergonómica/multi-pass; `twgl@7.0.0` tercera. F2: sin dep npm en el default (helper = código propio); si OGL, vendorizar Core subset pin exacto sin `^`. F3 WebGPU: OUT por fitness (1 draw call no usa compute/many-objects/render-bundles), no madurez; sigue no-Baseline MDN; gpuweb Firefox Linux/Android pendiente, Safari OS-gated; review-gate. F4: domain-warped fbm flow (ref Alex Harri; Book of Shaders; gist Patricio Vivo); highp declarado, loops acotados (4 octavas), sin branching dinámico, probado en móvil. F5: REVERSADO gradiente CSS → AVIF/WebP estático vía astro:assets primario (puede ser el img LCP); gradiente de tokens (#1) secundario; sin video; + manejo de context-loss. F6: REVERSADO — canvas NO elegible-LCP (LCP = texto/img del hero) → init rIC+IntersectionObserver manual (NO client:visible above-fold); caja reservada anti-CLS; fade opacity seguro. F7: ADD MATERIAL — control pausa/stop visible y operable por teclado OBLIGATORIO (SC 2.2.2 nivel A; anim >5s auto en paralelo con contenido; reduced-motion+aria-hidden NO bastan solos); reduced-motion → fallback estático; SC 2.3.3 (AAA) para el scroll seam. F8 CSP: paridad confirmada — Astro 6 experimental.csp + scriptDirective.hashes hashea el módulo bundled a script-src (como GSAP en #5); shaders como template-literals (sin connect-src); contexto canvas no gobernado por CSP; worker-src solo si OffscreenCanvas. F9: uniform movido por el rAF propio leyendo scroll listener pasivo (0 libs); ScrollTrigger.update SOLO si la página ya carga GSAP. F10: DPR ≤1.5 (cap 2), ~30fps, pausa IO offscreen + visibilitychange hidden, gate móvil/coarse-pointer a fallback; backbuffer chico upscaled (MDN). CC-A acotado (WebGL solo para noise/turbulence/domain-warp per-pixel o muchas capas @60fps; drift lento 2-3 colores → gradiente CSS). CC-B aceptado (movió F1). Verificado 2026-06-18.
-
-### 2026-06-18 — webgl-atmosfera · turn 5 (Build) — HECHO · skill #6 COMPLETA
-
-Bundle = SKILL.md + 5 references (renderer-and-library, atmosphere-shader-pattern, astro-load-and-csp, fallback-and-a11y, perf-and-scroll-seam). Autorado en code-exec por md-house-style + skill-author (frontmatter SKILL.md = name+description; refs = title/summary/last_updated/applies_to; body #/##/### sin bold/itálicas/HR/H4; tablas; TOC en los 2 refs >100 líneas: renderer 138, shader 118). Refleja los forks lockeados. Helper raw-WebGL2 + shader GLSL de referencia incluidos como code fences.
-
-Validación: quick_validate OK; description 951/1024 (recortada de 1042); frontmatter keys = {name, description}; sin `<`/`>`; sin `: ` mid-string. package_skill → webgl-atmosfera.skill 17707 B, 6 archivos bajo webgl-atmosfera/.
-
-Commit: DOS commits atómicos vía Git Data API (Composio, toolkit github). Workbench remoto NO comparte filesystem con code-exec → bundle materializado en el disco del sandbox como fuente legible (no base64), gateado por git-sha == local para los 6 antes de tocar el ref. (1) Bundle = 6 blobs (blob-sha == gate para los 6 ANTES de mover el ref) → tree sobre base_tree de HEAD → commit (parent 1881820f, autor+committer Carlos A. Cedillo L. / carlos@venturedge.com.mx) = 22f805c5ca1275f4198ff788e16cd2d7ded74a38. (2) RESIDENT traído por Contents API, editado en sandbox con guardas assert-exactly-once, blob sobre el tree del bundle → commit (parent 22f805c5) → PATCH refs/heads/main. Cero base64 emitido a chat. El .skill se entregó vía present_files (el repo guarda SOLO fuentes).
-
-Repo: 6/7 skills commiteadas (#1 9b182b0, #2 4f37a05, #3 23d8388f, #4 0b55775, #5 1bd35f15, #6 22f805c5). Claude Code reservado al build final de las 7 — no se abrió.
-
-Siguiente: signature-anim (#7) turn 1 (Scoping). Semilla: Rive state machine para un momento interactivo bespoke (último skill, capa visuales). Pin: `@rive-app/canvas@2.37.6` (o `@rive-app/webgl2@2.37.8`); NO `@rive-app/webgl` (deprecado). Cadencia 5 turnos.
-
-## Log — signature-anim (#7), turn 5 (build) — 2026-06-18
-
-Cadencia 5 turnos completada (scoping → pre-research → research mode → lock F1–F10 → build). #7 = disciplina de integración de UN momento Rive interactivo bespoke (state machine), no autoría del `.riv`. Bundle autorado en code-exec (SKILL.md 82 líneas + 4 refs: csp-and-wasm, rive-runtime-setup [TOC], state-machine-and-triggers, a11y-and-fallback), quick_validate PASS (desc 1006/1024 tras recortes), package_skill → `signature-anim.skill` (13.4 KB, 5 archivos), entregado vía present_files. House-style limpio.
-
-Commits atómicos vía Git Data API (Composio proxy_execute, sandbox `dqif`). Falla y recuperación: el primer intento (una sola celda workbench con los 5 archivos inline, ~31 KB) no terminó por payload demasiado grande — nada commiteado, HEAD intacto. Recuperado transfiriendo archivo por archivo (heredoc crudo `<<'RIVEEOF'`, sin base64, gate `git-hash-object`==local por archivo); los 5 PASS. NOTA: el HEAD había avanzado de `1853b9ae` (semilla) a `60adba1f` por un commit web 'Add files via upload' (2026-06-18T03:25Z, no tocó RESIDENT) — parenteado sobre el HEAD vivo, base_tree `effb6b1f`, sin clobber. (1) Bundle: 5 blobs (cada sha GitHub == local), tree `cf72cdf6`, commit `26576412328123844b493e3559c7ccb0d356bc4d` (parent `60adba1f`). (2) RESIDENT: Contents API, editado en sandbox con guardas assert-exactly-once, blob sobre el tree del bundle, commit parent `26576412`, PATCH refs/heads/main. Cero base64 a chat; verificación solo por metadata.
-
-Repo: 7/7 skills commiteadas (#1 9b182b0, #2 4f37a05, #3 23d8388f, #4 0b55775, #5 1bd35f15, #6 22f805c5, #7 26576412). Pins #7 verificados 2026-06-18: canvas 2.38.1, canvas-lite 2.37.3 (tren lite atrás), canvas-single 2.38.0, webgl2 2.38.1, react-canvas 4.28.0. Claude Code sigue reservado al build final de las 7.
-
-Siguiente: BUILD FINAL de las 7 vía Claude Code — quick_validate + package las 7, probar el marketplace (add/install/triggering); luego empezar a llenar el deferred `stack-integration-playbook`.
-
-### 2026-06-18 — cms-self-edit · SELECCIÓN de herramienta (fase previa a la cadencia de la skill) — HECHA
-
-Skill #8, NUEVA (no estaba en el scaffold de 7 + 1 diferida → no tiene stub ni registro en `.claude-plugin/`; en el build verificar si el auto-discovery basta o hay que registrarla en `plugin.json`/`marketplace.json`). Override de Carlos: decisión por MÉRITO puro; `stack-canon-argos` dropeado como autoridad (no existe / el stack no es fijo). Reframe vs el placeholder previo del RESIDENT ("CMS headless / turno de selección primero"): el espacio se mapeó completo (git-based / content-collections / headless-DB), native-first favoreciendo git-native.
-
-**Selección · paso 1 (mapeo de opciones):** enmarcado "CMS-self-edit ideal" sobre Astro 6 + CF para cliente no-técnico; familias + ejes (UX no-técnico · no-lock-in/own-data · low-maintenance · native-first · Astro6+CF fit · i18n MX · auth del editor · media · preview · latencia de rebuild); forks abiertos sin pre-decidir.
-
-**Selección · paso 2 (pre-investigación):** skill `pre-research` (5 búsquedas + fuentes primarias). Hallazgo que invierte el seed: Keystatic ("Astro-native") tiene 3 strikes sobre este stack. Sveltia = candidato git puro más fuerte. Pages CMS = mejor auth no-técnico (magic-link). Apareció EmDash (CMS oficial de Cloudflare). Pre-brief de 8 subtasks + source priority.
-
-**Selección · paso 3 (research verificado, fuente primaria):** reporte completo en el chat de decisiones. Resoluciones: Keystatic OUT hoy (#1515 ABIERTO, PR #1527 sin merge, peer-dep cap astro 2–5; #1497 OAuth-CF ABIERTO) — VERIFICADO en el issue tracker. Sveltia: SPA <600KB en `public/admin`, OAuth Worker oficial gratis, R2 nativo, i18n+DeepL, beta GA mid-2026, single-maintainer. Pages CMS: magic-link sin GitHub, pero hosted-SaaS-con-acceso-al-repo O self-host Postgres+BetterAuth. EmDash: v0.1.0 preview, contenido DB/Portable-Text, sandbox = CF pago → OUT. Tina: editor visual top pero DB/cloud + Astro experimental + sin i18n. DB self-host = VPS+Postgres+S3 (~$200/mes); Directus MSCL, OIG libre <$5M y <50 empleados. Latencia git→CF rebuild ~2–3 min (aceptable para sitio premium). Caveat INFERIDO (no documentado): mantener `/admin` como archivo estático en `public/` esquiva la CSP `<meta>` de #2; si fuera página renderizada por Astro, allowlistear el origen del bundle en `security.csp.scriptDirective.resources` (CSP es global, sin opt-out por ruta).
-
-**Selección · paso 4 (decisión / lock):** veredicto + escalera de 3 etapas (ver §3). Carlos aprobó Sveltia como default. Fork de auth (su llamada): si los clientes raramente rechazan GitHub → default = Sveltia tal cual; si es la norma → default = Pages CMS. PENDIENTE de su confirmación; sin respuesta, queda Sveltia default.
-
-RESIDENT actualizado en esta fase de selección (commit `a8c0948`) para registrar la decisión; corregido ahora el encuadre (selección hecha → la skill arranca en Turn 1). La 2ª actualización del RESIDENT (marcar #8 COMPLETA + flip de "siguiente") la hace el chat de build al cierre del turn 5, junto al commit del bundle.
-
-Sandbox suffix activo este chat: `dqif`.
-
-Siguiente: `cms-self-edit` (#8) turn 1 (Scope) de la cadencia de la skill, en chat nuevo (la selección de herramienta ya quedó). La cadencia corre Scope → Pre-research → Research → Decisiones → Build; el turn 5 (Build) autorea el bundle (skill-author + md-house-style) → `quick_validate` → `package` → `.skill` (entregar vía present_files, NO commitear el zip) → commit atómico de FUENTES (Git Data API) → 2ª actualización del RESIDENT. Re-verificar pins al inicio del build (`date -u` para la fecha UTC del contenedor).
-
-## Log — cms-self-edit (#8), turn 5 (build) — 2026-06-18
-
-Octava skill COMPLETA y commiteada. Cadencia de 5 turnos cerrada (scope, pre-research, research, decisiones, build). `cms-self-edit` = receta Sveltia CMS para que un cliente no-técnico edite un sitio Astro 6 en Cloudflare Workers Static Assets, con escalera de 3 etapas (Sveltia → Pages CMS → Directus).
-
-Commit del bundle + registro en `plugin.json`: `90110a9e` (parent `389d406e`). Archivos: `skills/cms-self-edit/SKILL.md` + 5 referencias (`sveltia-setup`, `cloudflare-auth-worker`, `media-r2`, `i18n-and-publishing`, `escalation-ladder`); `plugin.json` ahora lista las 8 skills. El `.skill` empaquetado se entregó en chat, NO se commitea (el repo solo guarda fuentes).
-
-Decisiones cerradas: /admin estático en `public/` con CSP propio en `_headers`; media por umbral (repo piso, R2 arriba); auth Sveltia/GitHub-OAuth Stage 1 (+PAT para admin único) y Pages CMS magic-link Stage 2; publicación por rama `drafts` + CI + merge manual; i18n `multiple_folders` + `default_locale es`; content collections ↔ Zod.
-
-Correcciones verificadas (2026-06-18) que reemplazan datos previos del §3: versión real `@sveltia/cms 0.167.2` (beta; GA objetivo mid-2026, NO early-2026); DeepL DESHABILITADO en Sveltia → usar Google Cloud Translation / Gemini / Mistral; la latencia commit→rebuild «~2-3 min» era FALSA (sin cifra de fuente; medir en el sitio real); COOP en `/admin` = `same-origin-allow-popups` (NO `same-origin`, que rompe el popup OAuth); orígenes GitHub del CSP = `api.github.com` + `www.githubstatus.com` en connect-src y `avatars/raw.githubusercontent.com` en img-src (el Worker OAuth NO va en CSP); Directus ahora bajo MSCL 1.0 (no BUSL), gratis vía Open Innovation Grant si <5M USD ingresos Y <50 empleados.
-
-Encuadre corregido: la selección de herramienta (#8) ya estaba hecha; este chat corrió la cadencia de autoría completa de la skill y la dejó COMPLETA. Con esto las 8 skills quedan autoradas.
-
-SIGUIENTE: BUILD FINAL de las 8 skills vía Claude Code (validación + gate de build del marketplace), según `v1-finalization-plan.md`. Claude Code se reserva para esa fase; no se abrió a mitad de la cadencia.
-
-Sandbox suffix activo este chat: `78kr`.
+### 2026-08-17 — Análisis pre-sprint + re-scope del plan v1
+Análisis profundo read-only vía Claude Code (11 agentes; 24 claims load-bearing verificados adversarialmente — 23 confirmados, 1 corregido en atribución): estado del repo, re-pin audit completo (→ §3 pins objetivo B0), inventario de `furever-brand`, contrato `brand-system-skills` 0.6.0, auditoría de solape de triggers (3 colisiones ALTAS + cluster medio). Decisiones adjudicadas: migrar a Astro 7 antes de validar (B0); ingestión de marca = skill nueva `brand-canon-ingest` (#9, B1); sitio de referencia = Furever (C); descriptions fix-pass = prerequisito estructural (A). Plan re-scopeado (reemplazo completo de `v1-finalization-plan.md`) commiteado en rama `claude/v1-sprint-rescope`; hallazgos durables → §8.

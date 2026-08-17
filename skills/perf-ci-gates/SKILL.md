@@ -3,9 +3,9 @@ name: perf-ci-gates
 description: Set up the two CI quality gates for an Astro 6 site on Cloudflare Workers — Lighthouse CI for Core Web Vitals and resource-weight budgets, and Biome as the single lint and format gate, wired into GitHub Actions. Use when adding performance budgets, gating pull requests on Lighthouse scores, wiring LHCI into CI, configuring Biome lint or format checks, or building a ci.yml with both gates. Covers serving the Astro plus Cloudflare build for collection (staticDistDir on dist/client, or astro preview for SSR routes), the lighthouserc.json assertion shape with TBT as the lab proxy for INP, regression-oriented lab budgets versus field thresholds, runner and storage choices, and Biome experimental Astro support with prettier-plugin-astro. Trigger on Lighthouse CI, performance budget, gate PRs on Core Web Vitals, LHCI in GitHub Actions, Biome CI, or biome ci. CI gates only — not for fixing runtime performance or animation weight (use motion-system) nor deep SEO (use seo-aeo-schema).
 ---
 
-# Performance and Code-Quality CI Gates for Astro 6 on Cloudflare
+# Performance and Code-Quality CI Gates for Astro on Cloudflare
 
-> Two independent gates in GitHub Actions for an Astro 6 plus Cloudflare Workers site. Lighthouse CI catches Core Web Vitals and resource-weight regressions before merge; Biome gates lint, format, and import order. Lighthouse CI is a pre-merge regression gate on stable lab signals, not the source of truth for real-user Core Web Vitals, which come from field monitoring.
+> Two independent gates in GitHub Actions for an Astro 7 plus Cloudflare Workers site. Lighthouse CI catches Core Web Vitals and resource-weight regressions before merge; Biome gates lint, format, and import order. Lighthouse CI is a pre-merge regression gate on stable lab signals, not the source of truth for real-user Core Web Vitals, which come from field monitoring.
 
 ## TL;DR
 - Run two parallel jobs in one ci.yml: a quality job (`biome ci`) and a lighthouse job (build, then LHCI collect, assert, upload). Make both required status checks for merge.
@@ -41,7 +41,7 @@ Deep SEO and schema work belongs to the seo-aeo-schema skill, and deep accessibi
 
 Point LHCI at the built static files with `staticDistDir: ./dist/client`. This is the most reproducible path for a mostly-static site: LHCI serves the files itself, no Cloudflare runtime needed. It does not replicate the adapter's immutable cache headers, which is fine because the gate measures regressions, not production cache behavior.
 
-Use `collect.startServerCommand` with `astro preview` only when on-demand (SSR) routes must be audited. In Astro 6 with `@astrojs/cloudflare` v13, `astro preview` runs on the real Cloudflare workerd runtime, so it is the production-parity path, but it is heavier and slower in CI. Do not set an absolute `site` plus `base` on the audited build: the Cloudflare build writes assets to `dist/client` without the base prefix, so they 404 when LHCI serves from a localhost port. See references/lighthouse-config.md.
+Use `collect.startServerCommand` with `astro preview` only when on-demand (SSR) routes must be audited. In Astro 7 with `@astrojs/cloudflare` v14, `astro preview` runs on the real Cloudflare workerd runtime, so it is the production-parity path, but it is heavier and slower in CI. Do not set an absolute `site` plus `base` on the audited build: the Cloudflare build writes assets to `dist/client` without the base prefix, so they 404 when LHCI serves from a localhost port. See references/lighthouse-config.md.
 
 ### Runner
 
@@ -52,7 +52,7 @@ Use treosh/lighthouse-ci-action@v12. It is GitHub-Actions-native, stores reports
 ### 1. Install
 
 ```bash
-npm install --save-dev --save-exact @biomejs/biome@2.5.0
+npm install --save-dev --save-exact @biomejs/biome@2.5.8
 npm install --save-dev prettier prettier-plugin-astro
 # @lhci/cli is pulled by the treosh action; install it locally only for `lhci` runs
 ```
@@ -118,7 +118,7 @@ Flag off, Biome formatter disabled for `.astro` so it does not fight prettier, t
 
 ```json
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.8/schema.json",
   "files": { "ignoreUnknown": true, "includes": ["**", "!**/dist", "!**/.astro"] },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": { "enabled": true, "rules": { "recommended": true } },
@@ -210,5 +210,5 @@ jobs:
 - Lab budgets here are regression ceilings, not Google ranking thresholds. The field "good" thresholds are LCP 2.5s, INP 200ms, CLS 0.1 at the 75th percentile and are unchanged as of mid-2026; the 2.0s LCP claim is false. Re-verify against web.dev and Google Search Central on any major revision.
 - Deep SEO and schema gating is out of scope (seo-aeo-schema skill); this gate only asserts a coarse Lighthouse SEO category floor as a warning. Deep accessibility and reduced-motion is out of scope (motion and visuals skills).
 - Runtime caching and Cache-Control are out of scope. The adapter already sets an immutable Cache-Control on hashed `_astro/*` assets; custom Cache-Control for non-hashed assets via `_headers` is unreliable on Cloudflare Workers Static Assets (issue 13164). Only this assumed-performance note lives here.
-- Biome Astro template support is experimental; this skill ships it off and uses prettier-plugin-astro for templates. That two-formatter split is a deliberate exception, kept until Biome marks HTML formatting stable, at which point the experimental flag can replace prettier. See references/biome-setup.md.
-- Version pins are current as of 2026-06-17: astro 6.4.7, @astrojs/cloudflare 13.7.0, @lhci/cli 0.15.1 (Lighthouse 12.6.1), @biomejs/biome 2.5.0, treosh/lighthouse-ci-action v12, Node 22. Re-verify on upgrades; Astro 7 (alpha) changes build internals.
+- Biome Astro template support is experimental (still, as of 2.5.8 — review-gate re-checked 2026-08-17, NOT triggered); this skill ships it off and uses prettier-plugin-astro for templates. That two-formatter split is a deliberate exception, kept until Biome marks HTML formatting stable, at which point the experimental flag can replace prettier. Note 2.5.2+ removed false-positive noUnusedImports/noUnusedVariables reports for bindings used only in Astro templates under the flag. See references/biome-setup.md.
+- Version pins are current as of 2026-08-17: astro 7.2.2, @astrojs/cloudflare 14.2.1, @lhci/cli 0.15.1 (Lighthouse 12.6.1 — Lighthouse 13 has NOT landed in LHCI, issue 1136 idle), @biomejs/biome 2.5.8, treosh/lighthouse-ci-action v12 (12.6.2, still the current major), Node 22. Re-verify on upgrades.

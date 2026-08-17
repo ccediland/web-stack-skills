@@ -1,8 +1,8 @@
 ---
 title: Motor decision matrix
 summary: The native-first escalation ladder across CSS scroll-driven, GSAP plus ScrollTrigger, and Motion, plus the exact CSS-versus-GSAP capability boundary and a when-each table.
-last_updated: 2026-06-17
-applies_to: astro@6.4.7, gsap@3.15.0, motion@12.40.0
+last_updated: 2026-08-17
+applies_to: astro@7.2.2, gsap@3.15.0, motion@13.1.0
 ---
 
 # Motor decision matrix

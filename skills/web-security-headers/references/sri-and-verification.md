@@ -1,8 +1,8 @@
 ---
 title: Subresource Integrity and verification
-summary: Adding SRI for cross-origin resources in Astro (manual or astro-shield), and how to verify the deployed security headers.
-last_updated: 2026-06-17
-applies_to: "astro@6.4.7, @kindspells/astro-shield@1.7.1"
+summary: Adding SRI for cross-origin resources in Astro (manual or a small build-time hash script), and how to verify the deployed security headers.
+last_updated: 2026-08-17
+applies_to: "astro@7.2.2"
 ---
 
 # Subresource Integrity and verification
@@ -15,8 +15,31 @@ Astro has no native SRI. SRI pins the exact bytes of a fetched script or stylesh
 
 Two ways to add it:
 
-- By hand, for a known cross-origin resource: add integrity with the resource hash and a crossorigin attribute to the tag. Regenerate the hash whenever the resource changes, or it will break.
-- With an integration, if there are many such resources: @kindspells/astro-shield can generate SRI hashes during the build. Pin it at 1.3.2 or later (CVE-2024-30250, CVSS 7.5, was patched in 1.3.2; current is 1.7.1). Scope it to SRI only. Its CSP generation overlaps Astro's native CSP, so do not run both as the CSP source; let Astro own CSP and let astro-shield own SRI.
+- By hand, for one or two known cross-origin resources: add integrity with the resource hash and a crossorigin attribute to the tag. Regenerate the hash whenever the resource changes, or it will break.
+- With a small build step, when there are several. @kindspells/astro-shield used to fill this role but is RETIRED from this stack (2026-08-17) — unmaintained since late 2024, community-confirmed inactive, and its peer range stops at astro 4, so Astro 5/6/7 installs only work by ignoring peer deps. Replace it with the zero-dependency recipe below.
+
+Build-time recipe — fetch each pinned cross-origin resource during prebuild, compute its sha384, and render the attribute from the generated map:
+
+```javascript
+// scripts/sri-hash.mjs — add "presri" (or fold into prebuild) in package.json
+import { createHash } from 'node:crypto';
+import { mkdir, writeFile } from 'node:fs/promises';
+
+const RESOURCES = [
+  'https://example-cdn.com/widget.min.js',
+];
+
+const entries = await Promise.all(RESOURCES.map(async (url) => {
+  const buf = Buffer.from(await (await fetch(url)).arrayBuffer());
+  const hash = createHash('sha384').update(buf).digest('base64');
+  return [url, `sha384-${hash}`];
+}));
+
+await mkdir('src/generated', { recursive: true });
+await writeFile('src/generated/sri.json', JSON.stringify(Object.fromEntries(entries), null, 2));
+```
+
+In the component, import the map and render the tag with `integrity={sri[url]}` plus `crossorigin="anonymous"`. Because the hash is frozen at build time, a swapped CDN file fails closed at runtime until you rebuild; pin an exact resource version in the URL whenever the CDN offers one, so rebuilds do not silently bless new bytes.
 
 ## Verification
 
@@ -34,4 +57,4 @@ A green grade is not the goal; a policy with no violations on your real pages an
 
 - This document does NOT cover the header set itself (see header-inventory.md) or CSP configuration (see csp-astro-native.md).
 - SRI hashes are content-pinned; every change to a pinned cross-origin resource requires a new hash.
-- Tool and version references current as of 2026-06-17; re-verify the astro-shield version and advisory status on upgrade.
+- Tool and version references current as of 2026-08-17. astro-shield is retired (unmaintained, peer astro ^4); if the project revives with an Astro 7 peer range, re-evaluate against this recipe.

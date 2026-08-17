@@ -1,7 +1,7 @@
 ---
 title: Validation and AEO framing
 summary: Validation tooling, the exported CI script and its handoff to perf-ci-gates, the 2026 rich-result types, and what JSON-LD does and does not do for AI surfaces.
-last_updated: 2026-06-17
+last_updated: 2026-08-17
 applies_to: schema.org, Google Search Central, June 2026
 ---
 

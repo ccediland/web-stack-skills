@@ -5,13 +5,13 @@ description: Integrates one bespoke interactive Rive state-machine animation as 
 
 # signature-anim
 
-> Integration discipline for embedding one bespoke, designer-authored, interactive Rive state-machine animation as a site's signature moment inside an Astro 6 plus Cloudflare Workers Static Assets stack, without breaking the native hash-based CSP, the Lighthouse perf budget, or accessibility. This skill is the how-to-embed, not how-to-author-in-Rive.
+> Integration discipline for embedding one bespoke, designer-authored, interactive Rive state-machine animation as a site's signature moment inside an Astro 7 plus Cloudflare Workers Static Assets stack, without breaking the native hash-based CSP, the Lighthouse perf budget, or accessibility. This skill is the how-to-embed, not how-to-author-in-Rive.
 
 ## TL;DR
 
 - One renderer: `@rive-app/canvas` (Canvas2D). It has no WebGL context limit, so it never competes with a sibling WebGL shader background for the browser's per-page context budget. Use `@rive-app/webgl2` only when the Rive Renderer, mesh deformation, or edit-time fidelity is required. Never `@rive-app/webgl` (legacy, superseded by webgl2).
 - Usage gate, hard: the Rive runtime is heavy. Measured first load is roughly 840 KB gzip for canvas (about 42 KB JS plus an 800 KB-class WASM); canvas-lite roughly halves the WASM. This is justified only by genuinely interactive, branching state-machine logic that CSS or GSAP cannot hand-code and that Lottie or dotLottie playback cannot match. For playback or a simple hover toggle, use the motion skill or a Lottie file instead. Ship at most one Rive instance per page.
-- CSP, load-bearing: WebAssembly needs `'wasm-unsafe-eval'` in script-src or it is blocked. Self-host the WASM so its fetch and the .riv fetch stay same-origin (connect-src 'self'). Astro 6 native CSP can express both via security.csp; no real HTTP header is needed even though Cloudflare adapter v13 lacks staticHeaders. Details in csp-and-wasm.md.
+- CSP, load-bearing: WebAssembly needs `'wasm-unsafe-eval'` in script-src or it is blocked. Self-host the WASM so its fetch and the .riv fetch stay same-origin (connect-src 'self'). Astro 7 native CSP can express both via security.csp; no real HTTP header is needed even though Cloudflare adapter v14 lacks staticHeaders. Details in csp-and-wasm.md.
 - Off the critical path: the WASM is the heaviest thing in the stack. Lazy-init with a vanilla IntersectionObserver and dynamic import, never an above-the-fold island. A canvas is not LCP-eligible, so deferring it does not hurt LCP.
 - Accessibility is not built in: Rive has no reduced-motion handling. If it autoplays or loops longer than five seconds, a visible keyboard-operable pause control is required for all users (WCAG 2.2.2, Level A). Reduced-motion handling is separate (WCAG 2.3.3, Level AAA).
 
@@ -37,13 +37,13 @@ dotLottie added a state machine in late 2025 with comparable WASM weight; Rive's
 
 ## Stack and versions
 
-Verified 2026-06-18 on npm; Rive web runtimes churn weekly, so re-pin at install.
+canvas and webgl2 re-verified 2026-08-17 on npm (lockstep train, published same day); the lite, single, and react rows are as of 2026-06-18 (their trains have since caught up to 2.40.0-era releases). Rive web runtimes churn weekly, so re-pin everything at install.
 
 | Package | Version | Role |
 |---|---|---|
-| `@rive-app/canvas` | 2.38.1 | default, Canvas2D, no WebGL context limit |
+| `@rive-app/canvas` | 2.40.0 | default, Canvas2D, no WebGL context limit |
 | `@rive-app/canvas-lite` | 2.37.3 | no Rive Text or audio, about half the WASM |
-| `@rive-app/webgl2` | 2.38.1 | only for Rive Renderer, mesh, fidelity |
+| `@rive-app/webgl2` | 2.40.0 | only for Rive Renderer, mesh, fidelity — 2.40.0 shrank the package about 11.5 percent (Emscripten 4.0.23, -Os) |
 | `@rive-app/canvas-single` | 2.38.0 | WASM inlined in JS, no separate WASM fetch |
 | `@rive-app/react-canvas` | 4.28.0 | only if the page is already a React island |
 | `@rive-app/webgl` | legacy | avoid, superseded by webgl2 |

@@ -1,8 +1,8 @@
 ---
 title: Rive runtime setup, lazy init, and lifecycle in Astro
 summary: Renderer choice and measured sizes, a vanilla TypeScript IntersectionObserver lazy-init that keeps the heavy WASM off the critical path, and the offscreen-pause and cleanup lifecycle.
-last_updated: 2026-06-18
-applies_to: astro@6.4.7, @rive-app/canvas@2.38.1, Node 22
+last_updated: 2026-08-17
+applies_to: astro@7.2.2, @rive-app/canvas@2.40.0, Node 22
 ---
 
 # Rive runtime setup, lazy init, and lifecycle in Astro
@@ -31,7 +31,7 @@ Measured 2026-06-18; re-measure at build because versions churn weekly.
 | @rive-app/canvas-lite | about 35 KB | about 806 KB | about 390 KB gzip |
 | @rive-app/webgl2 | about 44 KB | about 2.43 MB | about 1.05 MB gzip |
 
-The WASM, not the JS, dominates. canvas-lite drops Rive Text, audio, and scripting and roughly halves the WASM; use it when the `.riv` needs none of those. The widely cited 200 KB figure is outdated. The compressed served size is version-volatile; measure it and set the perf budget against the measured number, treating the WASM as a separate long-cached resource excluded from the critical budget.
+The WASM, not the JS, dominates. Table figures were measured on the 2.38.x train; the 2.40.0 train shrank the webgl2 package about 11.5 percent (Emscripten 4.0.23 with -Os), so re-measure on the pinned version. canvas-lite drops Rive Text, audio, and scripting and roughly halves the WASM; use it when the `.riv` needs none of those. The widely cited 200 KB figure is outdated. The compressed served size is version-volatile; measure it and set the perf budget against the measured number, treating the WASM as a separate long-cached resource excluded from the critical budget.
 
 ## Why vanilla, not an island
 

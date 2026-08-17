@@ -5,10 +5,10 @@ title: "web-stack-skills — v1 Sprint (Finalization + Brand Ingestion) & v2 Roa
 summary: "Mortal execution plan, re-scoped 2026-08-17 from the pre-sprint deep analysis (11 agents, adversarially verified). Seven gated phases: A cleanup/docs, B0 Astro 7 migration wave, B1 author brand-canon-ingest, B2 mechanical validation of 9 skills, C Furever reference site, D integration playbook, E ship v1. Points at RESIDENT.md for standing facts; archived at v1 ship."
 last_updated: 2026-08-17
 applies_to: "ccediland/web-stack-skills · post-8-skills · pre-v1-ship · consumes ccediland/furever-brand via brand-system-skills contract 0.6.0"
-status: "IN PROGRESS — re-scope adjudicado en chat 2026-08-17; pendiente commit de este plan (rama claude/) y arranque de Phase A."
-phase: "A (Cleanup & docs) — lista para arrancar tras el commit de este plan"
-home_base: "chat (claude.ai); excursions to Claude Code for A (execution), B0, B1-build, B2, C"
-next_action: "Commit de este plan re-scopeado en rama claude/v1-sprint-rescope + Phase A completa (ver Next actions)"
+status: "IN PROGRESS — Phase A mergeada a main (PR #1, d1591e0); Phase B0 (ola Astro 7) ejecutada y verificada — pins vigentes en RESIDENT §3, smoke scaffold verde, 1 gotcha de receta cazado (Tailwind v4 entry)."
+phase: "B1 (Author brand-canon-ingest #9) — lista para arrancar"
+home_base: "chat (claude.ai); excursions to Claude Code for B1-build, B2, C"
+next_action: "Scope de brand-canon-ingest (#9) en chat (el research ya está — reporte pre-sprint Bloques 3-4); en paralelo Carlos ratifica canon v2 furever Stage-10 (bloquea B1-build, no el scope)"
 resident: "./RESIDENT.md — canonical for all standing facts (skill verdicts, pins, decisions, state). Point, never duplicate."
 ---
 
@@ -161,6 +161,12 @@ Done-criteria (externo, pre-comprometido): release 1.0.0 taggeado · install + t
 Standing instruction: al abrir este plan en un chat fresco, leer el state block + front matter del RESIDENT, confirmar fase y next action con Carlos, ejecutar, loguear incrementalmente, y al cierre reescribir estado + session log. No reiniciar el plan.
 
 ## Session log
+### 2026-08-17 — Phase B0 ejecutada (ola Astro 7) — Claude Code
+Hecho: merge del PR #1 (Phase A → main, `d1591e0`, rama borrada). B0 completa en `claude/b0-astro7-wave` — re-pin lockstep por skill (un commit c/u; detalle y pins vigentes en RESIDENT §3), astro-shield RETIRADA y reemplazada por receta SRI sha384 custom en #2, smoke scaffold (astro 7.2.2 + adapter 14.2.1 + @tailwindcss/vite 4.3.3 + SD 5.5.1 + security.csp) compiló y verificó CSP meta / tokens / utilities / dark / Cache-Control del adapter.
+Lección de campo: `@tailwind base` es no-op SILENCIOSO en Tailwind v4 (build pasa, cero utilities) — el entry es `@import 'tailwindcss'`; corregido en astro-css-tokens y registrado en RESIDENT §8.
+Gates re-checados que NO disparan: staticHeaders (adapter 14.2.1), Keystatic (#1497 abierto), biome `.astro` estable.
+Siguiente: B1 — scope de `brand-canon-ingest` en chat; smoke-test del admin Sveltia queda para B2.
+
 ### 2026-08-17 — Re-scope del sprint desde el análisis pre-sprint
 Hecho: análisis profundo pre-sprint vía Code (11 agentes, 24 claims re-verificados adversarialmente: 23 confirmados, 1 corregido en atribución) — estado del repo, re-pin audit completo, inventario furever-brand, contrato brand-system-skills. Los 3 repos clonados/sincronizados en ~/proyectos/. Plan re-scopeado a 7 fases.
 Decidido: (1) migrar a Astro 7 antes de validar (B0) — adapter 14 acoplado, mina Vite-8 en Astro 6, switch-back Tailwind limpio; (2) ingestión de marca = skill nueva `brand-canon-ingest` (#9, B1) con pin de contrato 0.6.0 + run-gates como precondición — no extensión de astro-css-tokens (una herramienta por trabajo) ni recipe del playbook (bloquearía la capacidad tras Phase D); (3) sitio de referencia = Furever (C) — integration test + primera corrida de #9 + activo; (4) descriptions fix-pass promovida a prerequisito estructural (3 colisiones ALTAS + eje nuevo de #9); (5) astro-shield se reemplaza DENTRO de B0 (abandonado, peer ^4).

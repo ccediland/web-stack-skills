@@ -1,8 +1,8 @@
 ---
 title: CSP and reduced-motion per engine
-summary: The two cross-cutting, gate-relevant concerns — a ship-safe Content-Security-Policy recipe for each motion engine under Astro 6 hash-based meta CSP (script loading and runtime style writes), and the prefers-reduced-motion recipe for each engine tied to the perf-ci-gates 0.95 accessibility floor.
-last_updated: 2026-06-17
-applies_to: astro@6.4.7 security.csp, @astrojs/cloudflare@13.7.0, gsap@3.15.0, motion@12.40.0
+summary: The two cross-cutting, gate-relevant concerns — a ship-safe Content-Security-Policy recipe for each motion engine under Astro 7 hash-based meta CSP (script loading and runtime style writes), and the prefers-reduced-motion recipe for each engine tied to the perf-ci-gates 0.95 accessibility floor.
+last_updated: 2026-08-17
+applies_to: astro@7.2.2 security.csp, @astrojs/cloudflare@14.2.1, gsap@3.15.0, motion@13.1.0
 ---
 
 # CSP and reduced-motion per engine
@@ -18,7 +18,7 @@ applies_to: astro@6.4.7 security.csp, @astrojs/cloudflare@13.7.0, gsap@3.15.0, m
 - Limitations
 
 ## How Astro CSP reaches motion
-On Astro 6 with the Cloudflare adapter (no staticHeaders), the CSP is delivered as a hash-based meta http-equiv tag, not a response header. Astro emits hashes for all the scripts it bundles, including client islands, so anything Astro bundles passes a strict script-src automatically. Two distinct questions decide whether motion survives that policy: how the engine script is loaded, and what the engine does to styles at runtime.
+On Astro 7 with the Cloudflare adapter (no staticHeaders), the CSP is delivered as a hash-based meta http-equiv tag, not a response header. Astro emits hashes for all the scripts it bundles, including client islands, so anything Astro bundles passes a strict script-src automatically. Two distinct questions decide whether motion survives that policy: how the engine script is loaded, and what the engine does to styles at runtime.
 
 ## Script loading rule
 Load every engine via a bundled Astro script or a hydrated island, never is:inline. Astro processes and hashes bundled scripts and island hydration code, so they satisfy strict script-src. An is:inline script is not processed or hashed and is blocked under the strict policy, because unsafe-inline is incompatible with Astro CSP and browsers ignore unsafe-inline when a hash is present. External CDN scripts are not hashed out of the box: self-host via an npm import (the engines are installed as dependencies), or supply your own hash in security.csp.scriptDirective.hashes.

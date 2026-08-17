@@ -1,8 +1,8 @@
 ---
 title: i18n, AI translation, and the drafts-branch publishing flow
 summary: Configure Spanish and English locales with the multiple_folders structure, wire a currently-working AI translation service (not DeepL), and publish through a drafts branch with CI and a Cloudflare preview URL.
-last_updated: 2026-06-18
-applies_to: Sveltia CMS i18n and single-branch publishing, Astro 6 on Cloudflare Workers Static Assets
+last_updated: 2026-08-17
+applies_to: Sveltia CMS i18n and single-branch publishing, Astro 7 on Cloudflare Workers Static Assets
 ---
 
 # i18n, AI translation, and the drafts-branch publishing flow

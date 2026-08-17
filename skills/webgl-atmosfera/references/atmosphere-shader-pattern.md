@@ -1,7 +1,7 @@
 ---
 title: The atmosphere shader pattern
 summary: How a full-screen fragment shader paints an atmosphere from fbm domain-warped noise, a copy-ready reference shader with declared precision and bounded loops, the references to learn it from, and the boundary where a CSS gradient is the better choice than WebGL.
-last_updated: 2026-06-18
+last_updated: 2026-08-17
 applies_to: WebGL2 GLSL ES 3.0 fragment shaders; a single full-screen pass
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: Renderer and library for a full-screen shader hero
 summary: Why the default renderer is a vendored raw WebGL2 helper rather than a library, when OGL or twgl earn their bytes, why WebGPU is out for a single decorative draw call, and the copy-ready helper itself.
-last_updated: 2026-06-18
-applies_to: Astro 6 plus Cloudflare; WebGL2; a single full-screen fragment-shader pass
+last_updated: 2026-08-17
+applies_to: Astro 7 plus Cloudflare; WebGL2; a single full-screen fragment-shader pass
 ---
 
 # Renderer and Library for a Full-Screen Shader Hero

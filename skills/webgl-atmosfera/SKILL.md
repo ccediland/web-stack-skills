@@ -5,7 +5,7 @@ description: Use to build a premium WebGL hero atmosphere — a lazy-loaded full
 
 # WebGL Atmosphere for an Astro Hero
 
-> A minimal, defensible pattern for a lazy-loaded full-screen fragment-shader hero background on Astro 6 plus Cloudflare. The discipline is in the constraints — survives a hash-based CSP, a CI performance budget, and WCAG — not in the shader artistry.
+> A minimal, defensible pattern for a lazy-loaded full-screen fragment-shader hero background on Astro 7 plus Cloudflare. The discipline is in the constraints — survives a hash-based CSP, a CI performance budget, and WCAG — not in the shader artistry.
 
 ## TL;DR
 

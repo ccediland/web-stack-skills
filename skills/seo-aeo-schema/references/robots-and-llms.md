@@ -1,8 +1,8 @@
 ---
 title: robots.txt and llms.txt
 summary: Verified AI-crawler tokens, the access-versus-appearance rule, the baseline robots.txt, the honest llms.txt framing, and the shared prerendered text-endpoint pattern.
-last_updated: 2026-06-17
-applies_to: astro@6.4.7, @astrojs/cloudflare@13.7.0
+last_updated: 2026-08-17
+applies_to: astro@7.2.2, @astrojs/cloudflare@14.2.1
 ---
 
 # robots.txt and llms.txt

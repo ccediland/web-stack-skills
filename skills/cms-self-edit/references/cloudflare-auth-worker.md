@@ -1,7 +1,7 @@
 ---
 title: Cloudflare OAuth Worker, the COOP fix, and the /admin CSP
 summary: Deploy the sveltia-cms-auth Worker, register a GitHub OAuth App, choose OAuth versus a personal access token, fix the COOP login failure, and write the hardened CSP and headers scoped to /admin.
-last_updated: 2026-06-18
+last_updated: 2026-08-17
 applies_to: sveltia-cms-auth on Cloudflare Workers, GitHub OAuth App, Workers Static Assets _headers
 ---
 

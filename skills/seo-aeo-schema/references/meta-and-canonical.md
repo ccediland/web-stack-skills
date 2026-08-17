@@ -1,8 +1,8 @@
 ---
 title: Canonical and Open Graph head component
 summary: A hand-rolled typed head component for canonical URLs, Open Graph, and Twitter cards, plus the dynamic OG-image seam and the hreflang seam.
-last_updated: 2026-06-17
-applies_to: astro@6.4.7, @astrojs/cloudflare@13.7.0
+last_updated: 2026-08-17
+applies_to: astro@7.2.2, @astrojs/cloudflare@14.2.1
 ---
 
 # Canonical and Open Graph head component

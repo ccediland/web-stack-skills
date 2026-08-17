@@ -1,6 +1,6 @@
 # Biome Setup for an Astro Project
 
-> biome.json for an Astro 6 plus TypeScript project, the Astro template-formatting split with prettier-plugin-astro, the experimental-flag decision, and the biome ci wiring. Biome is the single lint and format tool for JS, TS, CSS, and JSON; prettier-plugin-astro formats .astro templates only.
+> biome.json for an Astro 7 plus TypeScript project, the Astro template-formatting split with prettier-plugin-astro, the experimental-flag decision, and the biome ci wiring. Biome is the single lint and format tool for JS, TS, CSS, and JSON; prettier-plugin-astro formats .astro templates only.
 
 ## Table of contents
 - The Astro problem
@@ -24,7 +24,7 @@ Flag off; Biome's formatter disabled for component files so it does not fight pr
 
 ```json
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.8/schema.json",
   "files": {
     "ignoreUnknown": true,
     "includes": ["**", "!**/dist", "!**/.astro", "!**/node_modules"]
@@ -103,7 +103,7 @@ biome ci --reporter=github --reporter-file=biome-report.txt
 }
 ```
 
-Pin Biome exactly: `npm install --save-dev --save-exact @biomejs/biome@2.5.0`. The CI step runs `npx @biomejs/biome ci --reporter=github` against that pinned dependency, so no version drift. The biomejs/setup-biome@v2 action is an alternative installer that reads the pinned version from the lockfile; the npx-against-pinned-devDep path is simpler and needs no extra action.
+Pin Biome exactly: `npm install --save-dev --save-exact @biomejs/biome@2.5.8`. The CI step runs `npx @biomejs/biome ci --reporter=github` against that pinned dependency, so no version drift. The biomejs/setup-biome@v2 action is an alternative installer that reads the pinned version from the lockfile; the npx-against-pinned-devDep path is simpler and needs no extra action.
 
 ## The experimental-flag decision
 

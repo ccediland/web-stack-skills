@@ -1,8 +1,8 @@
 ---
 title: Rive accessibility, reduced motion, and fallback
 summary: Rive has no built-in motion accessibility, so this covers the prefers-reduced-motion handling, the WCAG pause-control decision tree, and the static poster fallback for runtime or WASM failure.
-last_updated: 2026-06-18
-applies_to: @rive-app/canvas@2.38.1, WCAG 2.1 and 2.2
+last_updated: 2026-08-17
+applies_to: @rive-app/canvas@2.40.0, WCAG 2.1 and 2.2
 ---
 
 # Rive accessibility, reduced motion, and fallback

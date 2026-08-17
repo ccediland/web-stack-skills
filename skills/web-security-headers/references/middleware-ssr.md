@@ -1,8 +1,8 @@
 ---
 title: Headers for server-rendered routes (middleware)
 summary: Setting security headers and a real CSP header for on-demand Astro routes via src/middleware.ts, since public/_headers does not apply to Worker responses.
-last_updated: 2026-06-17
-applies_to: astro@6.4.7
+last_updated: 2026-08-17
+applies_to: astro@7.2.2
 ---
 
 # Headers for server-rendered routes
@@ -44,4 +44,4 @@ Astro native CSP is hash-only. If a specific integration genuinely requires a no
 
 - This document does NOT cover static-asset headers (see cloudflare-headers.md) or the native CSP config (see csp-astro-native.md).
 - Middleware runs in the Worker; heavy per-request work there has a latency cost. Keep header logic trivial.
-- API current as of astro@6.4.7.
+- API current as of astro@7.2.2.

@@ -1,26 +1,32 @@
 # Astro + Tailwind v4 wiring
 
-Load when configuring PostCSS, global CSS, dark mode, or scoped @apply.
+Load when configuring the Tailwind Vite plugin, global CSS, dark mode, or scoped @apply.
 
-## Why @tailwindcss/postcss (not @tailwindcss/vite)
+## @tailwindcss/vite on Astro 7 (review-gate #16542 closed)
 
-Astro 6 migrated its internal Vite fork to rolldown-vite. The `@tailwindcss/vite` plugin breaks on startup with:
-
-```
-Error: Missing field tsconfigPaths
-```
-
-Root cause: [withastro/astro#16542](https://github.com/withastro/astro/issues/16542) (open as of Jun 2026, upstream at vite#19802, `aliasOnly: true`).
-
-The workaround is `@tailwindcss/postcss`, which Astro runs through its native PostCSS pipeline without Vite involvement.
-
-Switch-back trigger: close #16542 is confirmed, you can reproduce a clean `astro dev` with `@tailwindcss/vite` pinned to the same minor as `tailwindcss`, and `@tailwindcss/postcss` is removed.
-
-## postcss.config.mjs
-
-Place at the project root (same level as `astro.config.mjs`):
+On Astro 7 (Vite 8), `@tailwindcss/vite` is the official path — it is what `astro add tailwind` installs. Wire it in `astro.config.mjs`:
 
 ```javascript
+import { defineConfig } from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+```
+
+Pin `@tailwindcss/vite` to the same minor as `tailwindcss`. No PostCSS config is needed.
+
+## History and the Astro 6 fallback (@tailwindcss/postcss)
+
+The old "vite plugin broken on Astro 6" verdict was misattributed. Astro 6 never used rolldown-vite — it runs standard Vite 7. The real failure was npm hoisting Vite 8 (rolldown-powered) to satisfy the plugin's wide peer range, crashing it on startup with `Missing field tsconfigPaths`; the underlying plugin bug was [tailwindlabs/tailwindcss#19802](https://github.com/tailwindlabs/tailwindcss/issues/19802) (`aliasOnly: true`, fixed around 4.2.4). pnpm and yarn users were never affected. [withastro/astro#16542](https://github.com/withastro/astro/issues/16542) is closed and the incompatibility is gone in current versions.
+
+If a project must stay on Astro 6, either block the hoist with `"overrides": { "vite": "^7" }` in `package.json` and keep the Vite plugin, or run `@tailwindcss/postcss` through Astro's native PostCSS pipeline:
+
+```javascript
+// postcss.config.mjs — Astro 6 fallback only, project root
 export default {
   plugins: {
     '@tailwindcss/postcss': {},
@@ -28,21 +34,21 @@ export default {
 };
 ```
 
-No other PostCSS plugins are needed for the token pipeline.
+Node floor note: Node 20 support ended at Astro 6.1.0 (not at Astro 7); the effective floor is Node ≥ 22.12.
 
 ## Global stylesheet (src/styles/global.css)
 
-Import order matters. Tailwind must see `theme.css` before processing utilities.
+The file must START with the Tailwind v4 entry `@import 'tailwindcss'` — that is what makes it a Tailwind root. The v3 directives (`@tailwind base` and friends) no longer exist in v4; with them, the build still SUCCEEDS but Tailwind never runs, no utility is generated, and the literal `@tailwind` line ships to the browser (verified on a real Astro 7 build, 2026-08-17 — the failure is silent). Tailwind collects `@theme` blocks from the whole import graph, so `theme.css` can come after the entry.
 
 ```css
-/* 1. Design tokens — source of truth */
+/* 1. Tailwind v4 entry — makes this file a Tailwind root */
+@import 'tailwindcss';
+
+/* 2. Design tokens — source of truth */
 @import './tokens.css';
 
-/* 2. Tailwind @theme inline bridge */
+/* 3. Tailwind @theme inline bridge */
 @import './theme.css';
-
-/* 3. Tailwind base styles */
-@tailwind base;
 
 /* 4. Dark mode variant */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));

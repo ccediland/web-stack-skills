@@ -1,8 +1,8 @@
 ---
 title: Sveltia setup — mount, config.yml, and Astro content collections
-summary: How to mount the Sveltia admin under public/admin, write config.yml for the GitHub backend, and map Sveltia collections to Astro 6 content collections and their Zod schemas.
-last_updated: 2026-06-18
-applies_to: Sveltia CMS 0.167.2 on Astro 6.x with @astrojs/cloudflare 13.x, GitHub backend
+summary: How to mount the Sveltia admin under public/admin, write config.yml for the GitHub backend, and map Sveltia collections to Astro 7 content collections and their Zod schemas.
+last_updated: 2026-08-17
+applies_to: Sveltia CMS 0.191.2 on Astro 7.x with @astrojs/cloudflare 14.x, GitHub backend
 ---
 
 # Sveltia setup — mount, config.yml, and Astro content collections
@@ -79,7 +79,7 @@ The output.quote option replaces the deprecated per-collection yaml_quote and co
 
 ## Mapping collections to Astro content collections
 
-Astro 6 reads content through the content layer: a glob loader points at a directory, and a Zod schema validates each entry's frontmatter. One Sveltia folder collection maps to one Astro collection directory.
+Astro reads content through the content layer (Astro 6+): a glob loader points at a directory, and a Zod schema validates each entry's frontmatter. One Sveltia folder collection maps to one Astro collection directory.
 
 ```ts
 // src/content.config.ts

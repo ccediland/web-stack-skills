@@ -2,7 +2,7 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-08-17
 repo: ccediland/web-stack-skills (público, MIT)
-status: Sprint v1 re-scopeado (2026-08-17). Las 8 skills autoradas; análisis pre-sprint hecho y verificado adversarialmente; plan de 7 fases en `v1-finalization-plan.md` (A cleanup → B0 Astro 7 → B1 brand-canon-ingest #9 → B2 validación → C sitio Furever → D playbook → E ship). Phase A ejecutada en rama `claude/v1-sprint-rescope` (PR pendiente de OK de Carlos). SIGUIENTE = gate A→B0 (migración Astro 7, pins objetivo en §3).
+status: Sprint v1 en curso. Phase A mergeada a main (PR #1, merge `d1591e0`). Phase B0 (migración Astro 7) EJECUTADA — pins vigentes en §3 (astro 7.2.2, adapter 14.2.1, switch-back a @tailwindcss/vite, SD 5.5.1, astro-shield retirada), 8 skills actualizadas, smoke scaffold Astro 7 verde (lección Tailwind-entry en §8). SIGUIENTE = B1: scope de `brand-canon-ingest` (#9) en chat; precondición de B1-build = Carlos ratifica canon v2 furever (Stage-10).
 ---
 
 # web-stack-skills — RESIDENT
@@ -37,7 +37,7 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 
 **Skill #8 — `cms-self-edit`** (COMPLETA — autorada, validada y registrada en `plugin.json`; commits `a8c0948` selección / `90110a9` bundle): disciplina para dar a un cliente NO técnico la capacidad de auto-editar el contenido de un sitio Astro 6 + Cloudflare Pages/Workers, sin lock-in tipo Webflow/Framer, como patrón reusable de bajo mantenimiento por sitio. Decisión por MÉRITO puro (sin lente de stack-canon — dropeado por Carlos: no existe / el stack no es fijo). **Veredicto:** ganador = **Sveltia** — CMS git-based client-side puro, montado como `public/admin/index.html`, sin backend; contenido = Markdown/YAML en el repo; OAuth GitHub vía el Worker oficial gratis `sveltia-cms-auth`; media en Cloudflare R2 (SigV4 browser→R2); i18n first-class (DeepL DESHABILITADO en Sveltia — traducción vía Google Cloud Translation / Gemini / Mistral); `/admin` se mantiene como archivo estático en `public/` para esquivar la CSP `<meta>` de #2; publicar vía rama `drafts` + check CI antes de merge (Editorial Workflow aún no es GA). Runner-up = **Pages CMS** — git-based, magic-link por email (el editor NO necesita cuenta GitHub), media R2; pero reintroduce dependencia: app hosteada de terceros con acceso al repo, O self-host con Postgres+BetterAuth. Diseño = **escalera de 3 etapas**: Etapa 1 (default) Sveltia · Etapa 2 (cliente jamás ve GitHub) Pages CMS · Etapa 3 (contenido relacional / multi-canal / publicación instantánea / workflow editorial pesado) Directus (motor por sitio: VPS+Postgres+S3 ~$200/mes; licencia MSCL, OIG libre si <$5M ingresos Y <50 empleados). **Descartados:** Keystatic = roto en Astro 6 (peer-dep `@keystatic/astro@5.0.6` tope astro 2–5, admin truena con error de React hook; issue #1515 ABIERTO, PR #1527 sin merge) + bug OAuth en Cloudflare (#1497 ABIERTO) + sin i18n → review-gate (reconsiderar si #1515 cierra fixed Y #1497 cierra; el cero-i18n sigue siendo tapón MX); EmDash = v0.1.0 dev-preview, contenido en DB/Portable-Text (no archivos), sandbox requiere CF de pago; Tina = pesado (motor+DB o Tina Cloud), Astro experimental, sin i18n nativo; Decap = abandonado (Sveltia es su sucesor); Sanity / headless-DB self-host (Directus/Strapi/Payload/PocketBase) = overkill salvo Etapa 3. Pins a RE-VERIFICAR en build: `@sveltia/cms@0.167.2` (beta, GA mid-2026), `astro@6.x`, `@astrojs/cloudflare@13.x`, Node 22; Worker `sveltia-cms-auth` (gratis) + GitHub OAuth App (`ALLOWED_DOMAINS` = hostname del sitio); bucket R2 + token (Object R/W) + CORS al dominio del CMS + `public_url`. Bundle propuesto: `SKILL.md` (veredicto + escalera + receta Sveltia + gotchas + limits) + references/ {`sveltia-setup`, `cloudflare-auth-worker`, `media-r2`, `escalation-ladder` (Pages CMS + frontera git-vs-DB), `i18n-and-publishing`}. Caveats: Sveltia es beta de un solo mantenedor (riesgo bajo por portabilidad de archivos); la interacción CSP×`/admin` es INFERIDA (verificar en build); Keystatic es time-sensitive (re-chequear). Registro = §11 (selección de herramienta); reporte de research completo = artefacto del chat de decisiones.
 
-### Pins (2026-06-16 — re-verificar en el research de cada skill)
+### Pins por skill (histórico 2026-06-16 — donde choque, manda la tabla vigente de abajo; el detalle vivo post-B0 está en cada SKILL.md)
 
 | Skill | Pins |
 |---|---|
@@ -49,9 +49,9 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 | webgl-atmosfera | Default = raw WebGL2 vendorizado (helper 0-dep, WebGL2 universal/Baseline). Alternativas: `ogl@1.0.11` (latest verificado; ~1 año sin publish; README sigue "alpha"; 0 deps; Core ~8 KB minzip, subset fullscreen una fracción — tree-shaken sin cifra publicada, medir en build) vendorizando Core subset (Renderer/Triangle/Program/Mesh), sin `^`; `twgl@7.0.0` (mantenido, 0 deps). WebGPU OUT (fitness; MDN no-Baseline may-2026; gpuweb: Firefox Linux/Android pendiente, Safari OS-gated). `astro@6` experimental.csp + scriptDirective.hashes. WCAG 2.2.2 (A) pausa obligatoria + 2.3.3 (AAA) scroll. Review-gates: ogl post-1.0.11 sin "alpha" → reconsiderar dep npm; WebGPU pasa Baseline MDN + se necesita compute → reabrir; set-LCP (canvas excluido) confirmar en build. Verificado 2026-06-18 |
 | signature-anim | `@rive-app/canvas@2.38.1` (default) · `@rive-app/canvas-lite@2.37.3` (tren lite va atrás) · `@rive-app/webgl2@2.38.1` · `@rive-app/canvas-single@2.38.0` · `@rive-app/react-canvas@4.28.0` · `@rive-app/webgl` legacy (evitar). Gates: re-pin semanal; medir WASM brotli servido (261 KB@v2.0.0 vs ~640 KB@v2.38.1) y presupuestar contra lo medido; CSP solo build+preview; `?url` bajo Rolldown-Vite; evitar `base` no-root (#16276). Verificado 2026-06-18 |
 
-### Pins objetivo B0 (2026-08-17 — re-pin audit verificado adversarialmente; aplicar en la migración B0 del sprint v1)
+### Pins vigentes (2026-08-17 — re-pin audit verificado adversarialmente; APLICADOS en B0)
 
-| Paquete | Pin vigente | Objetivo B0 | Nota |
+| Paquete | Pin previo | Vigente | Nota |
 |---|---|---|---|
 | `astro` | 6.4.7 | **7.2.2** | 7.0.0 stable desde 2026-06-22; `security.csp` sobrevive el major (solo aditivo — opción `kind` en 7.1.0) |
 | `@astrojs/cloudflare` | 13.7.0 | **14.2.1** | peer `astro ^7.2.0` — migración acoplada; `staticHeaders` sigue SIN aterrizar en el adapter (review-gate de #2 NO dispara); watch #16692 — hashed assets sin Cache-Control immutable en algunas configs (reportado en 13.5.0), re-verificar bajo 14.2.1 en B0/C |
@@ -59,9 +59,9 @@ Orden = fundación → visuales. El seed completo de cada una (veredicto, pins, 
 | `style-dictionary` | 5.4.4 | **5.5.1 — JAMÁS 5.5.0** | 5.5.0 = GHSA-xmr7-549p-98w3 (prototype pollution HIGH; npm audit puede no verla). #1398 cerrado desde 5.4.0; #1494 abierto → workaround string solo para typography |
 | `@biomejs/biome` | 2.5.0 | **2.5.8** | patch-only; flag `.astro` sigue experimental — se mantiene "OFF + prettier-plugin-astro" |
 | `@rive-app/canvas` / `@rive-app/webgl2` | 2.38.1 | **2.40.0** | webgl2 −11.5% de tamaño (Emscripten 4.0.23 + -Os) |
-| `@sveltia/cms` | 0.167.2 | **0.191.2** | 24 minors adelante; pre-GA (milestone 1.0 RC cerca) → smoke-test del admin al bump |
+| `@sveltia/cms` | 0.167.2 | **0.191.2** | 24 minors adelante; pre-GA (milestone 1.0 RC cerca) → smoke-test del admin PENDIENTE en B2 |
 | `motion` | 12.40.0 | **13.1.0** | único breaking = @emotion/is-prop-valid (no nos toca); trae `animateView` (View Transitions) |
-| `@kindspells/astro-shield` | 1.7.1 | **RETIRAR** | abandonado (último publish nov-2024, peer astro ^4) → SRI custom pequeña dentro de #2, en B0 |
+| `@kindspells/astro-shield` | 1.7.1 | **RETIRADA** | abandonada (último publish nov-2024, peer astro ^4) → reemplazada por la receta SRI sha384 custom en #2 (B0-2) |
 | gsap · @gsap/react · schema-dts · @astrojs/sitemap · @lhci/cli · treosh@v12 | — | **sin cambio** | todos siguen latest; #16838 (lastmod sitemap-index) ya está fijo en el pin 3.7.3 |
 
 Gotchas y outline detallados — en cada `skills/<nombre>/SKILL.md`.
@@ -145,13 +145,20 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 - **Superficie de triggers de las 8:** 3 colisiones ALTAS (CSP motion↔security; inversión léxica "hash-based CSP" — 4 hermanas la nombran, la dueña no; "animated gradient background" sin hook léxico en motion-system) + cluster medio (reduced-motion, pause, lazy-load, scroll-driven, perf-budget); 4 descriptions sin frontera; cero redirects entre hermanas. Fix-pass aplicada en Phase A; la #9 agrega el eje "design tokens"/"brand" (vs `astro-css-tokens` y vs los plugins brand-system) — vigilar en el triggering test de B2.
 - Ecosistema de pins (detalle en §3 pins objetivo B0): Sveltia 0.191.2 pre-GA con cadencia casi diaria (single-maintainer sano; sveltia-cms-auth activo); Keystatic review-gate NO cumplido (#1515 cerró solo peer-dep vía PR #1534; #1497 sigue abierto); GSAP/`@gsap/react` sin release nuevo y 100% free confirmado; LH13 NO ha aterrizado en LHCI (issue #1136 sin respuesta); DTCG 2025.10 sigue siendo el único stable.
 
+### 2026-08-17 — Lecciones del smoke scaffold B0 (build real Astro 7)
+
+- **`@tailwind base` es no-op SILENCIOSO en Tailwind v4:** el build PASA pero Tailwind nunca procesa el CSS — cero utilities generadas y la línea literal llega al browser. El entry stylesheet debe abrir con `@import 'tailwindcss'`; los bloques `@theme` se recolectan de todo el import graph. (Cazado por el smoke; corregido en astro-css-tokens.)
+- Confirmado en build real 7.2.2 + adapter 14.2.1 + `@tailwindcss/vite` 4.3.3 + SD 5.5.1: CSP meta hash-based en página estática ✓ · utilities compilan a cadenas `var(--ds-*)` ✓ · OKLCH preservado (lightningcss solo reformatea L a porcentaje) ✓ · dark override ✓ · el adapter SÍ inyectó `Cache-Control` immutable para `/_astro/*` en la config default (watch #16692: OK aquí; re-verificar en el deploy real de C).
+- Astro 7 ahora avisa a nivel config que Shiki × CSP chocan (consistente con la guía Prism de #2).
+
 ## 9. Estado
 
-- Skills #1–#8: autoradas, validadas y commiteadas (commit por skill en §11). 8/8.
-- Análisis pre-sprint 2026-08-17: hecho y verificado (re-pin audit → §3 pins objetivo B0; hallazgos durables → §8; solape de triggers auditado → fix-pass en Phase A).
-- Sprint v1 en curso por `v1-finalization-plan.md` (7 fases): **Phase A ejecutada** en rama `claude/v1-sprint-rescope` (plan re-scopeado + RESIDENT compactado + durables migrados + descriptions fix-pass + CLAUDE.md + README Lego) — PR pendiente de OK de Carlos.
+- Skills #1–#8: autoradas y commiteadas (commit por skill en §11). 8/8.
+- Phase A (cleanup/docs): MERGEADA a main (PR #1, merge `d1591e0`).
+- Phase B0 (migración Astro 7): EJECUTADA en rama `claude/b0-astro7-wave` — pins vigentes en §3 (astro 7.2.2, adapter 14.2.1, `@tailwindcss/vite` switch-back, SD 5.5.1 jamás 5.5.0, biome 2.5.8, motion 13.1.0, rive 2.40.0, sveltia 0.191.2, astro-shield RETIRADA), las 8 skills actualizadas, smoke scaffold Astro 7 verde con 1 bug de receta cazado y corregido (Tailwind entry → §8).
+- Pendiente de B2: smoke-test del admin de Sveltia tras el salto de 24 minors.
 - Precondición externa de B1-build: Carlos ratifica el canon v2 de `furever-brand` (Stage-10; gates 20/20 verdes, falta la firma).
-- Siguiente: OK del PR de Phase A → gate A→B0 → migración Astro 7 (B0).
+- Siguiente: B1 — scope de `brand-canon-ingest` (#9) en chat (el research ya está: reporte pre-sprint, Bloques 3–4).
 
 ## 10. Roadmap
 
@@ -216,3 +223,6 @@ Selección por mérito puro (stack-canon dropeado por Carlos como autoridad): Sv
 
 ### 2026-08-17 — Análisis pre-sprint + re-scope del plan v1
 Análisis profundo read-only vía Claude Code (11 agentes; 24 claims load-bearing verificados adversarialmente — 23 confirmados, 1 corregido en atribución): estado del repo, re-pin audit completo (→ §3 pins objetivo B0), inventario de `furever-brand`, contrato `brand-system-skills` 0.6.0, auditoría de solape de triggers (3 colisiones ALTAS + cluster medio). Decisiones adjudicadas: migrar a Astro 7 antes de validar (B0); ingestión de marca = skill nueva `brand-canon-ingest` (#9, B1); sitio de referencia = Furever (C); descriptions fix-pass = prerequisito estructural (A). Plan re-scopeado (reemplazo completo de `v1-finalization-plan.md`) commiteado en rama `claude/v1-sprint-rescope`; hallazgos durables → §8.
+
+### 2026-08-17 — Phase B0 (migración Astro 7) — EJECUTADA · rama `claude/b0-astro7-wave`
+Phase A mergeada (PR #1, `d1591e0`). Re-pin lockstep aplicado skill por skill, un commit c/u: #1 astro 7.2.2 + tailwind 4.3.3 + switch-back a `@tailwindcss/vite` (#16542 cerrado; 2 citas corregidas) + SD 5.5.1 (jamás 5.5.0) · #2 adapter 14.2.1 (gate staticHeaders NO disparó) + astro-shield RETIRADA → receta SRI sha384 custom + watch #16692 · #3 biome 2.5.8 (flag `.astro` sigue OFF) · #5 motion 13.1.0 + Firefox ~85.4% (watch Fx156 ~oct-2026) · #7 rive 2.40.0 · #8 sveltia 0.191.2 (gate Keystatic NO cumplido) · baseline 7.2.2/14.2.1 en #4/#6. Smoke scaffold Astro 7 completo compiló y verificó CSP/tokens/utilities/dark/Cache-Control; 1 bug de receta cazado y corregido (Tailwind v4 entry — no-op silencioso, → §8).

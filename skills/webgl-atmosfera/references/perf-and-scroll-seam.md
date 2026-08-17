@@ -1,7 +1,7 @@
 ---
 title: Runtime cost controls and the scroll-to-uniform seam
 summary: The controls that keep a background shader within the CI performance budget — clamped device pixel ratio, capped frame rate, pausing off-screen and when hidden, gating mobile to the fallback — and the rule for driving a shader uniform from scroll without adding a motion library for one value.
-last_updated: 2026-06-18
+last_updated: 2026-08-17
 applies_to: WebGL2 render loops; Core Web Vitals budgets; the locked motion-system engine ladder
 ---
 

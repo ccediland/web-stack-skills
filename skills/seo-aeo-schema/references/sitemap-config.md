@@ -1,15 +1,15 @@
 ---
 title: "@astrojs/sitemap configuration"
 summary: Pinned version, the opinionated config block, the on-demand-route inclusion pattern, lastmod wiring, output location, and known bugs.
-last_updated: 2026-06-17
-applies_to: "@astrojs/sitemap@3.7.3, astro@6.4.7, @astrojs/cloudflare@13.7.0"
+last_updated: 2026-08-17
+applies_to: "@astrojs/sitemap@3.7.3, astro@7.2.2, @astrojs/cloudflare@14.2.1"
 ---
 
 # @astrojs/sitemap configuration
 
 ## Pin
 
-Pin `@astrojs/sitemap@3.7.3`. Version 3.7.1 shipped a build-fail regression (a `reduce` on undefined); 3.7.3 fixes it. The integration is maintained by the Astro core team and tracks Astro 6.
+Pin `@astrojs/sitemap@3.7.3`. Version 3.7.1 shipped a build-fail regression (a `reduce` on undefined); 3.7.3 fixes it. The integration is maintained by the Astro core team; 3.7.3 declares no astro peerDependency, so it runs unchanged on Astro 7. The lastmod-in-sitemap-index bug (#16838) is fixed in this pin.
 
 ```bash
 npm i @astrojs/sitemap@3.7.3

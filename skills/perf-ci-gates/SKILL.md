@@ -52,7 +52,7 @@ Use treosh/lighthouse-ci-action@v12. It is GitHub-Actions-native, stores reports
 ### 1. Install
 
 ```bash
-npm install --save-dev --save-exact @biomejs/biome@2.5.0
+npm install --save-dev --save-exact @biomejs/biome@2.5.8
 npm install --save-dev prettier prettier-plugin-astro
 # @lhci/cli is pulled by the treosh action; install it locally only for `lhci` runs
 ```
@@ -118,7 +118,7 @@ Flag off, Biome formatter disabled for `.astro` so it does not fight prettier, t
 
 ```json
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.8/schema.json",
   "files": { "ignoreUnknown": true, "includes": ["**", "!**/dist", "!**/.astro"] },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": { "enabled": true, "rules": { "recommended": true } },
@@ -210,5 +210,5 @@ jobs:
 - Lab budgets here are regression ceilings, not Google ranking thresholds. The field "good" thresholds are LCP 2.5s, INP 200ms, CLS 0.1 at the 75th percentile and are unchanged as of mid-2026; the 2.0s LCP claim is false. Re-verify against web.dev and Google Search Central on any major revision.
 - Deep SEO and schema gating is out of scope (seo-aeo-schema skill); this gate only asserts a coarse Lighthouse SEO category floor as a warning. Deep accessibility and reduced-motion is out of scope (motion and visuals skills).
 - Runtime caching and Cache-Control are out of scope. The adapter already sets an immutable Cache-Control on hashed `_astro/*` assets; custom Cache-Control for non-hashed assets via `_headers` is unreliable on Cloudflare Workers Static Assets (issue 13164). Only this assumed-performance note lives here.
-- Biome Astro template support is experimental; this skill ships it off and uses prettier-plugin-astro for templates. That two-formatter split is a deliberate exception, kept until Biome marks HTML formatting stable, at which point the experimental flag can replace prettier. See references/biome-setup.md.
-- Version pins are current as of 2026-06-17: astro 6.4.7, @astrojs/cloudflare 13.7.0, @lhci/cli 0.15.1 (Lighthouse 12.6.1), @biomejs/biome 2.5.0, treosh/lighthouse-ci-action v12, Node 22. Re-verify on upgrades; Astro 7 (alpha) changes build internals.
+- Biome Astro template support is experimental (still, as of 2.5.8 — review-gate re-checked 2026-08-17, NOT triggered); this skill ships it off and uses prettier-plugin-astro for templates. That two-formatter split is a deliberate exception, kept until Biome marks HTML formatting stable, at which point the experimental flag can replace prettier. Note 2.5.2+ removed false-positive noUnusedImports/noUnusedVariables reports for bindings used only in Astro templates under the flag. See references/biome-setup.md.
+- Version pins are current as of 2026-08-17: astro 7.2.2, @astrojs/cloudflare 14.2.1, @lhci/cli 0.15.1 (Lighthouse 12.6.1 — Lighthouse 13 has NOT landed in LHCI, issue 1136 idle), @biomejs/biome 2.5.8, treosh/lighthouse-ci-action v12 (12.6.2, still the current major), Node 22. Re-verify on upgrades.

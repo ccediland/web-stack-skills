@@ -14,6 +14,7 @@
     "./skills/webgl-atmosfera",
     "./skills/signature-anim",
     "./skills/cms-self-edit",
-    "./skills/brand-canon-ingest"
+    "./skills/brand-canon-ingest",
+    "./skills/stack-integration-playbook"
   ]
 }

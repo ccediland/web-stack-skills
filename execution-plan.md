@@ -131,8 +131,8 @@ Ciclos de toque ~12–18 meses (majors Astro, adapter). Cada release de ola re-v
 - Resueltos (2026-08-18): catálogo completo se construye (owner) · Furever = fixture permanente, deploys temporales, sin go-live · ratificación Stage-10 = gobernanza post-sprint, fuera del plan.
 
 ## Next actions
-1. Code: reemplazar el plan en el repo (renombrar `v1-finalization-plan.md` → `execution-plan.md`, contenido = este doc; actualizar referencias en RESIDENT/CLAUDE.md/README si apuntan al nombre viejo) + ejecutar Phase B2 completa → reporte destilado al chat.
-2. Chat: adjudicar misfires de B2 si los hay; emitir prompt de Phase C.
+1. Chat: emitir el prompt de Phase C (fixture Furever en `furever-web`); adjudicar ahí el fork de acceso al repo de marca y el subdominio de deploy temporal si Code lo escala.
+2. Code (Phase C): componer el subconjunto del fixture, ejercitar los seams, CI gates, deploy temporal Workers → reporte destilado al chat.
 
 ## Resume
 Standing instruction: en chat fresco — leer state block + RESIDENT (front matter, §3, §8, §9, §10), confirmar fase y next action con Carlos, ejecutar, loguear incrementalmente, cerrar con estado + session log + hand-off. No reiniciar el plan.

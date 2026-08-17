@@ -1,8 +1,8 @@
 ---
 title: Typed JSON-LD @graph with schema-dts 2.0.0
 summary: schema-dts 2.0.0 types, the canonical cross-@id entity graph, the Astro render component, the @id non-validation limitation, and why inline JSON-LD is exempt from Astro's hash-based CSP.
-last_updated: 2026-06-17
-applies_to: schema-dts@2.0.0, astro@6.4.7, @astrojs/cloudflare@13.7.0
+last_updated: 2026-08-17
+applies_to: schema-dts@2.0.0, astro@7.2.2, @astrojs/cloudflare@14.2.1
 ---
 
 # Typed JSON-LD @graph with schema-dts 2.0.0
@@ -140,7 +140,7 @@ Pass one `Graph` per page from the builder. One graph per page beats scattering 
 
 A `<script type="application/ld+json">` is a data block in the HTML spec: the type is not a JavaScript type, so the browser never executes it. CSP `script-src` governs script execution, so it does not apply to a data block and the browser raises no violation for it.
 
-Practical effect on this stack: Astro 6's hash-based CSP (the web-security-headers skill) hashes the executable scripts it bundles, such as client islands and `define:vars` blocks. It does not hash an author-written `ld+json` block, and it does not need to. Do not add an entry for the JSON-LD to `security.csp.scriptDirective.hashes`. The CI-versus-local hash drift caused by Vite chunk boundaries affects bundled inline scripts, not a static `ld+json` block, which carries no hash at all. Structured data ships cleanly under the strict meta-element CSP that Cloudflare delivers.
+Practical effect on this stack: Astro's hash-based CSP (the web-security-headers skill) hashes the executable scripts it bundles, such as client islands and `define:vars` blocks. It does not hash an author-written `ld+json` block, and it does not need to. Do not add an entry for the JSON-LD to `security.csp.scriptDirective.hashes`. The CI-versus-local hash drift caused by Vite chunk boundaries affects bundled inline scripts, not a static `ld+json` block, which carries no hash at all. Structured data ships cleanly under the strict meta-element CSP that Cloudflare delivers.
 
 ## Pin and review-gate
 

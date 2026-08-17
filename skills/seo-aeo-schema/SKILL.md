@@ -3,14 +3,14 @@ name: seo-aeo-schema
 description: Add the machine-readable SEO and AEO layer to an Astro 6 site on Cloudflare Workers Static Assets — typed JSON-LD structured data, a sitemap, robots.txt, llms.txt, and a canonical and Open Graph head component. Use when adding schema.org structured data or a typed JSON-LD graph with schema-dts, wiring an entity graph that cross-links Organization, WebSite, WebPage, BreadcrumbList and a page entity, configuring @astrojs/sitemap, writing a robots.txt with AI-crawler directives, shipping an llms.txt, adding canonical, Open Graph, or Twitter meta tags, or validating rich results. Explains why inline JSON-LD is exempt from Astro's hash-based CSP, why the sitemap integration misses on-demand routes, why llms.txt is an agent-readiness file not an SEO lever, and which schema types still earn rich results in 2026. Trigger on JSON-LD, schema markup, structured data, sitemap, robots.txt, llms.txt, canonical tags, Open Graph, or rich results. Not for the CI merge gate (perf-ci-gates) or CSP setup (web-security-headers).
 ---
 
-# SEO, AEO, and Structured Data for Astro 6 on Cloudflare
+# SEO, AEO, and Structured Data for Astro on Cloudflare
 
-> The machine-readable discoverability layer for an Astro 6 site on Cloudflare Workers Static Assets: a typed JSON-LD @graph with schema-dts, a sitemap, robots.txt, llms.txt, and a canonical and Open Graph head component. Structured data earns rich results and entity recognition; it does not buy inclusion in AI answers.
+> The machine-readable discoverability layer for an Astro 7 site on Cloudflare Workers Static Assets: a typed JSON-LD @graph with schema-dts, a sitemap, robots.txt, llms.txt, and a canonical and Open Graph head component. Structured data earns rich results and entity recognition; it does not buy inclusion in AI answers.
 
 ## TL;DR
 
 - Emit one centralized JSON-LD @graph per page with schema-dts 2.0.0, cross-linked by @id. schema-dts type-checks each node's properties but does NOT validate @id cross-references, so wire them by hand and validate the rendered output.
-- Inline `<script type="application/ld+json">` is a non-executing data block, so CSP `script-src` does not apply and Astro 6's hash-based CSP needs no hash for it. Structured data is safe under the strict CSP from the web-security-headers skill. Still escape the characters that close a script tag.
+- Inline `<script type="application/ld+json">` is a non-executing data block, so CSP `script-src` does not apply and Astro's hash-based CSP needs no hash for it. Structured data is safe under the strict CSP from the web-security-headers skill. Still escape the characters that close a script tag.
 - `@astrojs/sitemap` 3.7.3 only sees prerendered routes, because the Cloudflare adapter defaults to on-demand rendering. Include on-demand routes via a custom prerendered sitemap endpoint or `customPages`, and set `lastmod` through `serialize`.
 - Ship robots.txt as the enforceable crawler-control surface, and llms.txt as an agent-readiness file. No major AI provider consumes llms.txt for ranking, so it is positioning, not SEO.
 - FAQ and HowTo rich results are gone; FAQ was deprecated 7 May 2026. Author schema for what the page is, matched to visible content. Google requires no special schema for AI Overviews.
@@ -43,8 +43,8 @@ Verified against npm on 2026-06-17. Re-verify before adopting.
 |---|---|---|
 | schema-dts | 2.0.0 | devDependency, TypeScript-only, zero runtime |
 | @astrojs/sitemap | 3.7.3 | the 3.7.1 build regression is fixed |
-| astro | 6.4.7 | baseline, requires Node 22 |
-| @astrojs/cloudflare | 13.7.0 | emits no static headers, so CSP ships via a meta element |
+| astro | 7.2.2 | baseline, requires Node 22 |
+| @astrojs/cloudflare | 14.2.1 | still emits no static headers (re-verified 2026-08-17), so CSP ships via a meta element |
 
 ## Setup in order
 

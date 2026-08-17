@@ -1,8 +1,8 @@
 ---
 title: Astro load and CSP for the shader hero
 summary: Why the canvas is never the LCP element and what that means, the correct lazy-init path for an above-the-fold canvas (requestIdleCallback plus IntersectionObserver, not client:visible), how to reserve the canvas box against CLS, and how the bundled shader script earns its place in a hash-based CSP.
-last_updated: 2026-06-18
-applies_to: Astro 6 islands and CSP; Cloudflare; Core Web Vitals
+last_updated: 2026-08-17
+applies_to: Astro 7 islands and CSP; Cloudflare; Core Web Vitals
 ---
 
 # Astro Load and CSP for the Shader Hero
@@ -59,7 +59,7 @@ Cumulative Layout Shift goes to zero only if the canvas occupies stable space be
 
 ## CSP parity with bundled scripts
 
-Astro 6 emits a Content-Security-Policy in which every script it bundles, including client islands, is represented by a SHA hash in script-src; modern browsers reject unsafe-inline once a hash or nonce is present in the directive. This is the same mechanism by which a bundled motion library's script is hashed in the sibling security-headers and motion skills, so the shader module inherits it for free. Four consequences follow:
+Astro emits a Content-Security-Policy (stable security.csp, shape intact 6 to 7) in which every script it bundles, including client islands, is represented by a SHA hash in script-src; modern browsers reject unsafe-inline once a hash or nonce is present in the directive. This is the same mechanism by which a bundled motion library's script is hashed in the sibling security-headers and motion skills, so the shader module inherits it for free. Four consequences follow:
 
 - A first-party WebGL module bundled by Astro is hash-emitted into script-src automatically. No manual hashing, no exception. This is full parity with how a bundled motion library is handled.
 - Author shaders as JS template-literal strings inside the bundled module so nothing is fetched at runtime — no .glsl file load, so no connect-src directive is involved.
@@ -86,4 +86,4 @@ Render the canvas in a static .astro component so the markup is server-rendered 
 ## Limitations
 
 - This assumes the hero headline or image is the LCP element and renders from static HTML. If a design makes the canvas visually dominant with no text or image LCP candidate, revisit — a slow LCP cannot be fixed by deferring the canvas, because the canvas was never the LCP element.
-- CSP behavior is verified against Astro 6's hash-based script directive; a future major may change the config surface, so re-check on upgrade.
+- CSP behavior is verified against Astro 7.2.2's hash-based script directive (the 6-to-7 major kept it intact); a future major may change the config surface, so re-check on upgrade.

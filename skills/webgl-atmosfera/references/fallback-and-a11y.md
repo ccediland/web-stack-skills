@@ -1,7 +1,7 @@
 ---
 title: Fallback and accessibility for the shader hero
 summary: The no-WebGL fallback choice and detection, WebGL context-loss and restore handling, and the WCAG verdict that a visible pause control is mandatory for a continuously animating decorative background, with the reduced-motion behavior that satisfies the related criteria.
-last_updated: 2026-06-18
+last_updated: 2026-08-17
 applies_to: WebGL2; WCAG 2.2 SC 2.2.2 and SC 2.3.3; Astro astro:assets
 ---
 

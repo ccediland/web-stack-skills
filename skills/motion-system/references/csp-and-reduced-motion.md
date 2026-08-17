@@ -1,8 +1,8 @@
 ---
 title: CSP and reduced-motion per engine
 summary: The two cross-cutting, gate-relevant concerns — a ship-safe Content-Security-Policy recipe for each motion engine under Astro 6 hash-based meta CSP (script loading and runtime style writes), and the prefers-reduced-motion recipe for each engine tied to the perf-ci-gates 0.95 accessibility floor.
-last_updated: 2026-06-17
-applies_to: astro@6.4.7 security.csp, @astrojs/cloudflare@13.7.0, gsap@3.15.0, motion@12.40.0
+last_updated: 2026-08-17
+applies_to: astro@7.2.2 security.csp, @astrojs/cloudflare@14.2.1, gsap@3.15.0, motion@13.1.0
 ---
 
 # CSP and reduced-motion per engine

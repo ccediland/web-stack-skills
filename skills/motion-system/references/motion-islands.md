@@ -1,8 +1,8 @@
 ---
 title: Motion inside React islands
 summary: When and how to use Motion (formerly framer-motion) only inside a React island that already exists — Mini useAnimate versus full motion/react, verified weights, WAAPI and auto-cleanup, island hydration, and when to prefer it over GSAP.
-last_updated: 2026-06-17
-applies_to: motion@12.40.0, import motion/react and motion/react-mini, astro@6.4.7
+last_updated: 2026-08-17
+applies_to: motion@13.1.0, import motion/react and motion/react-mini, astro@7.2.2
 ---
 
 # Motion inside React islands
@@ -20,7 +20,7 @@ applies_to: motion@12.40.0, import motion/react and motion/react-mini, astro@6.4
 - Limitations
 
 ## The rename
-framer-motion was renamed to Motion. The package is now motion and the React import path is motion/react instead of framer-motion; the API is the same. framer-motion still publishes as an alias but motion is canonical. Current pin motion@12.40.0.
+framer-motion was renamed to Motion. The package is now motion and the React import path is motion/react instead of framer-motion; the API is the same. framer-motion still publishes as an alias but motion is canonical. Current pin motion@13.1.0. The v13 major carries a single breaking change — the optional @emotion/is-prop-valid integration was removed in favour of an explicit MotionConfig isValidProp — which only affects styled-components and Emotion users, none of this stack. 13.x also graduates animateView (the View Transitions API helper) from Motion+ into the main library.
 
 ## Mini versus full and weights
 Verified gzipped sizes from motion.dev: Mini useAnimate about 2.3 KB (the smallest React animation path, WAAPI-based); the full animate function about 18 KB (timeline sequencing, independent transforms); the full motion component about 34 KB, reducible to about 4.6 KB initial render via LazyMotion plus the m component. For island-local imperative work, Mini at 2.3 KB is dramatically lighter than pulling in GSAP plus ScrollTrigger at about 45 KB.

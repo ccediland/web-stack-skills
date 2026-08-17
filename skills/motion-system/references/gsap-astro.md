@@ -1,8 +1,8 @@
 ---
 title: GSAP plus ScrollTrigger on Astro 6
 summary: Idiomatic loading on Astro 6 plus Cloudflare — bundled script for static pages versus useGSAP inside a React island, SSR-safety, tree-shaking imports, the lazy off-critical-path pattern, verified bundle weight, and what ScrollTrigger pin and scrub do.
-last_updated: 2026-06-17
-applies_to: gsap@3.15.0, @gsap/react@2.1.2, astro@6.4.7, @astrojs/cloudflare@13.7.0
+last_updated: 2026-08-17
+applies_to: gsap@3.15.0, @gsap/react@2.1.2, astro@7.2.2, @astrojs/cloudflare@14.2.1
 ---
 
 # GSAP plus ScrollTrigger on Astro 6

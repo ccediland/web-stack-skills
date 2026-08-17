@@ -1,7 +1,7 @@
 ---
 title: CSS scroll-driven animations
 summary: The native zero-JS default for reveals and parallax — scroll() and view() timelines, the @supports progressive-enhancement fallback, the Firefox flag and duration quirk, and the precise capability and limit list.
-last_updated: 2026-06-17
+last_updated: 2026-08-17
 applies_to: animation-timeline scroll() and view(), Chrome and Edge 115 plus, Safari 26 plus, Firefox behind flag
 ---
 
@@ -21,7 +21,7 @@ applies_to: animation-timeline scroll() and view(), Chrome and Edge 115 plus, Sa
 
 ## Browser support and Baseline status
 
-As of June 2026: Chrome and Edge 115 plus (shipped 2023), Safari 26 plus (added in 26.0), Firefox implemented but behind the layout.css.scroll-driven-animations.enabled flag in stable (default only in Nightly). caniuse reports about 83 percent global usage and the feature is NOT Baseline, because it does not work unflagged in one widely used browser. This is fine for cosmetic enhancement with a clean fallback, not for content whose readability depends on the animation.
+As of August 2026: Chrome and Edge 115 plus (shipped 2023), Safari 26 plus (added in 26.0, iOS included), Firefox implemented but behind the layout.css.scroll-driven-animations.enabled flag in stable (default-on in Nightly 156 — watch stable shipping around Firefox 156, ~Oct 2026). caniuse reports about 85 percent global usage and the feature is NOT Baseline, because it does not work unflagged in one widely used browser. This is fine for cosmetic enhancement with a clean fallback, not for content whose readability depends on the animation.
 
 Distinguish scroll-driven from scroll-triggered. The continuous-progress animation-timeline family (this document) is broadly available. The discrete animation-trigger property (play a time-based animation once when crossing an offset) is Chrome and Edge only in mid-2026 and is not production-ready; use view() continuous reveals or IntersectionObserver or GSAP for cross-browser discrete triggers.
 

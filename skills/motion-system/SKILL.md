@@ -9,8 +9,8 @@ description: Routes web animation to the right engine on an Astro 6 plus Cloudfl
 
 ## TL;DR
 - Three engines on a native-first ladder, chosen by job-fit, never by default: CSS scroll-driven (zero JS) for reveals and parallax; GSAP plus ScrollTrigger for cinematic scrub and pinning; Motion only inside an existing React island.
-- CSS scroll-driven is production-viable but NOT Baseline (Chrome and Edge 115 plus, Safari 26 plus, Firefox behind a flag in stable). Always ship it behind an `@supports` guard with an accessible default state so unsupported browsers stay readable.
-- CSP is safe for all three engines under Astro 6 hash-based CSP, with one rule: load engine scripts as bundled Astro scripts or hydrated islands, never `is:inline`. Runtime `element.style` writes by GSAP and Motion are exempt from style-src, so no unsafe-inline is needed.
+- CSS scroll-driven is production-viable but NOT Baseline (Chrome and Edge 115 plus, Safari 26 plus, Firefox behind a flag in stable — default-on in Nightly 156, watch stable around Oct 2026; ~85 percent global support). Always ship it behind an `@supports` guard with an accessible default state so unsupported browsers stay readable.
+- CSP is safe for all three engines under Astro 7 hash-based CSP, with one rule: load engine scripts as bundled Astro scripts or hydrated islands, never `is:inline`. Runtime `element.style` writes by GSAP and Motion are exempt from style-src, so no unsafe-inline is needed.
 - prefers-reduced-motion handling is gate-relevant, not optional, because sibling skill perf-ci-gates floors accessibility at 0.95. Wire it into every engine.
 - Keep animation JS off the critical path. Budget about 45 KB gzipped for a GSAP plus ScrollTrigger page; Motion Mini is about 2.3 KB.
 

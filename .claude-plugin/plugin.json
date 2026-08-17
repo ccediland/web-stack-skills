@@ -13,6 +13,7 @@
     "./skills/motion-system",
     "./skills/webgl-atmosfera",
     "./skills/signature-anim",
-    "./skills/cms-self-edit"
+    "./skills/cms-self-edit",
+    "./skills/brand-canon-ingest"
   ]
 }

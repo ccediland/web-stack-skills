@@ -5,10 +5,10 @@ title: "web-stack-skills — v1 Sprint (Finalization + Brand Ingestion) & v2 Roa
 summary: "Mortal execution plan, re-scoped 2026-08-17 from the pre-sprint deep analysis (11 agents, adversarially verified). Seven gated phases: A cleanup/docs, B0 Astro 7 migration wave, B1 author brand-canon-ingest, B2 mechanical validation of 9 skills, C Furever reference site, D integration playbook, E ship v1. Points at RESIDENT.md for standing facts; archived at v1 ship."
 last_updated: 2026-08-17
 applies_to: "ccediland/web-stack-skills · post-8-skills · pre-v1-ship · consumes ccediland/furever-brand via brand-system-skills contract 0.6.0"
-status: "IN PROGRESS — Phase A mergeada a main (PR #1, d1591e0); Phase B0 (ola Astro 7) ejecutada y verificada — pins vigentes en RESIDENT §3, smoke scaffold verde, 1 gotcha de receta cazado (Tailwind v4 entry)."
-phase: "B1 (Author brand-canon-ingest #9) — lista para arrancar"
-home_base: "chat (claude.ai); excursions to Claude Code for B1-build, B2, C"
-next_action: "Scope de brand-canon-ingest (#9) en chat (el research ya está — reporte pre-sprint Bloques 3-4); en paralelo Carlos ratifica canon v2 furever Stage-10 (bloquea B1-build, no el scope)"
+status: "IN PROGRESS — A, B0 y B1 mergeadas a main; brand-canon-ingest (#9) autorada, validada, empaquetada y registrada (9 en plugin.json); serializador C-1 + transform cubicBezier verificados contra furever-brand real; ratificación Stage-10 del canon v2 PENDIENTE de Carlos (el gate B1→B2 queda abierto SOLO en ese punto — no bloquea B2, bloquea el arranque de C)."
+phase: "B2 (Mechanical validation de las 9) — lista para arrancar"
+home_base: "chat (claude.ai); excursions to Claude Code for B2, C"
+next_action: "B2 — quick_validate + package de las 9 · /plugin marketplace add + install en ambos scopes · triggering test (ejes CSP/backgrounds/brand — misroutes de #9 vs #1 y vs plugins brand-system) · descongelar descriptions 'Astro 6' (6 de 8) · smoke admin Sveltia 0.191.2 · tag v1.0.0-rc. En paralelo Carlos: ratificar Stage-10 (bloquea C)."
 resident: "./RESIDENT.md — canonical for all standing facts (skill verdicts, pins, decisions, state). Point, never duplicate."
 ---
 
@@ -161,6 +161,9 @@ Done-criteria (externo, pre-comprometido): release 1.0.0 taggeado · install + t
 Standing instruction: al abrir este plan en un chat fresco, leer el state block + front matter del RESIDENT, confirmar fase y next action con Carlos, ejecutar, loguear incrementalmente, y al cierre reescribir estado + session log. No reiniciar el plan.
 
 ## Session log
+### 2026-08-17 — Phase B1 ejecutada (brand-canon-ingest #9) — Claude Code
+Scope lockeado en chat → verificación de terreno contra `furever-brand` real: `run-gates.mjs` ALL-GREEN (19 PASS + 1 NOT-RUN honesto), contrato 0.6.0 @ `abcc31f`, 4 schemes × 53 roles, `tokens/web/` string-projection confirmada SD-ready, keystones/`tokens-project.mjs`/gates confirmados como artefactos del CONTRATO (templates del builder), no particulares de Furever. Cero reversiones del scope; 3 ajustes menores (orden de emisión del serializador por empate de especificidad; fila projections machine-checked R6a; veto `-fc` = G-LOGO-02). Bundle: SKILL.md + 5 refs; ambos artefactos de código con evidencia dura (serializador → 212 vars contra el repo real; `value/cubic-bezier-css` compilado en SD 5.5.1). Description 975 chars, frontera bilateral; #1 recibe la contraparte (711 chars — diferido de A3 saldado). 9ª registrada en `plugin.json`; `.skill` empaquetado fuera del repo. Ratificación Stage-10 NO registrada (el prompt no abrió con la frase-mecanismo; sigue con Carlos). Commits `4e76123` · `b19b693` · docs; detalles en RESIDENT §3/§9/§11.
+
 ### 2026-08-17 — Phase B0 ejecutada (ola Astro 7) — Claude Code
 Hecho: merge del PR #1 (Phase A → main, `d1591e0`, rama borrada). B0 completa en `claude/b0-astro7-wave` — re-pin lockstep por skill (un commit c/u; detalle y pins vigentes en RESIDENT §3), astro-shield RETIRADA y reemplazada por receta SRI sha384 custom en #2, smoke scaffold (astro 7.2.2 + adapter 14.2.1 + @tailwindcss/vite 4.3.3 + SD 5.5.1 + security.csp) compiló y verificó CSP meta / tokens / utilities / dark / Cache-Control del adapter.
 Lección de campo: `@tailwind base` es no-op SILENCIOSO en Tailwind v4 (build pasa, cero utilities) — el entry es `@import 'tailwindcss'`; corregido en astro-css-tokens y registrado en RESIDENT §8.

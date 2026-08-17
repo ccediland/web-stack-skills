@@ -61,5 +61,5 @@ Composition creates failure modes no single skill owns; these habits caught ever
 
 - This skill does NOT own any single capability — each row of the order table has an owning skill; go there for setup, config shapes, and per-tool gotchas.
 - Recipes cover archetypes as they are proven in the field; today recipe #1 (brand-heavy fixture) is the only complete one. The skeleton in `references/recipes.md` is the contract for the next ones.
-- The stack map names contact points for data, forms, i18n, media, edge logic, and analytics whose owning skills ship in later waves; until a wave ships, the map entry is the frontier, not a recipe.
+- The stack map names contact points whose owning skills ship in later waves (today: edge logic and analytics); until a wave ships, the map entry is the frontier, not a recipe. Data, forms, i18n, media, and deep a11y already have owners.
 - Nothing here is project-specific: accounts, IDs, and endpoints belong in the consuming project's own docs.

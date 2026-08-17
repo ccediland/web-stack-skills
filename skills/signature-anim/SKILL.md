@@ -37,13 +37,13 @@ dotLottie added a state machine in late 2025 with comparable WASM weight; Rive's
 
 ## Stack and versions
 
-Verified 2026-06-18 on npm; Rive web runtimes churn weekly, so re-pin at install.
+canvas and webgl2 re-verified 2026-08-17 on npm (lockstep train, published same day); the lite, single, and react rows are as of 2026-06-18 and the lite train lags. Rive web runtimes churn weekly, so re-pin everything at install.
 
 | Package | Version | Role |
 |---|---|---|
-| `@rive-app/canvas` | 2.38.1 | default, Canvas2D, no WebGL context limit |
+| `@rive-app/canvas` | 2.40.0 | default, Canvas2D, no WebGL context limit |
 | `@rive-app/canvas-lite` | 2.37.3 | no Rive Text or audio, about half the WASM |
-| `@rive-app/webgl2` | 2.38.1 | only for Rive Renderer, mesh, fidelity |
+| `@rive-app/webgl2` | 2.40.0 | only for Rive Renderer, mesh, fidelity — 2.40.0 shrank the package about 11.5 percent (Emscripten 4.0.23, -Os) |
 | `@rive-app/canvas-single` | 2.38.0 | WASM inlined in JS, no separate WASM fetch |
 | `@rive-app/react-canvas` | 4.28.0 | only if the page is already a React island |
 | `@rive-app/webgl` | legacy | avoid, superseded by webgl2 |

@@ -1,8 +1,8 @@
 ---
 title: Rive CSP and self-hosted WASM in Astro 6
 summary: The exact native Astro 6 security.csp additions to run the Rive WASM runtime under a hash-based CSP, how to self-host the WASM and the .riv so everything is same-origin, and the all-in-one variant.
-last_updated: 2026-06-18
-applies_to: astro@6.4.7, @astrojs/cloudflare@13.7.0, @rive-app/canvas@2.38.1, Node 22
+last_updated: 2026-08-17
+applies_to: astro@7.2.2, @astrojs/cloudflare@14.2.1, @rive-app/canvas@2.40.0, Node 22
 ---
 
 # Rive CSP and self-hosted WASM in Astro 6
@@ -47,7 +47,7 @@ export default defineConfig({
 });
 ```
 
-The rendered meta directive takes the form `script-src 'self' 'wasm-unsafe-eval' 'sha256-...generatedByAstro'`. The meta-delivered CSP enforces `'wasm-unsafe-eval'` identically to a real HTTP header, because it is a fetch-directive source value, not one of the directives a meta element ignores. This matters on Cloudflare Workers Static Assets, where @astrojs/cloudflare@13.7.0 has no staticHeaders support and the CSP ships as a meta element; the WASM keyword still applies. No public/_headers entry is required for the Rive CSP.
+The rendered meta directive takes the form `script-src 'self' 'wasm-unsafe-eval' 'sha256-...generatedByAstro'`. The meta-delivered CSP enforces `'wasm-unsafe-eval'` identically to a real HTTP header, because it is a fetch-directive source value, not one of the directives a meta element ignores. This matters on Cloudflare Workers Static Assets, where @astrojs/cloudflare@14.2.1 has no staticHeaders support and the CSP ships as a meta element; the WASM keyword still applies. No public/_headers entry is required for the Rive CSP.
 
 The meta element ignores only frame-ancestors, sandbox, and the reporting directives. Rive needs none of those, so there is no fallback to a real header for this skill. A real header would only be needed if you required one of those ignored directives, in which case you would make the page on-demand so the adapter emits a Content-Security-Policy header, or add the one directive via a Cloudflare rule.
 

@@ -2,7 +2,7 @@
 
 Claude Code skills for building **premium, high-performance websites** on a best-of-all-worlds stack:
 
-**Astro 6** · **Cloudflare Workers Static Assets** · **Tailwind v4 + design tokens** · **GSAP / CSS scroll-driven / Motion** · **raw WebGL2** · **Rive** · **schema-dts / AEO** · **native CSP** · **Lighthouse CI / Biome**
+**Astro 7** · **Cloudflare Workers Static Assets** · **Tailwind v4 + design tokens** · **GSAP / CSS scroll-driven / Motion** · **raw WebGL2** · **Rive** · **schema-dts / AEO** · **native CSP** · **Lighthouse CI / Biome**
 
 Each skill encodes a vetted verdict, current version pins, a generic recipe, and the gotchas — so you can stand up the same architecture on any project without rediscovering the sharp edges.
 
@@ -39,7 +39,7 @@ Skills install at personal or project scope. There is no auto-update yet — re-
 
 ## Status
 
-All 9 skills are authored and registered — the stack runs on Astro 7 and the brand-ingestion skill (`brand-canon-ingest`) is in. The v1 sprint in progress (see `v1-finalization-plan.md`) now validates the bundle mechanically and against a live reference site. The `stack-integration-playbook` under `deferred/` is a skeleton, intentionally excluded from the installable plugin until it has field substance.
+All 9 skills are authored and registered — the stack runs on Astro 7 and the brand-ingestion skill (`brand-canon-ingest`) is in. The roadmap in progress (see `execution-plan.md`) validates the bundle mechanically, exercises it against a permanent integration fixture, and then builds out the full capability catalog toward v2.0.0. The `stack-integration-playbook` under `deferred/` is a skeleton, intentionally excluded from the installable plugin until it has field substance.
 
 ## License
 

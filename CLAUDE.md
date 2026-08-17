@@ -17,7 +17,7 @@ Marketplace de plugins de Claude Code (público, MIT): un plugin `web-stack` que
       references/*.md           configs, plantillas, gotchas (progressive disclosure)
     deferred/                   skills sin sustancia aún — FUERA del plugin (exclusión estructural)
     RESIDENT.md                 doc vivo canónico (leer primero)
-    v1-finalization-plan.md     plan mortal del sprint en curso (se archiva al ship)
+    execution-plan.md           plan mortal del roadmap en curso (full catalog v1.0.0→v2.0.0; se archiva al ship de v2)
     README.md · LICENSE
 
 ## Comandos

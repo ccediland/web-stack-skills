@@ -38,17 +38,17 @@ Node floor note: Node 20 support ended at Astro 6.1.0 (not at Astro 7); the effe
 
 ## Global stylesheet (src/styles/global.css)
 
-Import order matters. Tailwind must see `theme.css` before processing utilities.
+The file must START with the Tailwind v4 entry `@import 'tailwindcss'` — that is what makes it a Tailwind root. The v3 directives (`@tailwind base` and friends) no longer exist in v4; with them, the build still SUCCEEDS but Tailwind never runs, no utility is generated, and the literal `@tailwind` line ships to the browser (verified on a real Astro 7 build, 2026-08-17 — the failure is silent). Tailwind collects `@theme` blocks from the whole import graph, so `theme.css` can come after the entry.
 
 ```css
-/* 1. Design tokens — source of truth */
+/* 1. Tailwind v4 entry — makes this file a Tailwind root */
+@import 'tailwindcss';
+
+/* 2. Design tokens — source of truth */
 @import './tokens.css';
 
-/* 2. Tailwind @theme inline bridge */
+/* 3. Tailwind @theme inline bridge */
 @import './theme.css';
-
-/* 3. Tailwind base styles */
-@tailwind base;
 
 /* 4. Dark mode variant */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));

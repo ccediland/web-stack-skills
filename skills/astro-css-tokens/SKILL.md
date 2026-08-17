@@ -93,6 +93,7 @@ Add a `@custom-variant dark` declaration and a `[data-theme="dark"]` block that 
 - Alias refs must point to leaf tokens, not to a group node.
 - Keep `$value` a plain string. Dimension objects ({value, unit}) compile correctly since SD 5.4.0 (#1398 closed), but typography composites still split into sub-vars (#1494 open) — plain strings sidestep the whole class.
 - Import `tokens.css` and `theme.css` exactly once in the entry stylesheet. Duplicate imports produce duplicate var declarations.
+- The entry stylesheet must START with the Tailwind v4 entry (`@import 'tailwindcss'`). The v3 `@tailwind` directives no longer exist — with them the build still succeeds but no utility is ever generated (silent failure, verified on Astro 7).
 - Astro 6 only: `@tailwindcss/vite` could crash when npm hoisted Vite 8 next to Astro 6 (#16542, closed — root cause was tailwindlabs/tailwindcss#19802 plus npm hoisting, NOT rolldown-vite inside Astro). On Astro 7 the plugin is the official path. See `references/astro-tailwind-wiring.md` for the Astro 6 fallback.
 
 ## Limitations

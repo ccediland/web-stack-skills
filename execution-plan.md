@@ -5,10 +5,10 @@ title: "web-stack-skills — Full Catalog Roadmap (v1.0.0 → v2.0.0)"
 summary: "Mortal execution plan, re-scoped 2026-08-18 by owner directive: the full backlog is BUILT, not declared — pull-by-project retired as a deliberate deviation; Lego survives at composition time. Furever is a permanent integration fixture (temp Workers deploys at gates, never a final build). Sequence: B2 validation → C fixture → D playbook (ship 1.0.0) → W1–W4 capability waves (1.1–1.4) → W5 client layer (2.0.0). Points at RESIDENT.md for standing facts; archived at v2 ship."
 last_updated: 2026-08-18
 applies_to: "ccediland/web-stack-skills · post-B1 (9 skills authored, Astro 7 baseline) · consumes ccediland/furever-brand as test fixture (contract 0.6.0)"
-status: "IN PROGRESS — Phase C EXECUTED: fixture live on furever-web@claude/c-fixture (repo pre-existed with live production on main — fixture stays on its branch FOREVER, never merged), 8 skills composed, ingest vendorized @ b0a5332 (ALL-GREEN precondition), both CI gates green, native branch-preview deploy verified live, projections row R6a PASS, 20 lessons in RESIDENT §8, 3 recipe fixes applied."
-phase: "D (stack-integration-playbook v1 → ship v1.0.0) — ready to start"
+status: "IN PROGRESS — Phase D EXECUTED and v1.0.0 SHIPPED: stack-integration-playbook promoted as 10th skill (canonical order + 9 seams + stack map + recipe #1), validate 10/10, triggering 16/16 blind-judged, tag v1.0.0 + GitHub Release. W1 Run A EXECUTED: decision sheet delivered to chat (data-layer forks with leans; forms-lead-system verdict = RECIPE; fixture-extension sketch)."
+phase: "W1 (data & captura) — Run A delivered, AWAITING CHAT LOCK of forks → then Run B (build → v1.1.0)"
 home_base: "chat (claude.ai) for adjudication only; all execution and analysis in Claude Code (Fable 5)"
-next_action: "Code: Phase D — promote stack-integration-playbook from deferred/ using the C lessons (RESIDENT §8 fixture block + furever-web fixture-domain recipe), register, validate, triggering vs the 9; then ship v1.0.0 (bump, tag, README)"
+next_action: "Chat: lock the W1 forks from the Run A decision sheet (data-layer defaults + forms recipe-vs-skill). Then Code: W1 Run B — build data-layer skill + forms fat recipe in the playbook, extend the fixture (synthetic catalog + test form), triggering vs the 10, ship v1.1.0"
 resident: "./RESIDENT.md — canonical for all standing facts (skill verdicts, pins, decisions, state). Point, never duplicate."
 ---
 
@@ -124,20 +124,25 @@ Ciclos de toque ~12–18 meses (majors Astro, adapter). Cada release de ola re-v
 
 ## Open questions / forks
 - Acceso del sitio al repo de marca — RESUELTO en C: vendorización en ingest-time (lock de chat, sostuvo contra la evidencia; CI standalone).
-- forms-lead-system: skill vs pick+recipe — Run A de W1.
+- forms-lead-system: skill vs pick+recipe — Run A entregó veredicto RECIPE (una sola ruta nativa dominante: Astro Action + Turnstile + Supabase insert-only RLS + Resend; flip conditions: uploads/multi-step, ingesta Twenty in-scope, Cloudflare Email Service supera a Resend, o mixed-rendering frágil en Workers Builds). PENDIENTE lock de chat.
+- Forks de data-layer (Run A, pendientes de lock): tier default de lectura (lean: custom loader build-time sobre el schema del contrato; `file()` sobre el seed = tier cero; client-side Supabase solo escalación justificada; live collections FUERA del default — cambian el deploy shape) · trigger de rebuild (lean: Supabase Database Webhook → Workers Builds Deploy Hook directo, sin hop de Actions) · typing (lean: un zod schema como artefacto de contrato vía astro/zod; tipos generados de Supabase solo cross-check) · llaves (lean: sb_publishable_ desde día uno; legacy anon muere fin 2026).
 - Veredictos de hogar de W4 — Run A de W4 (leans arriba).
 - Nombre final de client-discovery — Run A de W5.
 - Subdominio de prueba — RESUELTO en C: preview nativo de rama en workers.dev (alias estable por rama, sin auth local).
 - Resueltos (2026-08-18): catálogo completo se construye (owner) · Furever = fixture permanente, deploys temporales, sin go-live · ratificación Stage-10 = gobernanza post-sprint, fuera del plan.
 
 ## Next actions
-1. Chat: emitir el prompt de Phase C (fixture Furever en `furever-web`); adjudicar ahí el fork de acceso al repo de marca y el subdominio de deploy temporal si Code lo escala.
-2. Code (Phase C): componer el subconjunto del fixture, ejercitar los seams, CI gates, deploy temporal Workers → reporte destilado al chat.
+1. Chat: lockear los forks de W1 desde la decision sheet del Run A (data-layer: tier de lectura, trigger de rebuild, typing, llaves · forms: ratificar RECIPE).
+2. Code (W1 Run B): construir `data-layer` + la recipe gorda de forms en el playbook; extender el fixture (catálogo sintético vía loader + form de contacto de prueba); validate + triggering vs las 10; expandir el playbook; tag v1.1.0.
 
 ## Resume
 Standing instruction: en chat fresco — leer state block + RESIDENT (front matter, §3, §8, §9, §10), confirmar fase y next action con Carlos, ejecutar, loguear incrementalmente, cerrar con estado + session log + hand-off. No reiniciar el plan.
 
 ## Session log
+### 2026-08-17 — Phase D ejecutada (playbook → SHIP v1.0.0) + W1 Run A — Claude Code
+D en cadencia comprimida (research = lecciones de C, cero re-derivación): playbook promovido vía `git mv` con historia, autorado (SKILL.md orden canónico como cadena de dependencias; refs seams/mapa/recipes), registrado 10º, validate 10/10, triggering 16/16 con 4 jueces ciegos sobre 12 descriptions (4 composición → playbook CLEAR; ambiguo → NONE sano), manifiestos 1.0.0, README v1 (fix: brand-canon-ingest faltaba en la tabla), merge + tag `v1.0.0` + GitHub Release. W1 Run A (solo análisis): 2 agentes de research con fuentes primarias + verificador adversarial sobre claims load-bearing; decision sheet destilada al chat. Hallazgos que cambian el terreno: Workers Builds YA tiene Deploy Hooks (2026-04) — el camino nativo de rebuild es webhook de Supabase → hook directo; live collections estables pero fuerzan on-demand (frontera dura del deploy shape); Astro Actions estables con RPC desde páginas prerendered (solo el endpoint es server) — el "sitio full-estático + un endpoint de forms" es first-class; `@astrojs/db` muerta (removida en Astro 7); Supabase migró a `sb_publishable_`/`sb_secret_`.
+Siguiente: chat lockea forks de W1 → Run B.
+
 ### 2026-08-17 — Phase C ejecutada (fixture Furever) — Claude Code
 Deviations del lock con evidencia: repo YA existía (producción viva en main) → fixture en rama `claude/c-fixture`, NUNCA merge; deploy temporal = preview nativo de rama de Workers Builds (workers.dev, sin wrangler auth local). Compuesto: 8 skills (webgl por evidencia — cero `.riv` + ALGO-ATMOSPHERE-COMPOSE). Seams ejercitados de verdad: 84 violaciones CSP por style-attrs → clases → 0; COOP duplicado en `/admin/` cazado EN VIVO → detach `!`; hash manual single-sourced del no-flash; dist/server vacío → assets-only; #16692 no dispara (verificado vivo); GSAP pin + Sveltia + dark switch + data-pointer OK. Gates CI verdes; projections R6a PASS (`furever-brand@5d99526`); preview `claude-c-fixture-furever-web.carlos-872.workers.dev`. 20 lecciones (RESIDENT §8) + 3 fixes de recetas (78b92e5). Resueltos ambos forks abiertos: acceso = vendorización ingest-time (lock sostuvo); subdominio = workers.dev nativo.
 

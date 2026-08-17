@@ -39,7 +39,7 @@ Skills install at personal or project scope. There is no auto-update yet — re-
 
 ## Status
 
-All 9 skills are authored and registered — the stack runs on Astro 7 and the brand-ingestion skill (`brand-canon-ingest`) is in. The v1 sprint in progress (see `v1-finalization-plan.md`) now validates the bundle mechanically and against a live reference site. The `stack-integration-playbook` under `deferred/` is a skeleton, intentionally excluded from the installable plugin until it has field substance.
+All 9 skills are authored and registered — the stack runs on Astro 7 and the brand-ingestion skill (`brand-canon-ingest`) is in. The roadmap in progress (see `execution-plan.md`) validates the bundle mechanically, exercises it against a permanent integration fixture, and then builds out the full capability catalog toward v2.0.0. The `stack-integration-playbook` under `deferred/` is a skeleton, intentionally excluded from the installable plugin until it has field substance.
 
 ## License
 

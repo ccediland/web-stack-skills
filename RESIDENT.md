@@ -7,7 +7,7 @@ status: Sprint v1 en curso. Phases A y B0 mergeadas a main (`d1591e0`, `ff6552f`
 
 # web-stack-skills — RESIDENT
 
-Documento vivo y **home base** del proyecto: fuente de verdad única de hechos durables. Contiene qué es, el stack, las skills y sus verdictos, la cadencia de autoría, las reglas operativas, las decisiones, los descubrimientos del proceso, el estado y el log de sesiones. Quien lo lea queda al día para continuar. (El plan mortal del sprint en curso vive en `v1-finalization-plan.md`; cita este doc, nunca lo duplica.)
+Documento vivo y **home base** del proyecto: fuente de verdad única de hechos durables. Contiene qué es, el stack, las skills y sus verdictos, la cadencia de autoría, las reglas operativas, las decisiones, los descubrimientos del proceso, el estado y el log de sesiones. Quien lo lea queda al día para continuar. (El plan mortal del roadmap en curso vive en `execution-plan.md`; cita este doc, nunca lo duplica.)
 
 ## 1. Qué es
 
@@ -84,7 +84,7 @@ Gotchas y outline detallados — en cada `skills/<nombre>/SKILL.md`.
       cms-self-edit/SKILL.md
     deferred/
       stack-integration-playbook/SKILL.md   (excluido del plugin)
-    README.md  LICENSE  RESIDENT.md  CLAUDE.md  v1-finalization-plan.md
+    README.md  LICENSE  RESIDENT.md  CLAUDE.md  execution-plan.md
 
 Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) **y** registradas en `plugin.json`. La diferida vive en `deferred/` = imposible de shippear hasta tener sustancia.
 
@@ -165,13 +165,13 @@ Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) *
 
 ## 10. Roadmap
 
-### v1 (H1) — sprint en curso
-Fase 0 + skills #1–#8: HECHAS. El sprint corre por `v1-finalization-plan.md` (doc mortal): A cleanup/docs → B0 migración Astro 7 (pins objetivo en §3) → B1 `brand-canon-ingest` (#9) → B2 validación mecánica de las 9 → C sitio Furever (integration test real) → D `stack-integration-playbook` (promover de `deferred/`) → E ship 1.0.0. Decisiones adjudicadas 2026-08-17: migrar antes de validar; ingestión de marca = skill nueva; sitio de referencia = Furever.
+### Roadmap en curso (full catalog — `execution-plan.md`)
+Fase 0 + skills #1–#9: HECHAS. El roadmap corre por `execution-plan.md` (doc mortal, re-scope 2026-08-18 a catálogo completo): B2 validación mecánica → C fixture Furever → D playbook (ship 1.0.0) → olas W1–W4 (backlog completo, minor por ola) → W5 capa cliente (v2.0.0). Decisiones adjudicadas 2026-08-17/18: migrar antes de validar; ingestión de marca = skill nueva; Furever = fixture permanente (deploys temporales, jamás go-live); pull-by-project retirado (desviación deliberada del owner — Lego sobrevive en composición).
 
 ### Principio Lego (regla permanente del catálogo)
 El bundle es un catálogo, no un sistema fijo. Cada sitio compone solo el SUBCONJUNTO que su brief necesita; ningún sitio lleva todas las skills; la capa visual entra UNA vez, cuando el brief la justifica, nunca por default. Una skill nueva amplía el alcance del catálogo, no el payload de cada sitio.
 
-### v2 (H2) — backlog Lego (jalado por proyectos reales, no por brainstorm)
+### Backlog (asignado a olas W1–W5 en `execution-plan.md`; pull-by-project RETIRADO por el owner 2026-08-18 — la tabla conserva los build-triggers como contexto histórico)
 Prioridad comprometida: **`client-discovery`** (intake/descubrimiento del cliente) — único ítem v2 especificado. Job: convertir lo que el cliente dé, en el formato que sea (escrito / dibujo / export design-tool), en un brief estructurado y validado contra el stack, + registro de lo diferido a Carlos. 4 fases: intake (banco de preguntas/plantillas) → captura por formato (escrito→requisitos; dibujo→requisitos+handoff visual; export→pipeline de tokens) → factibilidad (corre contra la matriz del playbook; veredicto por ítem, límites, delta brief↔deploy) → deferral (separa estético vs funcional/UX; registra como decisión de Carlos con contexto). Fronteras: captura intención, NO renderiza ni diseña; la factibilidad vive en el playbook (referencia, no duplica); diferidos se registran. Depende de Phase D (playbook); gate de arranque: v1 shipped. Nombre final al autorarla.
 
 | Skill candidata | Tier | Build-trigger |

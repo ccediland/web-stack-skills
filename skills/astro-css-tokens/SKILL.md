@@ -1,6 +1,6 @@
 ---
 name: astro-css-tokens
-description: Use when wiring a design-token pipeline into an Astro site styled with Tailwind v4 — a single tokens.json in DTCG format compiled by Style Dictionary into two consumers, flat CSS variables plus a Tailwind @theme block, so tokens survive a framework swap with no lock-in. Trigger on requests to set up design tokens, theme an Astro and Tailwind v4 project, generate CSS variables from a token source, or establish base and semantic and component token layers. Not for component-level styling decisions, palette design, or non-Astro stacks.
+description: Use when wiring a design-token pipeline into an Astro site styled with Tailwind v4 — a single tokens.json in DTCG format compiled by Style Dictionary into two consumers, flat CSS variables plus a Tailwind @theme block, so tokens survive a framework swap with no lock-in. Trigger on requests to set up design tokens, theme an Astro and Tailwind v4 project, generate CSS variables from a token source, or establish base and semantic and component token layers. Not for component-level styling decisions, palette design, or non-Astro stacks; when the token source is a brand repo emitted by the brand-canon builder, use brand-canon-ingest — it layers the brand's schemes, assets, and voice on top of this pipeline.
 ---
 
 # astro-css-tokens

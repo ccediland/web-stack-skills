@@ -23,6 +23,7 @@
     "./skills/edge-logic",
     "./skills/auth-simple",
     "./skills/visual-regression-ci",
-    "./skills/conversion-patterns"
+    "./skills/conversion-patterns",
+    "./skills/client-discovery"
   ]
 }

@@ -46,9 +46,9 @@ Depth: `perf-ci-gates` owns the workflow shape.
 - Workers Builds is the deploy pipeline: git push → `build.command` from `wrangler.jsonc` → `versions upload`. Branch pushes yield stable per-branch preview aliases on workers.dev (the native temporary deploy — no local wrangler auth); production moves only on an explicit `versions deploy`.
 - `public/_headers` carries the static-response header set (web-security-headers owns it); the adapter emits the assets manifest and immutable caching for hashed assets.
 - DNS, redirects (www → apex), and the workers.dev/custom-domain split are Cloudflare-zone concerns outside the repo; the repo only assumes a stable canonical host for `site`.
-- Edge logic beyond serving (A/B, geo, feature flags) is deliberately absent until its wave ships.
+- Edge logic beyond serving (A/B, geo, feature flags, redirects) has an owner: the `edge-logic` skill — including why Astro middleware cannot intercept prerendered pages and what `run_worker_first` costs.
 
-Depth: seam 9 in the seams reference; `edge-logic` (W3) will own Workers logic.
+Depth: seam 9 in the seams reference; `edge-logic` owns Workers logic.
 
 ## Secrets — Infisical
 
@@ -69,7 +69,7 @@ These stack functions touch the site but have no shipped skill yet; the map mark
 |---|---|---|
 | Lead capture / forms | Astro Action on the site's Worker + Turnstile + insert-only storage + notification | RESOLVED — `forms-lead-recipe.md` in this skill (W1) |
 | Transactional email | Owner notification via Cloudflare Email Service (verified destination, free); Resend when arbitrary recipients at $0 | `forms-lead-recipe.md` email slot (W1) |
-| Analytics / measurement | Script + CSP `connect-src` + event schema (stack canon Cloudflare Web Analytics / PostHog) | `analytics-measurement` (W3) |
+| Analytics / measurement | Env-gated script + CSP origins + event vocabulary + server-side conversion event from the Action | RESOLVED — `analytics-recipe.md` in this skill (W3); canon corrected — Umami is the events default, CF WA is the ambient RUM layer |
 | CRM handoff | Lead rows in Supabase are the system of record; a later job syncs to the CRM — the site never talks to the CRM directly | frontier (a forms flip condition) |
 | Payments | Off-site or embedded checkout; heavy CSP surface; per-project (Stripe / Mercado Pago) | unassigned — per-project decision |
 | WhatsApp / phone comms | Deep links from CTAs, logged as lead events | `forms-lead-recipe.md` knob (W1) |

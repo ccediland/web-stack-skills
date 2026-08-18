@@ -2,16 +2,16 @@
 title: web-stack-skills — RESIDENT (working doc / home base)
 updated: 2026-08-18
 repo: ccediland/web-stack-skills (público, MIT)
-status: Roadmap full-catalog en curso (`execution-plan.md`). Phases A/B0/B1/B2/C/D + W1–W3 mergeadas; v1.0.0–v1.3.0 shipped. W4 Run B EJECUTADA — lock del triage tal cual (conversion-patterns SOBREVIVIÓ su gate de sustancia): 3 skills delgadas #16–#18 + 4 absorciones versionadas + 2 recipes del playbook = BACKLOG DE CAPACIDAD COMPLETO (18 skills, validate 18/18), fixture con CUARTA puerta visual (baselines CI-generadas, determinismo por reduced-motion), view-transition morph, pase de conversión aplicado, página de aviso del template legal, auth stub honesto; triggering 31/32 + fix re-testeado, SHIP v1.4.0. W5 Run A EJECUTADA (decision sheet de la capa cliente al chat). Fixture: rama `claude/c-fixture` de `furever-web` JAMÁS se mergea a su main = producción. SIGUIENTE = chat lockea forks de W5 → Run B (v2.0.0, cierre).
+status: CATÁLOGO COMPLETO — v2.0.0 shipped 2026-08-18, roadmap full-catalog CERRADO y archivado (`archive/execution-plan-2026-08.md`). 19 skills (capacidad completa + capa cliente) + playbook con recipes de capacidad Y arquetipo; plugin reestructurado a `plugin/` (payload limpio); política de versionado en CLAUDE.md; MODO MANTENIMIENTO — el trabajo futuro corre por el calendario de drift (§12) y burns de skills nuevas contra el fixture permanente (`furever-web` rama `claude/c-fixture`, que JAMÁS se mergea a su main = producción). Triggering final 32/32 sobre superficie de 21.
 ---
 
 # web-stack-skills — RESIDENT
 
-Documento vivo y **home base** del proyecto: fuente de verdad única de hechos durables. Contiene qué es, el stack, las skills y sus verdictos, la cadencia de autoría, las reglas operativas, las decisiones, los descubrimientos del proceso, el estado y el log de sesiones. Quien lo lea queda al día para continuar. (El plan mortal del roadmap en curso vive en `execution-plan.md`; cita este doc, nunca lo duplica.)
+Documento vivo y **home base** del proyecto: fuente de verdad única de hechos durables. Contiene qué es, el stack, las skills y sus verdictos, la cadencia de autoría, las reglas operativas, las decisiones, los descubrimientos del proceso, el estado y el log de sesiones. Quien lo lea queda al día para continuar. (El roadmap full-catalog que construyó el catálogo está CERRADO — su plan mortal vive archivado en `archive/execution-plan-2026-08.md`; este RESIDENT es la única fuente viva.)
 
 ## 1. Qué es
 
-Un **marketplace de plugins de Claude Code**, público y genérico (MIT), que entrega **18 skills** que codifican un stack web premium de alto rendimiento ("lo mejor de todos los mundos"): 17 de capacidad + `stack-integration-playbook`, la autoridad de composición (promovida en D; porta también las recipes de capacidad: forms, analytics, prefetching/speculation y el template legal). Con W4 el backlog de capacidad está COMPLETO; falta solo la capa cliente (W5 → v2.0.0). Reusable en cualquier proyecto: un proyecto origen fue el primer consumidor, **no** el alcance. Cero contenido específico de proyecto, cero marca, cero secretos.
+Un **marketplace de plugins de Claude Code**, público y genérico (MIT), que entrega **19 skills** que codifican un stack web premium de alto rendimiento ("lo mejor de todos los mundos"): 17 de capacidad + `client-discovery` (la capa cliente: del material del cliente al brief con veredictos de factibilidad) + `stack-integration-playbook`, la autoridad de composición (porta las recipes de capacidad — forms, analytics, prefetching/speculation, template legal — y las de ARQUETIPO: brand-heavy PROVEN, lead-gen landing, catalog+self-edit, editorial/story, más la frontera client-portal). Con v2.0.0 el catálogo está COMPLETO y en modo mantenimiento (§12). Reusable en cualquier proyecto: un proyecto origen fue el primer consumidor, **no** el alcance. Cero contenido específico de proyecto, cero marca, cero secretos.
 
 Meta: parándote en cualquier proyecto nuevo, levantar la misma arquitectura sin volver a descubrir los filos.
 
@@ -19,9 +19,9 @@ Meta: parándote en cualquier proyecto nuevo, levantar la misma arquitectura sin
 
 Astro 7 · Cloudflare Workers Static Assets · Tailwind v4 + Style Dictionary · GSAP + CSS scroll-driven + Motion · OGL · Rive · schema-dts + @astrojs/sitemap + llms.txt · CSP nativo · Lighthouse CI + Biome.
 
-## 3. Las 18 skills
+## 3. Las 19 skills
 
-Orden = fundación → visuales → contenido/marca → data → alcance → edge → calidad/growth → composición. El seed completo de cada una (veredicto, pins, gotchas, outline) vive en su `SKILL.md`; aquí va el resumen.
+Orden = fundación → visuales → contenido/marca → data → alcance → edge → calidad/growth → cliente → composición. El seed completo de cada una (veredicto, pins, gotchas, outline) vive en su `SKILL.md`; aquí va el resumen.
 
 | # | Skill | Capa | Veredicto (una línea) |
 |---|---|---|---|
@@ -57,6 +57,11 @@ Orden = fundación → visuales → contenido/marca → data → alcance → edg
 - **Absorciones W4 (extensiones versionadas):** motion-system ganó **view transitions** (ref nueva: escalera animateView/raw same-doc [Baseline 2025-10-14] → ClientRouter para navegación [la ÚNICA runa con reduced-motion y announcer automáticos] → cross-doc nativo solo enhancement [NOT Baseline, cero Firefox, cero a11y built-in]) y **hover micro-interactions** (CSS puro, hover:hover, tokens de duración; description 1020→1009 con los ejes nuevos) · cms-self-edit ganó **content modeling** (ref: schema-first con espejo config.yml, frontera documents-vs-rows con data-layer, disciplina de drift; description 964→990) · astro-css-tokens ganó **component conventions** (ref: clases-no-style-attrs bajo CSP hash, superficies de estilo rankeadas, variants por data-attributes, ceguera de scheme, checklist de review; description 750→888, exclusión "component-level styling" retirada) · signature-anim: frontera Lottie ACTUALIZADA (dotLottie v2 con state machines nativas SIN paridad Rive; lottie-web estancado; **Rive exports a Cadet $9/seat desde 2025-10-20, runtime sigue MIT**; description 1016→1018 reclamando la decisión Rive-vs-dotLottie tras el gap cazado por juez ciego).
 - **Recipes W4 (playbook):** `speculation-recipe.md` (default = astro:prefetch estable; escalación = Speculation Rules manuales INSEPARABLES del guard `document.prerendering` × analytics; `experimental.clientPrerender` NO se enseña [experimental en 7.2.2]; Speed Brain inaplicable — "will not prefetch on routes that run Workers" verbatim) · `legal-recipe.md` (template del aviso PLANTILLA-NO-ASESORÍA bajo el marco 2025 verificado contra el decreto DOF: finalidades exhaustivas sin "entre otros", decisiones automatizadas/AI, retención; reglamento nuevo AUSENTE con 2011/2013 supletorios; sin banner MX — "cookieless elimina el banner, no el aviso"; review-gate = reforma en Congreso ~sept-2026). Description del playbook 1018 con los ejes prefetch/legal y la cola de redirects comprimida (18 hermanas ya no caben nominales — quedan las 4 colisionables).
 
+**Skill #19 + recipes de arquetipo — la ola W5 "capa cliente" (COMPLETAS — autoradas en W5 Run B bajo los locks de la decision sheet; cierre del roadmap):**
+
+- **`client-discovery` (#19):** la capa cliente — de lo que el cliente dé (conversación, doc, boceto, export de design-tool) a un brief estructurado con veredicto de factibilidad POR ÍTEM y un registro de deferrals que el owner decide. **Veredicto:** 4 fases — intake HÍBRIDO conversacional-primero (el banco de preguntas por 6 dominios es estructura de COBERTURA, no guion; cada pregunta nombra la skill que consume su respuesta; regla STOP de 4 respuestas; form exportable es-MX para clientes async) → captura por formato (escrito→requisitos; boceto→requisitos estructurales + handoff visual a Claude Design, JAMÁS renderiza; export de tokens→pipeline de tokens; el export nunca es contrato pixel-match) → factibilidad POR REFERENCIA al playbook (los HECHOS viven allá; esta skill aporta el vocabulario cerrado de veredictos: feasible-as-is con dueña nombrada / feasible-with-flip con costo explícito / deferred con condición de revisita / out-of-scope con dirección) → registro de deferrals EN EL REPO DEL SITIO (patrón projections: el catálogo emite el schema, el proyecto guarda el estado; tipo estético-vs-funcional nombra la disciplina que la ausencia toca). Fronteras bilaterales: Claude Design (captura ≠ render), brand-canon-scoper (brief de sitio ≠ brief de marca), playbook (el brief es el último artefacto de esta skill; la primera pasada de composición es del playbook). Burn RETROACTIVO real: el material de Furever (brief de experiencia Fase A + repo de marca) corrido por las 4 fases → worked example sanitizado en la skill (los 2 items de portal salieron out-of-scope con dirección a la frontera — el instrumento funciona). Bundle: SKILL.md + 4 refs (question-bank, brief-schema, intake-form, worked-example). Description 1018.
+- **Recipes de arquetipo (W5, playbook):** contrato del skeleton EVOLUCIONADO con dos estatus honestos — PROVEN (build completo del arquetipo con gates verdes) y DERIVED (cada ingrediente probado en campo, el conjunto espera su primer build dedicado; el mapa de evidencia por ingrediente y la lista de NO-confirmado son parte de la recipe). Set final: #1 brand-heavy (PROVEN, el fixture — actualizada a las 5 olas y 4 puertas) · lead-gen landing (DERIVED; conversion-patterns como diferenciador, A/B de edge-logic como motor de iteración) · catalog+self-edit (DERIVED; la decisión rows-vs-documents por tipo de contenido es el paso 1) · editorial/story (DERIVED; content modeling antes de páginas, escalera completa de motion incl. VT, a11y sobre el piso). PODADA con evidencia: consultoría-AI (cero skills exclusivas — un énfasis AEO no es recipe). FRONTERA documentada, no recipe: client-portal (cuentas de cliente con datos por usuario = el deploy shape cambia de clase; veredicto out-of-scope CON dirección; si recurre, justifica su propia ola).
+
 - **`a11y-deep` (#14):** disciplina WCAG 2.2 AA en TRES capas donde la automatizada es la MENOR. **Veredicto:** (1) job axe en CI vía `@axe-core/playwright` 4.13.0 a ZERO violations sobre TODAS las páginas built, tags 2a/2aa/21a/21aa/22aa + `target-size` habilitado explícito (axe la shippea disabled — única regla 2.2 automatizada de 6 criterios A/AA nuevos); (2) smoke manual codificado por release (teclado, NVDA+VoiceOver, reflow 400%, semántica de errores, los 6 deltas 2.2 como líneas literales); (3) audit WCAG-EM 2.0 (Note 2026-07-23) reservado para claims públicos. Evidencia: Lighthouse = ~66 audits del catálogo de 125 de axe con score PONDERADO (0.95 ≠ cero violaciones); axe pleno = 57% del volumen (Deque). Seam contract escrito en ambas: perf-ci-gates dueña del workflow + floor 0.95 como tripwire; a11y-deep aporta el job axe y todo lo de arriba. Seams Astro: announcer del ClientRouter (title→h1→pathname ⇒ title único por página), ventana de hidratación de islands. Framing es-MX honesto (sin mandato privado hoy — no sobrevender). Gotcha de campo: AxeBuilder exige `browser.newContext()` explícito. Bundle: SKILL.md + 3 refs (axe-ci-job, manual-checklist, astro-seams). Description 1017.
 
 ### Pins por skill (histórico 2026-06-16 — donde choque, manda la tabla vigente de abajo; el detalle vivo post-B0 está en cada SKILL.md)
@@ -91,30 +96,22 @@ Gotchas y outline detallados — en cada `skills/<nombre>/SKILL.md`.
 ## 4. Estructura del repo
 
     .claude-plugin/
-      marketplace.json     -> 1 plugin: web-stack (source ".")
-      plugin.json          -> manifiesto + "skills":[ las 9, rutas relativas ]
-    skills/
-      astro-css-tokens/SKILL.md
-      web-security-headers/SKILL.md
-      perf-ci-gates/SKILL.md
-      seo-aeo-schema/SKILL.md
-      motion-system/SKILL.md
-      webgl-atmosfera/SKILL.md
-      signature-anim/SKILL.md
-      cms-self-edit/SKILL.md
-      brand-canon-ingest/SKILL.md
-      data-layer/SKILL.md
-      i18n-system/SKILL.md
-      media-optimization/SKILL.md
-      a11y-deep/SKILL.md
-      edge-logic/SKILL.md                   (delgada: sin references)
-      auth-simple/SKILL.md                  (delgada: sin references)
-      visual-regression-ci/SKILL.md         (+ 1 ref: visual-ci-job)
-      conversion-patterns/SKILL.md          (delgada: sin references)
-      stack-integration-playbook/SKILL.md   (+ references/ en cada una)
-    README.md  LICENSE  RESIDENT.md  CLAUDE.md  execution-plan.md
+      marketplace.json     -> 1 plugin: web-stack (source "./plugin" — SOLO el subdirectorio viaja al installer)
+    plugin/                -> el payload instalable completo (restructure W5, fix del installer bloat)
+      .claude-plugin/plugin.json  -> manifiesto + "skills":[ las 19, rutas relativas a plugin/ ]
+      LICENSE              -> copia (MIT exige acompañar lo distribuido)
+      skills/
+        astro-css-tokens/ · web-security-headers/ · perf-ci-gates/ · seo-aeo-schema/
+        motion-system/ · webgl-atmosfera/ · signature-anim/
+        cms-self-edit/ · brand-canon-ingest/
+        data-layer/ · i18n-system/ · media-optimization/ · a11y-deep/
+        edge-logic/ (delgada) · auth-simple/ (delgada) · visual-regression-ci/ (+1 ref)
+        conversion-patterns/ (delgada) · client-discovery/ (+4 refs)
+        stack-integration-playbook/ (+7 refs — seams, mapa, recipes, forms, analytics, speculation, legal)
+    README.md  LICENSE  RESIDENT.md  CLAUDE.md  upstream-suggestions.md
+    archive/execution-plan-2026-08.md   (el roadmap cerrado en v2.0.0)
 
-Regla: skills bajo `skills/<nombre>/` (nombre de carpeta = nombre de la skill) **y** registradas en `plugin.json`. `deferred/` (exclusión estructural para skills sin sustancia) quedó vacío al promover la #10 en D; el mecanismo sigue disponible para candidatas futuras.
+Regla: skills bajo `plugin/skills/<nombre>/` (nombre de carpeta = nombre de la skill) **y** registradas en `plugin.json`. Docs del repo viven FUERA de `plugin/` — no existe ignore mechanism; el subdirectorio ES el filtro. `deferred/` (exclusión estructural para skills sin sustancia) sigue disponible para candidatas futuras.
 
 ## 5. Cadencia de autoría (5 turnos por skill, ~1 skill por chat)
 
@@ -247,6 +244,15 @@ Fixture vivo: rama `claude/c-fixture` de `furever-web`, preview `claude-c-fixtur
 6. El pase estructural de conversión sobre una landing existente encontró huecos REALES en minutos (la página de conversión sin link en el nav primario, sin ask de cierre, teléfono sin tel:) — la skill paga su lugar como checklist ejecutable aun antes de tener analytics corriendo.
 7. Access a nivel Worker NO pudo quemarse sin acción del owner (Zero Trust org + policy = dashboard/API con token account-level que el fixture no tiene) — quedó STUB honesto con el wiring documentado; el burn real es deuda del primer sitio que lo necesite.
 
+### 2026-08-18 — Lecciones de W5 (capa cliente — cierre del roadmap)
+
+1. El contrato de las recipes aguantó su primera tensión real con una EVOLUCIÓN, no una violación: los 3 arquetipos nuevos no tenían build dedicado, y en vez de fingir proven o escribirlos especulativos, el skeleton ganó dos estatus (PROVEN/DERIVED) donde el mapa de evidencia por ingrediente y la lista de NO-confirmado son parte obligatoria de la recipe. La honestidad se codifica en el contrato, no en la buena intención.
+2. El burn retroactivo es un instrumento válido de skill nueva: correr client-discovery HACIA ATRÁS sobre material real (el brief de experiencia de Furever) produjo un worked example verificable contra un build que ya shippeó — y cazó un matiz de gobernanza: un catálogo PÚBLICO sanitiza el ejemplo (reglas de negocio sensibles resumidas, no citadas) y esa sanitización se documenta como práctica, no se esconde.
+3. El patrón "el catálogo emite schemas, los proyectos guardan estado" cerró su tercera instancia (projections de marca → data pointers → registro de deferrals) — ya es un principio de arquitectura del catálogo, no una coincidencia.
+4. El fix del installer bloat confirmó la regla de plataforma: NO existe ignore mechanism en plugins — el source dir se copia completo; el subdirectorio es el único filtro. Y destapó un detalle de compliance: al filtrar, la LICENSE deja de viajar — MIT exige copia dentro del payload.
+5. Una frontera bilateral puede rutear CLEAR en ambas direcciones con UN solo lado escrito (discovery↔scoper: el juez citó NUESTRA auto-exclusión para rutear al scoper) — el espejo upstream baja de necesario a robustez; el registro formal (upstream-suggestions.md) carga el veredicto con evidencia en vez de opinión.
+6. En la superficie final de 21, los 5 NARROW del jueceo fueron TODOS fronteras por diseño con runner-up correcto (portal auth↔data, gradient-hero motion↔webgl, editorial playbook↔discovery, tokens-new-brand builder↔tokens) — NARROW con runner-up correcto es señal de frontera sana, no de canibalización; perseguir CLEAR universal inflaría descriptions sin ganancia.
+
 ### 2026-08-17 — Lecciones del smoke scaffold B0 (build real Astro 7)
 
 - **`@tailwind base` es no-op SILENCIOSO en Tailwind v4:** el build PASA pero Tailwind nunca procesa el CSS — cero utilities generadas y la línea literal llega al browser. El entry stylesheet debe abrir con `@import 'tailwindcss'`; los bloques `@theme` se recolectan de todo el import graph. (Cazado por el smoke; corregido en astro-css-tokens.)
@@ -274,12 +280,13 @@ Fixture vivo: rama `claude/c-fixture` de `furever-web`, preview `claude-c-fixtur
 - W4 Run A (triage tier 3, NO build): EJECUTADA — 3 agentes de research (view-transitions+speculation-rules / auth+visual-regression / dotLottie+LFPDPPP) con fuentes primarias + verificador adversarial sobre 14 claims load-bearing. Tabla de triage completa al chat: 3 skills propias delgadas (`auth-simple` con el ancla Worker-level Access 2026-08-14 · `visual-regression-ci` con paisaje movido: Lost Pixel MUERTO/Figma, BackstopJS estancado 23 meses · `conversion-patterns` estructural-MX), 4 absorciones (view-transitions→motion-system · content-modeling→cms-self-edit · component-scaffolding→astro-css-tokens · hover micro-interactions→motion-system), 2 recipes del playbook (speculation-rules — Chrome-only, clientPrerender sigue experimental, Speed Brain inaplicable a rutas con Workers · legal-compliance — reglamento LFPDPPP nuevo AUSENTE con deadline vencido, 2011/2013 supletorios, reforma en Congreso sept-2026 = review-gate), 1 frontera actualizada (Lottie: dotLottie v2 con state machines reales pero sin paridad Rive; NUEVO — Rive movió exports a Cadet $9/seat, el runtime sigue MIT).
 - W4 Run B (build → v1.4.0): EJECUTADA en rama `claude/w4-tier3` — lock del triage aplicado tal cual (c3 resuelto: conversion-patterns SOBREVIVIÓ su gate de sustancia). 3 skills delgadas (#16–#18, resumen §3), 4 absorciones como extensiones versionadas (motion×2 ejes / cms / tokens / signature frontera), 2 recipes del playbook (speculation + legal), validate 18/18. Fixture: CUARTA puerta visual (Playwright, determinismo por reduced-motion, baselines CI-generadas), theme morph con view transitions (runa 1 raw), pase estructural de conversión (3 fixes reales), página de aviso desde el template legal, auth = STUB honesto (Access exige acción de owner). Triggering 31/32 primera pasada + 1 gap léxico (Rive-vs-Lottie→NONE) → fix → re-test 3/3. Ship v1.4.0.
 - W5 Run A (análisis, NO build): EJECUTADA — decision sheet de la ola final al chat (client-discovery con forks y propuesta de nombre · set final de arquetipos de composition recipes · marketplace maturity: política de versionado + calendario de drift §12 + fix del installer bloat [verificado: NO existe ignore mechanism; el patrón documentado es source a subdirectorio] + upstream suggestions formalizadas · esbozo de cierre del fixture como banco permanente).
-- Siguiente: chat lockea los forks de W5 → Run B (client-discovery + recipes + maturity → v2.0.0, cierre del roadmap).
+- W5 Run B (build → v2.0.0, CIERRE DEL ROADMAP): EJECUTADA en rama `claude/w5-client-layer` — locks de la decision sheet aplicados tal cual, CERO reversiones. `client-discovery` #19 (resumen §3; burn retroactivo real sobre Furever → worked example sanitizado), 3 recipes de arquetipo DERIVED + frontera client-portal + poda de consultoría-AI (§3), maturity completa (política de versionado en CLAUDE.md · §12 calendario de drift · restructure a `plugin/` con install re-test 19/19 y payload sin docs internos · upstream-suggestions.md S-1..S-4), fixture → banco permanente (sección en su RESIDENT). Validate+package 19/19. Triggering final 32/32 a la primera (8 jueces ciegos, superficie 21; cero misfires; 5 NARROW todos fronteras por diseño con runner-up correcto). Ship v2.0.0 + plan archivado a `archive/execution-plan-2026-08.md`.
+- ESTADO PERMANENTE: catálogo completo, MODO MANTENIMIENTO — el trabajo futuro corre por el calendario de drift (§12) y burns de skills nuevas contra el fixture permanente, bajo la política de versionado del CLAUDE.md. Pendientes que son gobernanza del OWNER (no del catálogo): ratificación Stage-10 del canon · GAP-006 banco de imagen · GAP-014 aviso real · licencia BTN · cuenta Umami + site id · Zero Trust/Access para el burn real de auth-simple · onboarding Email Service · decidir si las upstream suggestions (S-1..S-4) se convierten en issues de brand-system-skills.
 
 ## 10. Roadmap
 
-### Roadmap en curso (full catalog — `execution-plan.md`)
-Fase 0 + skills #1–#9: HECHAS. El roadmap corre por `execution-plan.md` (doc mortal, re-scope 2026-08-18 a catálogo completo): B2 validación mecánica → C fixture Furever → D playbook (ship 1.0.0) → olas W1–W4 (backlog completo, minor por ola) → W5 capa cliente (v2.0.0). Decisiones adjudicadas 2026-08-17/18: migrar antes de validar; ingestión de marca = skill nueva; Furever = fixture permanente (deploys temporales, jamás go-live); pull-by-project retirado (desviación deliberada del owner — Lego sobrevive en composición).
+### Roadmap full-catalog — CERRADO en v2.0.0 (archivado: `archive/execution-plan-2026-08.md`)
+Fase 0 + skills #1–#9 → B2 validación mecánica → C fixture Furever → D playbook (v1.0.0) → olas W1–W4 (backlog completo, minor por ola) → W5 capa cliente (v2.0.0, 2026-08-18). TODO ejecutado. Decisiones adjudicadas que sobreviven al plan: Furever = fixture permanente (deploys temporales, jamás go-live); pull-by-project retirado (desviación deliberada del owner — Lego sobrevive en composición). El trabajo futuro = mantenimiento por §12 + burns de skills nuevas.
 
 ### Principio Lego (regla permanente del catálogo)
 El bundle es un catálogo, no un sistema fijo. Cada sitio compone solo el SUBCONJUNTO que su brief necesita; ningún sitio lleva todas las skills; la capa visual entra UNA vez, cuando el brief la justifica, nunca por default. Una skill nueva amplía el alcance del catálogo, no el payload de cada sitio.
@@ -339,6 +346,9 @@ Selección por mérito puro (stack-canon dropeado por Carlos como autoridad): Sv
 
 ### 2026-08-17 — Análisis pre-sprint + re-scope del plan v1
 Análisis profundo read-only vía Claude Code (11 agentes; 24 claims load-bearing verificados adversarialmente — 23 confirmados, 1 corregido en atribución): estado del repo, re-pin audit completo (→ §3 pins objetivo B0), inventario de `furever-brand`, contrato `brand-system-skills` 0.6.0, auditoría de solape de triggers (3 colisiones ALTAS + cluster medio). Decisiones adjudicadas: migrar a Astro 7 antes de validar (B0); ingestión de marca = skill nueva `brand-canon-ingest` (#9, B1); sitio de referencia = Furever (C); descriptions fix-pass = prerequisito estructural (A). Plan re-scopeado (reemplazo completo de `v1-finalization-plan.md`) commiteado en rama `claude/v1-sprint-rescope`; hallazgos durables → §8.
+
+### 2026-08-18 — W5 Run B (capa cliente → SHIP v2.0.0) — CIERRE DEL ROADMAP — EJECUTADA · rama `claude/w5-client-layer`
+La ola final, locks tal cual, cero reversiones. Build: `client-discovery` #19 (4 fases; banco de preguntas con cada pregunta amarrada a su skill consumidora; veredictos de factibilidad como vocabulario cerrado por referencia al playbook; deferrals como schema que el repo del sitio instancia; description 1018 con fronteras a Claude Design y scoper; burn retroactivo sobre el material real de Furever → worked example sanitizado en la skill). Playbook: 3 recipes de arquetipo bajo el contrato evolucionado PROVEN/DERIVED + frontera client-portal + consultoría-AI podada; description 1010 con el eje archetype y el deslinde recíproco a client-discovery. Maturity: política de versionado (CLAUDE.md), §12 calendario de drift (17 watches), restructure `plugin/` (validate+package 19/19, install re-test con cache limpio 944 KB solo-skills+LICENSE), upstream-suggestions.md. Fixture → banco permanente (su RESIDENT). Triggering final 32/32 primera pasada, superficie 21, cero misfires. Ship v2.0.0 ("Full catalog"); `execution-plan.md` → `archive/execution-plan-2026-08.md` (status ARCHIVED — CLOSED AT v2.0.0). Este RESIDENT queda como ÚNICA fuente viva.
 
 ### 2026-08-18 — W4 Run B (tier 3 → SHIP v1.4.0) + W5 Run A — EJECUTADAS · rama `claude/w4-tier3`
 Lock del triage aplicado tal cual; c3 (conversion-patterns) resuelto por su review-gate: SOBREVIVIÓ (secuencia instrumentación-first + árbol de conversión primaria + anti-patrones canon-amarrados ≠ checklist de una página; autorada sin claims cuantitativos por honestidad de fuentes). Build: `auth-simple` (escalera Access-Worker-level/tokens/Supabase, 998) + `visual-regression-ci` (cuarta puerta Playwright + ref del job, 1010) + `conversion-patterns` (1013); absorciones motion (VT + hover, ref nueva, 1009), cms (content-modeling ref, 990), tokens (component-conventions ref, 888), signature (frontera Lottie/Rive actualizada, 1018); recipes speculation + legal en el playbook (1018). Fixture: 4ª puerta visual con `reducedMotion: 'reduce'` como mecanismo de determinismo, baselines nacidas en CI (dispatch+artifact), theme toggle con `document.startViewTransition` (runa 1, cero deps), pase de conversión con 3 hallazgos reales aplicados (nav→contacto, ask de cierre, tel:), `/aviso-de-privacidad/` desde el template (7 URLs LHCI, 9 páginas axe), auth STUB honesto. Triggering 31/32 (8 jueces, superficie 20) + gap Rive-vs-Lottie → fix description → re-test 3/3. Ship v1.4.0. W5 Run A: research puntual (installer bloat verificado contra docs primarias de plugins) + decision sheet A–D al chat.

@@ -91,7 +91,7 @@ Orden = fundación → visuales → contenido/marca → data → alcance → edg
 | `@kindspells/astro-shield` | 1.7.1 | **RETIRADA** | abandonada (último publish nov-2024, peer astro ^4) → reemplazada por la receta SRI sha384 custom en #2 (B0-2) |
 | gsap · @gsap/react · schema-dts · @astrojs/sitemap · @lhci/cli · treosh@v12 | — | **sin cambio** | todos siguen latest; #16838 (lastmod sitemap-index) ya está fijo en el pin 3.7.3 |
 
-Gotchas y outline detallados — en cada `skills/<nombre>/SKILL.md`.
+Gotchas y outline detallados — en cada `plugin/skills/<nombre>/SKILL.md`.
 
 ## 4. Estructura del repo
 
@@ -126,7 +126,7 @@ Regla: skills bajo `plugin/skills/<nombre>/` (nombre de carpeta = nombre de la s
 ## 6. Reglas operativas
 
 - **Superficie por época** — en la fase de autoría (2026-06) GitHub fue TODO por Composio (Git Data API) y Claude Code quedó reservado al build final. Desde el sprint v1 (2026-08-17), Claude Code ES la superficie de ejecución (ver Surfaces del plan); Composio queda como vía alternativa para commits desde chat.
-- **Un plugin** (`web-stack`) agrupa las 9. Instalación: `/plugin marketplace add ccediland/web-stack-skills` luego `/plugin install web-stack@web-stack-skills`.
+- **Un plugin** (`web-stack`) agrupa las 19. Instalación: `/plugin marketplace add ccediland/web-stack-skills` luego `/plugin install web-stack@web-stack-skills`.
 - Gobierno: **skill-author** = autoridad de arquitectura; **skill-creator** (`/mnt/skills/examples/skill-creator`, con `quick_validate.py` + `package_skill.py`) = validar/empacar; **Context7** + docs oficiales = contenido actual.
 - Naming de skills: kebab-case, ≤64, sin la palabra "claude". Description ≤1024, sin `<` ni `>`, sin dos-puntos-espacio a media cadena (rompe YAML — usar guión largo).
 - Pins del 2026-06-16 — re-verificar en turns 2/3 de cada skill.
@@ -134,7 +134,7 @@ Regla: skills bajo `plugin/skills/<nombre>/` (nombre de carpeta = nombre de la s
 
 ## 7. Decisiones
 
-- Público + genérico + MIT. Un repo-marketplace, un plugin que agrupa las 7.
+- Público + genérico + MIT. Un repo-marketplace, un plugin que agrupa el catálogo completo (19 al cierre).
 - 8ª skill diferida como skeleton; excluida del instalable hasta tener sustancia.
 - Skills bajo `skills/<nombre>/`; manifiesto `plugin.json` agregado; skills registradas explícitamente en `plugin.json`; diferida fuera de `skills/`.
 - **El activo durable es el MÉTODO, no las skills** (motor portable: este RESIDENT + cadencia 5-turn + caso contrario + source-priority + log); las skills son perecederas y reconstruibles desde docs. El `stack-integration-playbook` diferido concentra el valor irremplazable (lecciones de composición de campo) — su prioridad de llenado sube en cuanto haya sustancia. (Revisión externa 2026-06-17, adoptado.)
@@ -291,7 +291,7 @@ Fase 0 + skills #1–#9 → B2 validación mecánica → C fixture Furever → D
 ### Principio Lego (regla permanente del catálogo)
 El bundle es un catálogo, no un sistema fijo. Cada sitio compone solo el SUBCONJUNTO que su brief necesita; ningún sitio lleva todas las skills; la capa visual entra UNA vez, cuando el brief la justifica, nunca por default. Una skill nueva amplía el alcance del catálogo, no el payload de cada sitio.
 
-### Backlog (asignado a olas W1–W5 en `execution-plan.md`; pull-by-project RETIRADO por el owner 2026-08-18 — la tabla conserva los build-triggers como contexto histórico)
+### Backlog (asignado a olas W1–W5 en el plan hoy archivado — `archive/execution-plan-2026-08.md`; TODO construido; pull-by-project RETIRADO por el owner 2026-08-18 — la tabla conserva los build-triggers como contexto histórico)
 Prioridad comprometida: **`client-discovery`** (intake/descubrimiento del cliente) — único ítem v2 especificado. Job: convertir lo que el cliente dé, en el formato que sea (escrito / dibujo / export design-tool), en un brief estructurado y validado contra el stack, + registro de lo diferido a Carlos. 4 fases: intake (banco de preguntas/plantillas) → captura por formato (escrito→requisitos; dibujo→requisitos+handoff visual; export→pipeline de tokens) → factibilidad (corre contra la matriz del playbook; veredicto por ítem, límites, delta brief↔deploy) → deferral (separa estético vs funcional/UX; registra como decisión de Carlos con contexto). Fronteras: captura intención, NO renderiza ni diseña; la factibilidad vive en el playbook (referencia, no duplica); diferidos se registran. Depende de Phase D (playbook); gate de arranque: v1 shipped. Nombre final al autorarla.
 
 | Skill candidata | Tier | Build-trigger |

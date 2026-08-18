@@ -108,7 +108,7 @@ Include ONLY when the production hostname is on a Cloudflare-proxied zone: enabl
 
 ## The GA4 tombstone
 
-GA4 is OFF the catalog's default path, with evidence: 143 KB gzip (heaviest by two orders over the winner); the most hostile CSP surface of any candidate (googletagmanager + `*.google-analytics.com` + `*.g.doubleclick.net` + `*.google.com` + every `google.tld` enumerated INDIVIDUALLY — CSP wildcards cannot cover TLDs — plus an inline bootstrap to hash, plus dynamically injected sub-scripts, the exact pattern hash CSP exists to resist); data thresholding that withholds report rows at precisely the traffic scale of a small MX business; zero LFPDPPP advantage.
+GA4 is OFF the catalog's default path, with evidence: 143 KB gzip (the heaviest candidate — ~62x the winner); the most hostile CSP surface of any candidate (googletagmanager + `*.google-analytics.com` + `*.g.doubleclick.net` + `*.google.com` + every `google.tld` enumerated INDIVIDUALLY — CSP wildcards cannot cover TLDs — plus an inline bootstrap to hash, plus dynamically injected sub-scripts, the exact pattern hash CSP exists to resist); data thresholding that withholds report rows at precisely the traffic scale of a small MX business; zero LFPDPPP advantage.
 
 ONE documented exception: the client runs (or will run) Google Ads and needs conversion import / remarketing — Ads-ecosystem gravity, not analytics merit. Then gtag ships as an exception entry (consent posture and aviso updated), never as the default. Search Console needs no GA4 — use GSC directly, unlinked.
 

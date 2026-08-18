@@ -23,7 +23,8 @@ Each skill encodes a vetted verdict, current version pins, a generic recipe, and
 | `i18n-system` | reach | Multi-language with Astro core i18n — default locale at root, typed string dictionary, Sveltia-matched collections, hreflang |
 | `media-optimization` | reach | Build-time images with the explicit `compile` service, responsive layouts, priority LCP, and a tiered video ladder |
 | `a11y-deep` | reach | WCAG 2.2 AA beyond the Lighthouse floor — axe zero-violations in CI, codified manual smoke, WCAG-EM audits |
-| `stack-integration-playbook` | composition | How the skills compose into ONE site — canonical order, cross-cutting seams, stack map, recipes (incl. lead capture) |
+| `edge-logic` | edge | A/B, geo, flags, and redirects on Workers — defaulting to LESS at the edge, with the traps that make the obvious approaches wrong |
+| `stack-integration-playbook` | composition | How the skills compose into ONE site — canonical order, cross-cutting seams, stack map, recipes (lead capture, analytics) |
 
 ## Compose per site (the Lego principle)
 
@@ -50,7 +51,7 @@ Skills install at personal or project scope (verified on both). There is no auto
 
 ## Status
 
-v1.2.0 — the 14 pieces above are authored, validated, installable, and trigger-tested. Wave W2 added `i18n-system`, `media-optimization`, and `a11y-deep`, all exercised on the integration fixture: a synthetic second locale with per-page hreflang (x-default included) on the live preview, a media page built under the explicit `compile` image service, and a THIRD CI gate — an axe zero-violations sweep over every built page. Wave W1 had added `data-layer` (live catalog graduated from seed JSON to Supabase at build time, webhook-triggered rebuilds) and the forms/lead-capture recipe in the playbook. The roadmap in progress (see `execution-plan.md`) continues the capability waves (edge, analytics) toward v2.0.0.
+v1.3.0 — the 15 pieces above are authored, validated, installable, and trigger-tested. Wave W3 added `edge-logic` (a deliberately thin skill: the middleware misconception, invocation-billing traps, and decision tables that keep A/B, geo, flags, and redirects on their cheapest honest surface) and the analytics recipe in the playbook (Umami events layer, server-side conversion event, GA4 tombstone, LFPDPPP posture), both exercised on the integration fixture: a synthetic client-side A/B experiment assigned pre-paint under the hash CSP, and the full analytics wiring shipped env-gated as an honest stub. Wave W2 had added `i18n-system`, `media-optimization`, and `a11y-deep` (with the axe CI gate); W1 added `data-layer` and the forms recipe. The roadmap in progress (see `execution-plan.md`) continues with the tier-3 wave toward v2.0.0.
 
 ## License
 

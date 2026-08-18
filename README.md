@@ -27,17 +27,19 @@ Each skill encodes a vetted verdict, current version pins, a generic recipe, and
 | `auth-simple` | edge | The least auth that does the job — Worker-level Cloudflare Access for previews and admin, service tokens for CI, Supabase Auth for real portals |
 | `visual-regression-ci` | quality | The fourth CI gate — Playwright screenshot comparisons, CI-generated baselines in the repo, SaaS escalation when review UIs earn their place |
 | `conversion-patterns` | growth | Structural CRO under measurement — one primary CTA, landing hierarchy, MX trust signals; instrumentation first, never persuasive copy |
-| `stack-integration-playbook` | composition | How the skills compose into ONE site — canonical order, cross-cutting seams, stack map, recipes (lead capture, analytics, prefetching, legal template) |
+| `client-discovery` | client | Turn whatever a client gives you into a feasibility-checked site brief plus a deferral register — interview-first intake, capture by format, per-item verdicts, owner-decided deferrals |
+| `stack-integration-playbook` | composition | How the skills compose into ONE site — canonical order, cross-cutting seams, stack map, capability recipes (lead capture, analytics, prefetching, legal template) and archetype recipes |
 
 ## Compose per site (the Lego principle)
 
-The bundle is a catalog, not a fixed system: each site composes only the subset its brief needs, and no site takes every skill.
+The bundle is a catalog, not a fixed system: each site composes only the subset its brief needs, and no site takes every skill. Four archetype recipes live in `stack-integration-playbook`:
 
-- **Corporate brochure site** — `astro-css-tokens` + `web-security-headers` + `perf-ci-gates` + `seo-aeo-schema`, plus `motion-system` for reveals. No WebGL, no Rive, no CMS if the content is static.
-- **Restaurant site with a self-edited menu** — the same four foundation skills, plus `cms-self-edit` (the owner edits the menu without touching GitHub) and at most ONE visual skill (`webgl-atmosfera` OR `signature-anim`) if the brief justifies it.
-- **Brand-heavy site under a governed brand repo** — start at `brand-canon-ingest` and follow composition recipe #1 in `stack-integration-playbook`.
+- **Brand-heavy site** (PROVEN by the integration fixture) — start at `brand-canon-ingest`; the maximal composition.
+- **Lead-gen landing** — the foundation four plus `conversion-patterns` as the differentiator, client-side A/B from `edge-logic`, forms and analytics recipes.
+- **Catalog with client self-edit** — `data-layer` rows plus `cms-self-edit` documents, with the rows-versus-documents homing decision made per content type.
+- **Editorial / storytelling site** — content modeling before pages, the full motion ladder including view transitions, accessibility above the floor.
 
-A new skill widens the catalog's reach, never each site's payload. The `stack-integration-playbook` skill is the composition authority: canonical order, the seams where composed builds actually fail, and proven recipes.
+Customer portals (login, per-customer data) are a documented FRONTIER, not a recipe — the deploy shape changes class. A new skill widens the catalog's reach, never each site's payload; `client-discovery` produces the brief upstream, and the playbook composes from it.
 
 ## Proven in composition
 
@@ -50,11 +52,15 @@ This repo is a Claude Code plugin marketplace.
     /plugin marketplace add ccediland/web-stack-skills
     /plugin install web-stack@web-stack-skills
 
-Skills install at personal or project scope (verified on both). There is no auto-update yet — re-running `install` pulls the latest (git is the source of truth). Manual alternative: copy `skills/<skill>` into `~/.claude/skills/`.
+Skills install at personal or project scope (verified on both). There is no auto-update yet — re-running `install` pulls the latest (git is the source of truth). Only the `plugin/` subdirectory ships to installers — repo docs stay out of your cache. Manual alternative: copy `plugin/skills/<skill>` into `~/.claude/skills/`.
+
+## Versioning
+
+The plugin versions the CATALOG; individual skills carry no version of their own. MAJOR = a breaking catalog change (a skill removed or renamed, a consumed contract broken, the installable layout restructured) · MINOR = a new skill or a versioned extension of an existing one · PATCH = content, descriptions, pins, and fixes with no new surface. Every shipped version is an annotated tag plus a GitHub Release.
 
 ## Status
 
-v1.4.0 — the 18 pieces above are authored, validated, installable, and trigger-tested; with wave W4 the capability BACKLOG IS COMPLETE. W4 added three thin skills (`auth-simple` anchored on Worker-level Cloudflare Access, `visual-regression-ci` as the fourth CI gate with CI-generated baselines, and `conversion-patterns`, which survived its own substance gate), four versioned extensions of existing skills (view transitions and hover micro-interactions into `motion-system`, content modeling into `cms-self-edit`, component conventions into `astro-css-tokens`, the updated Rive-versus-dotLottie boundary in `signature-anim`), and two playbook recipes (prefetching/speculation with the mandatory analytics guard, and the LFPDPPP legal template — template, not advice). All exercised on the integration fixture, now guarded by FOUR CI gates. What remains on the roadmap (see `execution-plan.md`) is the client layer: `client-discovery`, composition recipes per archetype, and marketplace maturity, shipping as v2.0.0.
+**v2.0.0 — the catalog is COMPLETE.** 19 skills authored, validated, installable, and trigger-tested across five capability waves plus the client layer; the full-catalog roadmap that built it is closed and archived (`archive/`). The catalog now lives in maintenance mode: a drift calendar (17 watches — platform anchors, framework majors, legal reform, pre-GA tools) drives quarterly and on-changelog re-verification, and the permanent integration fixture — a real brand consumed by a real composed build behind FOUR CI gates (Lighthouse, Biome, axe, visual regression) — is the standing test bench for every future re-pin and extension.
 
 ## License
 

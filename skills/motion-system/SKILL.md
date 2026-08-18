@@ -1,6 +1,6 @@
 ---
 name: motion-system
-description: Routes web animation to the right engine on an Astro 7 plus Cloudflare site — native CSS scroll-driven animations for reveals, parallax, progress, and CSS-achievable animated gradient or background effects; GSAP with ScrollTrigger for scrubbed cinematic timelines, pinning, and sequencing; Motion only inside React islands that already exist. Use when building scroll, entrance, background, or cinematic motion for an Astro site, choosing between native CSS and a JS animation library, loading GSAP or Motion under a strict hash-based Content-Security-Policy, keeping animation JS inside a Core Web Vitals budget, or wiring prefers-reduced-motion. Trigger on add a scroll reveal, animate on scroll, add an animated gradient background, build a pinned cinematic section, lazy-load GSAP, use Motion in an island, or make the animation respect reduced motion. Does not cover page or view transitions, Lottie, or UI hover micro-interactions; for WebGL shader heroes use webgl-atmosfera, for a Rive moment use signature-anim.
+description: Routes web animation to the right engine on an Astro 7 plus Cloudflare site — native CSS scroll-driven animations for reveals, parallax, progress, and CSS-achievable animated gradient or background effects; GSAP with ScrollTrigger for scrubbed cinematic timelines, pinning, and sequencing; Motion only inside React islands that already exist. Also owns view transitions (the animateView and ClientRouter ladder, native cross-document as enhancement) and CSS hover micro-interactions. Use when building scroll, entrance, background, or cinematic motion, animating page navigation, choosing between native CSS and a JS library, loading GSAP or Motion under a strict hash-based CSP, or wiring prefers-reduced-motion. Trigger on add a scroll reveal, animate on scroll, animated gradient background, pinned cinematic section, view transitions between pages, hover effects, lazy-load GSAP, or respect reduced motion. Not for Lottie; for WebGL shader heroes use webgl-atmosfera, for a Rive moment use signature-anim.
 ---
 
 # motion-system
@@ -15,7 +15,7 @@ description: Routes web animation to the right engine on an Astro 7 plus Cloudfl
 - Keep animation JS off the critical path. Budget about 45 KB gzipped for a GSAP plus ScrollTrigger page; Motion Mini is about 2.3 KB.
 
 ## When to use this document
-Use when adding scroll, entrance, or cinematic motion to an Astro 7 site; deciding whether an effect needs JS at all; loading GSAP or Motion under a hash-based CSP; or wiring reduced-motion. Do not use for page or view transitions (routing, and it conflicts with the strict CSP of web-security-headers), WebGL hero atmosphere (webgl-atmosfera), a bespoke Rive moment (signature-anim), Lottie or video motion, or UI hover and focus micro-interactions (those are plain CSS, not a system).
+Use when adding scroll, entrance, or cinematic motion to an Astro 7 site; animating page navigation or in-page state morphs (view transitions — see references/view-transitions.md); adding hover micro-interactions; deciding whether an effect needs JS at all; loading GSAP or Motion under a hash-based CSP; or wiring reduced-motion. Do not use for WebGL hero atmosphere (webgl-atmosfera), a bespoke Rive moment (signature-anim), or Lottie and video motion.
 
 ## The three engines
 
@@ -49,6 +49,14 @@ Every engine must honor reduced-motion because perf-ci-gates floors accessibilit
 4. CSP: bundled scripts or islands only, never is:inline. Do not add unsafe-inline for runtime style writes.
 5. Budget: lazy-load all motion JS; reserve about 45 KB gzipped for a GSAP page in the perf-ci-gates budget.json and keep it off the critical path.
 
+## View transitions (fourth surface — W4 extension)
+
+Same-document morphs are Baseline (2025-10-14) and run through `animateView` from the already-pinned `motion` package or the raw API, with a hand-wired reduced-motion gate. Animated NAVIGATION goes through Astro's `<ClientRouter />` — not deprecated, and the only rung with automatic reduced-motion and a route announcer. Native cross-document `@view-transition` is progressive enhancement ONLY (not Baseline, no Firefox, no built-in a11y): if it ships, it ships inside a `prefers-reduced-motion: no-preference` media query. Full ladder, the a11y gap, and composition rules in references/view-transitions.md.
+
+## Hover micro-interactions (W4 extension)
+
+Plain CSS, never an engine: `transition` on the hovered property (transform/opacity/color — compositor-friendly ones), wrapped in `@media (hover: hover)` so touch devices are not left with sticky states, and inside the same reduced-motion gate as everything else when the effect moves (color-only hovers need no gate). Durations come from the token layer (astro-css-tokens' duration/easing tokens), not magic numbers. If a hover needs JS, it is not a micro-interaction — re-route it up the ladder.
+
 ## Gotchas
 - Do not use the discrete `animation-trigger` property (scroll-triggered, not scroll-driven). It is Chrome and Edge only in mid-2026. Use the continuous `view()` timeline for reveals, or IntersectionObserver or GSAP for cross-browser discrete triggers.
 - Firefox needs a non-zero animation-duration (convention 1ms) for scroll-driven animations to apply.
@@ -56,7 +64,7 @@ Every engine must honor reduced-motion because perf-ci-gates floors accessibilit
 - GSAP is 100 percent free including ScrollTrigger and SplitText for commercial use since April 2025; the older claim that SplitText needs a Club membership is false.
 
 ## Limitations & Out-of-Scope
-- Does NOT cover page or view transitions, Astro ClientRouter, WebGL, Rive, Lottie, video motion, or UI hover and focus micro-interactions.
+- Does NOT cover WebGL, Rive, Lottie, or video motion. (View transitions and hover micro-interactions joined this skill in W4 — the pre-W4 exclusion is superseded.)
 - Does NOT design the specific animations of a given site; it encodes the engine-selection method and the integration, not the choreography.
 - CSS scroll-driven Baseline status and the GSAP bundle weight move; re-verify the pins and the Firefox flag at author time. The exact ScrollTrigger gzip figure is a single-source estimate; confirm against a real compressed build.
 

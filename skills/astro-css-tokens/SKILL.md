@@ -1,6 +1,6 @@
 ---
 name: astro-css-tokens
-description: Use when wiring a design-token pipeline into an Astro site styled with Tailwind v4 — a single tokens.json in DTCG format compiled by Style Dictionary into two consumers, flat CSS variables plus a Tailwind @theme block, so tokens survive a framework swap with no lock-in. Trigger on requests to set up design tokens, theme an Astro and Tailwind v4 project, add dark mode through token overrides, generate CSS variables from a token source, or establish base and semantic and component token layers. Not for component-level styling decisions, palette design, or non-Astro stacks; when the token source is a brand repo emitted by the brand-canon builder, use brand-canon-ingest — it layers the brand's schemes, assets, and voice on top of this pipeline.
+description: Use when wiring a design-token pipeline into an Astro site styled with Tailwind v4 — a single tokens.json in DTCG format compiled by Style Dictionary into two consumers, flat CSS variables plus a Tailwind @theme block, so tokens survive a framework swap with no lock-in. Also owns the component-authoring conventions against the token layer — classes over style attributes under hash CSP, variants by data-attributes, no hardcoded design values. Trigger on requests to set up design tokens, theme an Astro and Tailwind v4 project, add dark mode through token overrides, generate CSS variables from a token source, establish token layers, or component styling conventions. Not for palette design or non-Astro stacks; when the token source is a brand repo emitted by the brand-canon builder, use brand-canon-ingest — it layers the brand's schemes, assets, and voice on top of this pipeline.
 ---
 
 # astro-css-tokens
@@ -106,4 +106,5 @@ Add a `@custom-variant dark` declaration and a `[data-theme="dark"]` block that 
 - `references/style-dictionary-config.md` — verified `build.mjs`, SD v5 config, custom format, package.json hooks, gotchas
 - `references/tokens-example.md` — verified 3-layer `tokens.json`, DTCG authoring rules, compiled output examples
 - `references/astro-tailwind-wiring.md` — `postcss.config.mjs`, global CSS import order, no-flash dark script, scoped `@apply`, switch-back trigger
+- `references/component-conventions.md` — authoring components against the token layer (W4): classes-not-style-attributes under hash CSP, styling surfaces ranked, data-attribute variants, scheme blindness, the review checklist
 - `references/color-oklch.md` — OKLCH rationale, no-fallback policy, browser support baseline, SD preservation

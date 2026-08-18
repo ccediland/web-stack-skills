@@ -1,6 +1,6 @@
 ---
 name: stack-integration-playbook
-description: Composition authority for the web-stack catalog — how the skills compose into ONE site, how the site plugs into the rest of the stack, and the forms recipe. Use when composing multiple skills, deciding which subset a brief needs, sequencing a full build, or capturing leads. Trigger on build the full site with this stack, in what order do I apply these skills, wire the stack together, add a contact form, capture leads with spam protection, or write a composition recipe. Provides the canonical order (ingest, tokens, security, gates, seo, motion, visual, cms), the cross-cutting seams, the stack map, and recipes including lead capture (Astro Action, Turnstile, LFPDPPP consent). Not for single capabilities — tokens go to astro-css-tokens, CSP to web-security-headers, CI to perf-ci-gates, schema to seo-aeo-schema, animation to motion-system, shaders to webgl-atmosfera, Rive to signature-anim, client editing to cms-self-edit, brand repos to brand-canon-ingest, external data to data-layer.
+description: Composition authority for the web-stack catalog — how the skills compose into ONE site, how the site plugs into the rest of the stack, and the forms and analytics recipes. Use when composing multiple skills, deciding which subset a brief needs, sequencing a full build, capturing leads, or measuring the site. Trigger on build the full site, in what order do I apply these skills, wire the stack together, add a contact form, add analytics, track conversions, measure leads, or write a composition recipe. Provides the canonical order, the cross-cutting seams, the stack map, and recipes for lead capture (Astro Action, Turnstile) and cookieless analytics (Umami, LFPDPPP). Not for single capabilities — tokens go to astro-css-tokens, CSP to web-security-headers, CI to perf-ci-gates, schema to seo-aeo-schema, animation to motion-system, shaders to webgl-atmosfera, Rive to signature-anim, client editing to cms-self-edit, brand repos to brand-canon-ingest, external data to data-layer, A/B and redirects to edge-logic.
 ---
 
 # stack-integration-playbook
@@ -15,6 +15,7 @@ This SKILL.md is the composition order and the omission rules. Load references o
 - `references/stack-integration-map.md` — load when the site must touch anything beyond the web layer: external data, CI secrets, deploys, rebuild triggers, email, analytics.
 - `references/recipes.md` — load when starting a new site composition (pick the closest recipe), or when documenting a finished composition as a new recipe.
 - `references/forms-lead-recipe.md` — load when the site needs a contact form or lead capture: the one-route native architecture (Astro Action + Turnstile + Supabase insert-only + native email + LFPDPPP consent), its knobs, gate amendments, and the flip conditions that would promote it to a skill.
+- `references/analytics-recipe.md` — load when the site needs analytics, conversion tracking, or measurement: the events-layer architecture (Umami + attribute events + the server-side conversion event from the Action + exact CSP additions + env-gating + the aviso paragraph), the merit map with measured script weights, the GA4 tombstone, and the promotion triggers.
 
 ## TL;DR
 
@@ -61,5 +62,5 @@ Composition creates failure modes no single skill owns; these habits caught ever
 
 - This skill does NOT own any single capability — each row of the order table has an owning skill; go there for setup, config shapes, and per-tool gotchas.
 - Recipes cover archetypes as they are proven in the field; today recipe #1 (brand-heavy fixture) is the only complete one. The skeleton in `references/recipes.md` is the contract for the next ones.
-- The stack map names contact points whose owning skills ship in later waves (today: edge logic and analytics); until a wave ships, the map entry is the frontier, not a recipe. Data, forms, i18n, media, and deep a11y already have owners.
+- The stack map names contact points whose owning skills ship in later waves (today: the tier-3 candidates — auth, legal templates, visual regression); until a wave ships, the map entry is the frontier, not a recipe. Data, forms, i18n, media, deep a11y, edge logic (edge-logic), and analytics (this playbook's recipe) already have owners.
 - Nothing here is project-specific: accounts, IDs, and endpoints belong in the consuming project's own docs.

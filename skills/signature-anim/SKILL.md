@@ -33,7 +33,7 @@ Spend a Rive moment only when the interaction is real. Rive's differentiator is 
 | Branching interactive state logic, designer-authored | Rive (this skill) |
 | A second animated moment on the same page | not a second Rive instance, use CSS or Lottie |
 
-dotLottie added a state machine in late 2025 with comparable WASM weight; Rive's edge today is editor and runtime maturity, not exclusivity. If the interaction is modest, weigh dotLottie. For the one signature interactive moment, Rive remains defensible.
+The Lottie boundary, updated W4 (verified 2026-08-18): dotLottie's v2.0 spec ships NATIVE state machines (stored in the .lottie archive itself, no JS glue) and the player is `@lottiefiles/dotlottie-web` 0.79.1 (MIT, Rust plus ThorVG core — roughly 57 KB JS gzip plus a 700 KB-class WASM, so no lighter than Rive); legacy `lottie-web` has been stalled since late 2024 and is maintenance-only. dotLottie state machines cover modest interactivity (hover, click, loading states) but do NOT match Rive's depth — no data binding, no scripting-grade control. The cost side moved too: Rive's 2025-10-20 pricing restructure keeps the editor free but gates .riv EXPORT behind the paid Cadet tier ($9 per seat per month) — the designer-authored .riv this skill integrates now presupposes a paid seat on the DESIGN side; the `@rive-app/canvas` runtime stays MIT and free. Net rule: for the ONE signature interactive moment, Rive remains the pick on depth and maturity, with its export cost named; for modest interactivity on a zero budget, a dotLottie v2 state machine is the honest $0 alternative — and playback-only still wants plain Lottie playback or CSS, never either runtime.
 
 ## Stack and versions
 

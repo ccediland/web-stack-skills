@@ -24,7 +24,10 @@ Each skill encodes a vetted verdict, current version pins, a generic recipe, and
 | `media-optimization` | reach | Build-time images with the explicit `compile` service, responsive layouts, priority LCP, and a tiered video ladder |
 | `a11y-deep` | reach | WCAG 2.2 AA beyond the Lighthouse floor — axe zero-violations in CI, codified manual smoke, WCAG-EM audits |
 | `edge-logic` | edge | A/B, geo, flags, and redirects on Workers — defaulting to LESS at the edge, with the traps that make the obvious approaches wrong |
-| `stack-integration-playbook` | composition | How the skills compose into ONE site — canonical order, cross-cutting seams, stack map, recipes (lead capture, analytics) |
+| `auth-simple` | edge | The least auth that does the job — Worker-level Cloudflare Access for previews and admin, service tokens for CI, Supabase Auth for real portals |
+| `visual-regression-ci` | quality | The fourth CI gate — Playwright screenshot comparisons, CI-generated baselines in the repo, SaaS escalation when review UIs earn their place |
+| `conversion-patterns` | growth | Structural CRO under measurement — one primary CTA, landing hierarchy, MX trust signals; instrumentation first, never persuasive copy |
+| `stack-integration-playbook` | composition | How the skills compose into ONE site — canonical order, cross-cutting seams, stack map, recipes (lead capture, analytics, prefetching, legal template) |
 
 ## Compose per site (the Lego principle)
 
@@ -51,7 +54,7 @@ Skills install at personal or project scope (verified on both). There is no auto
 
 ## Status
 
-v1.3.0 — the 15 pieces above are authored, validated, installable, and trigger-tested. Wave W3 added `edge-logic` (a deliberately thin skill: the middleware misconception, invocation-billing traps, and decision tables that keep A/B, geo, flags, and redirects on their cheapest honest surface) and the analytics recipe in the playbook (Umami events layer, server-side conversion event, GA4 tombstone, LFPDPPP posture), both exercised on the integration fixture: a synthetic client-side A/B experiment assigned pre-paint under the hash CSP, and the full analytics wiring shipped env-gated as an honest stub. Wave W2 had added `i18n-system`, `media-optimization`, and `a11y-deep` (with the axe CI gate); W1 added `data-layer` and the forms recipe. The roadmap in progress (see `execution-plan.md`) continues with the tier-3 wave toward v2.0.0.
+v1.4.0 — the 18 pieces above are authored, validated, installable, and trigger-tested; with wave W4 the capability BACKLOG IS COMPLETE. W4 added three thin skills (`auth-simple` anchored on Worker-level Cloudflare Access, `visual-regression-ci` as the fourth CI gate with CI-generated baselines, and `conversion-patterns`, which survived its own substance gate), four versioned extensions of existing skills (view transitions and hover micro-interactions into `motion-system`, content modeling into `cms-self-edit`, component conventions into `astro-css-tokens`, the updated Rive-versus-dotLottie boundary in `signature-anim`), and two playbook recipes (prefetching/speculation with the mandatory analytics guard, and the LFPDPPP legal template — template, not advice). All exercised on the integration fixture, now guarded by FOUR CI gates. What remains on the roadmap (see `execution-plan.md`) is the client layer: `client-discovery`, composition recipes per archetype, and marketplace maturity, shipping as v2.0.0.
 
 ## License
 

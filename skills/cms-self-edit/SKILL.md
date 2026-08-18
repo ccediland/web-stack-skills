@@ -1,6 +1,6 @@
 ---
 name: cms-self-edit
-description: Give a non-technical client the ability to self-edit the content of an Astro 7 site on Cloudflare Workers Static Assets, with no lock-in, using a git-based CMS. Use when wiring a content editor into an Astro plus Cloudflare site, when a client needs to edit pages without touching GitHub or the codebase, when choosing or setting up Sveltia CMS, when mounting an admin panel under public/admin, when configuring the sveltia-cms-auth OAuth Worker or a GitHub OAuth App, when storing media in Cloudflare R2, when adding Spanish and English i18n with AI translation, or when publishing through a drafts branch with CI. Also covers the escalation ladder to Pages CMS and Directus when git-based editing is outgrown. Trigger on add a CMS to Astro, let my client edit content, Sveltia CMS, git-based CMS, headless CMS for a static site, or admin panel for Astro. Not for building the site or its CI gates (perf-ci-gates) — this skill wires only the client editing layer.
+description: Give a non-technical client the ability to self-edit the content of an Astro 7 site on Cloudflare Workers Static Assets, with no lock-in, using a git-based CMS. Use when wiring a content editor into an Astro plus Cloudflare site, when a client must edit pages without touching GitHub, when setting up Sveltia CMS or mounting the admin under public/admin, when configuring the sveltia-cms-auth Worker, when storing media in Cloudflare R2, when adding Spanish and English i18n with AI translation, or when publishing through a drafts branch with CI. Also covers the escalation ladder to Pages CMS and Directus. Also owns content modeling — what becomes a collection, the Zod schema and its config.yml mirror. Trigger on add a CMS to Astro, let my client edit content, model the content, content collections schema, Sveltia CMS, git-based CMS, or admin panel for Astro. Not for business data rows (data-layer) or the site's CI gates (perf-ci-gates) — this skill wires the client editing layer.
 ---
 
 # Client Self-Editing for Astro on Cloudflare
@@ -19,6 +19,7 @@ description: Give a non-technical client the ability to self-edit the content of
 
 This SKILL.md is the verdict, the ladder, and the recipe in order. Load a reference only when its condition is met:
 
+- references/content-modeling.md — load when deciding what becomes a collection at all, designing the Zod schema and its config.yml mirror, choosing documents versus rows (the data-layer boundary), or planning a schema change against existing content.
 - references/sveltia-setup.md — load when mounting the admin panel, writing config.yml, or mapping collections to Astro content collections and Zod schemas.
 - references/cloudflare-auth-worker.md — load when deploying sveltia-cms-auth, registering the GitHub OAuth App, choosing OAuth versus a personal access token, or hitting the COOP login failure.
 - references/media-r2.md — load when deciding between repo media and R2, or when configuring the R2 bucket, token, CORS, and public URL.

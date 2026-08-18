@@ -1,6 +1,6 @@
 ---
 title: web-stack-skills — RESIDENT (working doc / home base)
-updated: 2026-08-17
+updated: 2026-08-18
 repo: ccediland/web-stack-skills (público, MIT)
 status: Roadmap full-catalog en curso (`execution-plan.md`). Phases A/B0/B1/B2/C/D + W1–W3 mergeadas; v1.0.0–v1.3.0 shipped. W4 Run B EJECUTADA — lock del triage tal cual (conversion-patterns SOBREVIVIÓ su gate de sustancia): 3 skills delgadas #16–#18 + 4 absorciones versionadas + 2 recipes del playbook = BACKLOG DE CAPACIDAD COMPLETO (18 skills, validate 18/18), fixture con CUARTA puerta visual (baselines CI-generadas, determinismo por reduced-motion), view-transition morph, pase de conversión aplicado, página de aviso del template legal, auth stub honesto; triggering 31/32 + fix re-testeado, SHIP v1.4.0. W5 Run A EJECUTADA (decision sheet de la capa cliente al chat). Fixture: rama `claude/c-fixture` de `furever-web` JAMÁS se mergea a su main = producción. SIGUIENTE = chat lockea forks de W5 → Run B (v2.0.0, cierre).
 ---

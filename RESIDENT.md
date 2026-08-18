@@ -366,3 +366,27 @@ Scope lockeado en chat; verificación de terreno contra `furever-brand` real ANT
 
 ### 2026-08-17 — Phase B0 (migración Astro 7) — EJECUTADA · rama `claude/b0-astro7-wave`
 Phase A mergeada (PR #1, `d1591e0`). Re-pin lockstep aplicado skill por skill, un commit c/u: #1 astro 7.2.2 + tailwind 4.3.3 + switch-back a `@tailwindcss/vite` (#16542 cerrado; 2 citas corregidas) + SD 5.5.1 (jamás 5.5.0) · #2 adapter 14.2.1 (gate staticHeaders NO disparó) + astro-shield RETIRADA → receta SRI sha384 custom + watch #16692 · #3 biome 2.5.8 (flag `.astro` sigue OFF) · #5 motion 13.1.0 + Firefox ~85.4% (watch Fx156 ~oct-2026) · #7 rive 2.40.0 · #8 sveltia 0.191.2 (gate Keystatic NO cumplido) · baseline 7.2.2/14.2.1 en #4/#6. Smoke scaffold Astro 7 completo compiló y verificó CSP/tokens/utilities/dark/Cache-Control; 1 bug de receta cazado y corregido (Tailwind v4 entry — no-op silencioso, → §8).
+
+## 12. Calendario de drift (mantenimiento post-v2 — la disciplina viva del catálogo)
+
+Cadencia: revisión TRIMESTRAL de toda la tabla + atención on-changelog-hit fuera de ciclo cuando un watch dispara. Un run de drift = rama `claude/drift-<YYYY-Qn>`, re-verificación de los watches disparados contra fuente primaria, burn en el fixture cuando el cambio toque una receta ejercitada, y release PATCH (o MINOR si abre superficie) bajo la política de versionado del CLAUDE.md. Los pins finos por paquete viven en §3 y en cada SKILL.md; esta tabla es el ÍNDICE de lo que envejece.
+
+| Watch | Dueña | Trigger esperado | Acción al disparar |
+|---|---|---|---|
+| Worker-level Access — madurez/pricing/docs (EL MÁS VOLÁTIL del catálogo, ancla con días de edad al autorar) | auth-simple | changelog de Cloudflare Zero Trust | re-verificar escalera y la inferencia "sin zona propia"; quemar en el fixture cuando el owner tenga Zero Trust |
+| Flagship — pricing sin publicar (empatado en volatilidad) | edge-logic | anuncio de pricing/GA | resolver el review-gate del fork de flags; puede mover el default |
+| Reforma LFPDPPP en Congreso (~sept-2026) | legal recipe (playbook) | publicación en DOF | re-verificar template completo + short notice + no-banner; PATCH inmediato |
+| Firefox scroll-driven sin flag (Fx156 ~oct-2026) | motion-system | release notes de Firefox | actualizar el caveat NO-Baseline del motor CSS; puede subir el default |
+| Majors de Astro (~12–18 meses; el adapter movió API en AMBOS majors vigentes) | TODO el catálogo | astro@8 alpha | presupuestar ola de re-pin tipo B0 — fase propia, no un patch casual; pin por major del adapter |
+| Sveltia GA (milestone 1.0 RC) | cms-self-edit | release GA | quitar el caveat pre-GA; smoke del admin; revisar Editorial Workflow |
+| LHCI × Lighthouse 13 (bloqueado por Node 22.19+) | perf-ci-gates | release de @lhci/cli con LH13 | re-pin + revisar audit llms.txt nuevo en el gate |
+| Speculation Rules → Baseline | speculation recipe (playbook) | dashboard Baseline | la escalación deja de ser Chromium-only; re-encuadrar la recipe |
+| experimental.clientPrerender estable | speculation recipe (playbook) | release notes de Astro | reconsiderar enseñarlo como vía integrada |
+| Trenes Rive (~semanal) + madurez dotLottie state machines | signature-anim | al tocar la skill | re-pin del runtime; re-juzgar la frontera Rive-vs-dotLottie si dotLottie alcanza paridad |
+| CF Web Analytics custom events ("Not yet") | analytics recipe (playbook) | changelog de CF | re-encuadre posible del RUM ambiental hacia eventos |
+| Majors de Umami + pesos de scripts (tabla de evidencia FECHADA) | analytics recipe (playbook) | major de Umami | re-medir pesos — la tabla es evidencia, no dogma |
+| Supabase legacy keys mueren (fin 2026) | data-layer | aviso de Supabase | ya en llaves nuevas; verificar que ejemplos/docs no regresen a legacy |
+| Keystatic review-gate (#1497 abierto) | cms-self-edit | cierre de ambos issues | reconsiderar en la escalera (el cero-i18n sigue siendo tapón MX) |
+| WebGPU Baseline | webgl-atmosfera | Baseline MDN + necesidad de compute | reabrir el veredicto de motor |
+| Contrato brand-system (0.6.0 @ tool-repo) | brand-canon-ingest | release del contrato | re-pin de las 4 superficies consumidas + re-correr projections R6a |
+| Re-medición del fixture (Supabase free pausa a ~1 semana idle) | fixture furever-web | cada run de drift | CI es inmune (builds seed); despertar el proyecto solo si el burn pide tier 1 |

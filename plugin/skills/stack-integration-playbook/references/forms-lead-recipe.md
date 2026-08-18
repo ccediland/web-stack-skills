@@ -1,7 +1,7 @@
 ---
 title: Forms and lead capture — the one-route native recipe
 summary: The catalog's lead-capture architecture — an Astro Action on the site's own Worker, Turnstile anti-spam, Supabase insert-only storage, native email notification, LFPDPPP consent, and the WhatsApp deep-link knob — with per-brief knobs and the verbatim flip conditions that would promote this recipe to a full skill.
-last_updated: 2026-08-17
+last_updated: 2026-08-18
 applies_to: astro@7.2.2 (Actions, astro/zod) · @astrojs/cloudflare@14.2.1 · Cloudflare Turnstile + Email Service (public beta) · @supabase/supabase-js@2.112.3
 ---
 
@@ -110,9 +110,15 @@ Reading leads happens elsewhere (dashboard, secret-key job, eventual CRM sync) �
 
 ## Email notification — the native slot
 
-The slot is Cloudflare Email Service (public beta since 2026-04-16), which wins on native-first FOR THIS EXACT CASE: sending to a VERIFIED DESTINATION ADDRESS in the account — the owner's own inbox — is free on ALL plans, including Workers Free, with the FROM on the site's domain. Wiring: verify the owner's inbox (Email Routing destination-address flow), add the `send_email` binding to `wrangler.jsonc`, and `env.EMAIL.send({...})` from the handler. DNS is easier than any third party because the zone already lives in Cloudflare.
+The slot is Cloudflare Email Service (public beta since 2026-04-16), which wins on native-first FOR THIS EXACT CASE: sending to a VERIFIED DESTINATION ADDRESS in the account — the owner's own inbox — is free on ALL plans, including Workers Free, with the FROM on the site's domain.
 
-Beta caveats, stated honestly: no SLA, young deliverability reputation, conservative initial quotas. Acceptable for an internal owner notification; the lead row in Supabase is the system of record either way — email is a courtesy channel, and a send failure must not fail the submission.
+Wiring — TWO prerequisites, both owner-side, then the binding (field-burned 2026-08-18):
+
+1. Verify the owner's inbox (Email Routing destination-address flow, account level).
+2. Onboard the FROM domain to Email Sending (`wrangler email sending enable <domain>` or dashboard). This creates a SENDING SUBDOMAIN with its own SPF/DKIM records — it does NOT touch the apex MX/SPF, so it coexists with an external mail provider (Google Workspace on the same zone, proven live). Destination verification alone is NOT enough — an un-onboarded from-domain fails the send with `E_SENDER_NOT_VERIFIED`.
+3. Binding: `"send_email": [{ "name": "EMAIL" }]` in `wrangler.jsonc`; the handler calls `env.EMAIL.send({ to, from: { email, name }, subject, text, html })` — a plain object, and the Workers binding uses `email` in the from object (the REST API uses `address`; do not mix them). Errors throw with `E_*` codes — keep the send inside try/catch so a failure never fails the submission.
+
+Beta caveats, stated honestly: no SLA, young deliverability reputation, conservative initial quotas. Field note (first live send, 2026-08-18): the notification DELIVERED to the verified Gmail-hosted inbox but landed in SPAM — expected for a fresh sending subdomain with zero reputation; the owner marking it not-spam trains the inbox, and the lead row in Supabase is the system of record either way — email is a courtesy channel, and a send failure must not fail the submission.
 
 Documented fallback — Resend (`resend@6.20.0`, official Workers guide, 3,000 emails/mo free to ARBITRARY recipients): switch the slot when the brief needs auto-replies or confirmations to the LEAD's address on a $0 budget (arbitrary recipients on Email Service require Workers Paid), or when beta status is unacceptable. The slot is one function; swapping it touches nothing else.
 

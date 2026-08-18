@@ -31,13 +31,23 @@ Climb only when the rung below demonstrably cannot do the job. A "password on th
 
 ## Rung 1 — Cloudflare Access at the Worker level
 
-Since 2026-08-14, an Access policy can attach DIRECTLY to a Worker — no zone-level application, no owned domain required for the workers.dev case. The policy follows the Worker everywhere it serves: routes, custom domains, workers.dev, and preview URLs. That last part is the load-bearing feature for this stack: branch previews on Workers Builds get protected automatically, which is exactly the surface a fixture or staging flow needs gated.
+Since 2026-08-14, an Access policy can attach DIRECTLY to a Worker — no zone-level application, no owned domain required for the workers.dev case. The policy follows the Worker everywhere it serves: routes, custom domains, workers.dev, and preview URLs.
 
-- Identity: One-Time PIN by email works with zero IdP setup; signing in with an existing Cloudflare account (Cloudflare-as-IdP) is the default for new Zero Trust orgs since 2026-06-18; Google/GitHub attach as standard external IdPs. All on the free plan.
+The real model (field-burned 2026-08-18 on the catalog fixture): an Access application carries DESTINATIONS, and the destination type decides the blast radius —
+
+| Destination | Protects | Use for |
+|---|---|---|
+| `worker` (worker_id) | EVERY request routed to the Worker: routes, custom domains, workers.dev, previews | a Worker that serves nothing public |
+| `preview_worker` | only the Worker's preview URLs | gating branch previews while production stays public |
+| `public` (host + path, wildcards) | just that host/path | a section — `/admin` on one preview host |
+
+`preview_worker` and `public` take PRECEDENCE over `worker`, so narrow apps can carve exceptions out of a broad one. The trap this table exists for: when ONE Worker serves production on a custom domain AND branch previews (the normal Workers Builds shape), attaching the `worker` destination gates PRODUCTION too. "Protect the preview" is `preview_worker`; "protect a section" is `public` with a path — both attach account-level via `POST /accounts/{id}/access/apps` (type `self_hosted`, `destinations`, inline `policies`), which is also the CI-friendly path when the dashboard is not in the loop.
+
+- Identity: One-Time PIN by email needs ONE explicit IdP add on a new org (`POST .../access/identity_providers` `{type: "onetimepin"}` or the dashboard toggle) — new Zero Trust orgs ship with ONLY Cloudflare-as-IdP since 2026-06-18, so "OTP works out of the box" is no longer true (field-verified 2026-08-18). Google/GitHub attach as standard external IdPs. All on the free plan.
 - Requirements: Zero Trust enabled on the account (the free plan qualifies). Local dev testing uses the `access.dev` block in wrangler config; runtime identity (email, name) reads via `ctx.access.getIdentity()` when the Worker itself needs to know who came in.
-- Scope note, stated honestly: the "no owned zone needed" framing for workers.dev is an INFERENCE from the feature covering workers.dev URLs (which require no zone) — Cloudflare's changelog does not say those words verbatim. The legacy path (a self-hosted application configured in the Zero Trust dashboard) DOES require an active zone on the account; the Worker-level path is what removes that friction.
+- Scope note: the "no owned zone needed" inference for workers.dev now has field support — the fixture's account-level app with a `public` workers.dev destination referenced no zone anywhere in the flow (burn 2026-08-18). Residual honesty: that account DID own a zone, so a zone-less account remains unproven.
 - Documented limitation: Worker-level Access policies do not currently support WebSocket connections — those need the hostname-based (legacy) application instead.
-- Interaction with Static Assets: the Access check runs at the edge in front of the Worker, so it gates a static-assets site exactly like any Worker — but this specific combination is not a named, documented integration. Verify on the target project before promising it (this skill's fixture burn is the standing evidence when present).
+- Interaction with Static Assets: VERIFIED in the fixture burn (2026-08-18) — the Access check runs at the edge in front of the Worker and gated `/admin` on a static-assets+main Worker cleanly: 302 to the org login on all `/admin*` paths, OTP flow through, `CF_Authorization` session cookie, sibling paths untouched.
 
 ## Rung 2 — Service tokens for CI and automation
 
@@ -65,9 +75,9 @@ A hand-rolled gate in front of static assets means `run_worker_first` on the pro
 
 | Surface | Pinned fact (2026-08-18) | Review-gate |
 |---|---|---|
-| Worker-level Access | shipped 2026-08-14; policy on the Worker; covers workers.dev + previews; `ctx.access.getIdentity()`; no WebSockets | MAXIMUM volatility — days old at authoring; plan gating, pricing, and semantics may all move; re-verify before EVERY client use |
+| Worker-level Access | shipped 2026-08-14; destination types `worker`/`preview_worker`/`public` with narrow-over-broad precedence; `ctx.access.getIdentity()`; no WebSockets. First field burn 2026-08-18 (catalog fixture): path-scoped `public` app on a preview host, OTP end-to-end | MAXIMUM volatility — days old at authoring; plan gating, pricing, and semantics may all move; re-verify before EVERY client use |
 | Access free plan | 50 users, $0 | seat definition and cap per plan page |
-| Access IdPs | OTP built-in; Cloudflare-as-IdP default for new orgs since 2026-06-18 | defaults may shift again |
+| Access IdPs | OTP is one explicit IdP add (not preinstalled); Cloudflare-as-IdP is the ONLY default for new orgs since 2026-06-18 (field-verified) | defaults may shift again |
 | Service tokens | included with Access; header pair auth | plan-tier language is absent, availability inferred from Access docs |
 | `@supabase/ssr` | 0.12.4; needs `nodejs_compat` + 2025+ compatibility_date on Workers | active package, near-monthly; re-pin at adoption |
 | Supabase free tier | 50k MAU; projects pause after 1 week idle | pricing page moves; pause behavior bites portals |
@@ -77,4 +87,4 @@ A hand-rolled gate in front of static assets means `run_worker_first` on the pro
 
 - This skill does NOT cover: security headers and CSP (web-security-headers); RLS policy design and data contracts (data-layer); the CMS OAuth worker that cms-self-edit ships (that auth flow is Sveltia's, already solved); payment-gated content (a product decision, per-project).
 - Everything above assumes the Workers Free plan and this catalog's mostly-static deploy shape; a fully on-demand app changes the invocation math and probably the auth conversation.
-- The anchor feature is too young for field lessons. The first composed build that gates a real preview behind Worker-level Access should feed its gotchas back here — until then, the fixture's burn (or honest stub) is the only evidence.
+- First field burn: 2026-08-18, the catalog fixture — `/admin` of a Workers Builds branch preview gated via an account-level app (`public` destination with path, OTP policy, created 100% by API), full OTP login verified, sibling paths and CI untouched. The MAXIMUM review-gate stands: one burn is evidence, not stability.

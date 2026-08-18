@@ -1,7 +1,7 @@
 {
   "name": "web-stack",
   "description": "Skills for premium high-performance websites on Astro 7 plus Cloudflare Workers Static Assets — client discovery and site briefs, design tokens, brand-canon ingestion, native CSP, perf CI gates, schema and AEO, motion, WebGL, signature animation, a client-editable CMS, a build-time data layer, i18n, media optimization, deep accessibility, edge logic, simple auth, visual regression, conversion structure, and the composition playbook (capability recipes — forms, analytics, prefetching, legal template — plus archetype recipes) that wires them into one site.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": {
     "name": "ccediland"
   },

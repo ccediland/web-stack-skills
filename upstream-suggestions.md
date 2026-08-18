@@ -27,6 +27,6 @@
 
 - Detectada — 2026-08-18 (W5, autoría de `client-discovery`).
 - Evidencia — la description del scoper abre con "interview the owner" y "scope … in conversation" sin deslinde hacia briefs de SITIO; con `client-discovery` en el catálogo, el par "brand discovery" ↔ "client/site discovery" queda deslindado solo del lado nuestro ("a SITE brief, not a brand brief — … goes to brand-canon-scoper"). La frontera bilateral es el patrón que este catálogo probó estable (W2: hreflang; W4: absorciones); unilateral funciona pero con margen más frágil.
-- Estado de evidencia — el triggering final de v2 juzga el par en ambas direcciones; esta entrada carga el veredicto cuando exista.
+- Veredicto del triggering final v2 (2026-08-18, jueces ciegos, superficie 21) — el par YA rutea CLEAR en ambas direcciones con solo nuestro lado escrito: "Brand discovery for a new brand" → scoper CLEAR (el juez citó la auto-exclusión de client-discovery como desempate) y "Interview the client about their new website requirements" → client-discovery CLEAR sin runner-up. La sugerencia baja de necesaria a ROBUSTEZ: el espejo protegería el par si nuestra description cambiara.
 - Sugerencia — el scoper gana una frase espejo tipo "scopes the BRAND, not a website project — client intake and site briefs belong to the site pipeline".
 - Beneficio — el par rutea estable desde ambos lados, como todas las fronteras bilaterales del catálogo.

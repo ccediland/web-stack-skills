@@ -3,3 +3,7 @@
 
 # packaged skill bundles are build artifacts, never committed
 *.skill
+
+# Config de servidores MCP: lleva credenciales de conexión y es por máquina.
+# Ya se ignoraba en tres repos; la regla se generaliza (2026-08-31).
+.mcp.json

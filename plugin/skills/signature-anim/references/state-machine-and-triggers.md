@@ -2,7 +2,7 @@
 title: Rive state machine inputs, listeners, and triggers on the web
 summary: How to drive Rive state-machine inputs from JavaScript, how editor Listeners handle hover and click internally, the native-first scroll wiring, and the event-handling flag.
 last_updated: 2026-08-17
-applies_to: @rive-app/canvas@2.40.0
+applies_to: "@rive-app/canvas@2.40.0"
 ---
 
 # Rive state machine inputs, listeners, and triggers on the web

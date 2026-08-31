@@ -7,3 +7,11 @@
 # Config de servidores MCP: lleva credenciales de conexión y es por máquina.
 # Ya se ignoraba en tres repos; la regla se generaliza (2026-08-31).
 .mcp.json
+
+# Artefactos de Claude Code. No se versionan nunca: `.claude/` guarda estado de
+# sesión del harness, y `.claude-*/` son directorios de PERFIL, que contienen
+# credenciales (.credentials.json, modo 600) e identidad de cuenta.
+# Verificado el 2026-08-30: gitleaks NO marca un .credentials.json de Claude, así
+# que el pre-commit no es red aquí — estas dos líneas sí (F-004).
+.claude/
+.claude-*/

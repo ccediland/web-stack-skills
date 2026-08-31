@@ -53,3 +53,18 @@ entrada no se inventa: recoge los commits reales de esta sesión en el repo.
 Decidido: ninguna en este repo (las del sistema viven en `_meta/venturedge-framework/decisiones.md`).
 Pendiente: `MAPA.md`, el quinto documento del estándar, que aquí todavía no existe.
 Siguiente: al cerrar la próxima sesión que toque este repo, agregar su entrada aquí — sin preguntar.
+
+## 2026-08-31 · Code · Sesión de sistema
+
+Hecho: 3 commit(s) en este repo, dentro de la sesión que cerró el doc-set de cinco en los
+quince repos, escribió el criterio de dónde registrar un esfuerzo, y construyó el agregador de
+avance sobre los dos dominios de Workspace.
+
+- docs: MAPA.md, el quinto documento del estandar (#5)
+- docs: BITACORA.md, el cuarto documento del estandar (#4)
+- gitignore: .mcp.json no se versiona (#3)
+
+Decidido: las del sistema viven en `_meta/venturedge-framework/decisiones.md` (`VE-2026-020` a
+`VE-2026-033` se escribieron hoy).
+Pendiente: lo que quedó abierto está en `pendientes.md` y como issues etiquetados por área.
+Siguiente: al cerrar la próxima sesión que toque este repo, agregar su entrada aquí — sin preguntar.

@@ -59,3 +59,22 @@ Tras instalar, probar triggering: cada skill debe disparar con sus frases objeti
 - Pins — cada pin duro y cada workaround por issue-number lleva review-gate (§3 y §7 del RESIDENT). No bumpear pins casualmente; los bumps van por fase de re-pin (B0) o por review-gate disparado.
 - Git — trabajar SIEMPRE en rama `claude/<nombre>`, nunca en `main`; PR y esperar OK de Carlos para merge. Commits atómicos por unidad lógica.
 - Al cerrar trabajo importante — reflejar decisiones/estado en `RESIDENT.md` (§9/§11) y aquí lo que cambie para el dev.
+
+## Bitácora
+
+Al cerrar cualquier sesión que haya tocado este repo, **agrega su entrada al final de
+`BITACORA.md` sin preguntar y sin anunciarlo**. Una sesión sin entrada no cerró.
+
+El formato está en la cabecera de ese archivo. Es **append-only**: nunca se edita ni se reordena
+una entrada pasada, y una revisión posterior va abajo con su propia fecha — jamás como nota en la
+cabecera.
+
+Qué va dónde, con la prueba mecánica del estándar:
+
+> ¿Lleva una **fecha**? → `BITACORA.md`.
+> ¿Sigue siendo verdad en tres meses sin que nadie lo toque? → `RESIDENT.md`.
+> ¿Es sobre cómo tocar los archivos? → aquí.
+
+Esto no es burocracia: es lo que mantiene a `RESIDENT.md` atemporal. Un RESIDENT que carga la
+narrativa de cada sesión cambia todos los días, y entonces el knowledge de su Project queda
+desfasado siempre.

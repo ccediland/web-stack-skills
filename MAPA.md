@@ -2,7 +2,7 @@
 name: web-stack-skills-mapa
 title: web-stack-skills — MAPA
 description: Qué archivos hay en este repo y para qué sirve cada uno. Se lee para ubicarse sin barrer el repo entero. Las filas las genera `mapa.py`; la columna «Qué es» se escribe a mano.
-last_updated: 2026-08-31
+last_updated: 2026-09-01
 status: vigente
 supersede: ninguno
 ---
@@ -31,8 +31,10 @@ homogéneos (ahí la fila dice cuántos son y qué convención siguen).
 | `CLAUDE.md` | Cómo tocar este repo sin romperlo. | raíz |
 | `LICENSE` | Licencia. | andamio |
 | `README.md` | Qué es el catálogo de stack web, para alguien de fuera. | raíz |
-| `RESIDENT.md` | Cómo es el catálogo hoy, sus olas de construcción y el calendario de drift. | raíz |
+| `RESIDENT.md` | Cómo es el catálogo hoy, su stack, sus reglas y el índice de decisiones. | raíz |
 | `archive/execution-plan-2026-08.md` | Plan de ejecución de agosto, ya cumplido. Archivo. | evidencia |
+| `docs/calendario-drift.md` | Índice de los 18 disparadores de obsolescencia que vigilan el catálogo en modo mantenimiento. | raíz |
+| `docs/skill-verdicts.md` | Veredicto extendido de las skills con selección o composición propia, más las tablas de pins. | raíz |
 | `plugin/` | **El catálogo.** Las skills del stack: tokens y CSS, datos, i18n, medios, motion, SEO/AEO, seguridad, puertas de CI, WebGL, formularios, auth y el playbook que las compone. `furever-web` fue su banco de pruebas. | raíz |
 | `upstream-suggestions.md` | Hallazgos que valdría subir a las fuentes originales de las recetas. | raíz |
 <!-- MAPA:FIN -->

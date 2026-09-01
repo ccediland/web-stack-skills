@@ -15,3 +15,9 @@
 # que el pre-commit no es red aquí — estas dos líneas sí (F-004).
 .claude/
 .claude-*/
+# Red de seguridad — jamás versionar secretos (estandar.md §5)
+.env
+.env.*
+*.pem
+*.key
+*.token

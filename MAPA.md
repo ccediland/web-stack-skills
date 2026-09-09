@@ -26,6 +26,7 @@ homogéneos (ahí la fila dice cuántos son y qué convención siguen).
 | Ruta | Qué es | Autoridad |
 |---|---|---|
 | `.claude-plugin/marketplace.json` | Declara este repo como marketplace de plugins. | andamio |
+| `.gitattributes` | Normaliza fin de línea. | raíz |
 | `.gitignore` | Qué no entra. | andamio |
 | `BITACORA.md` | Qué pasó y cuándo, append-only. | raíz |
 | `CLAUDE.md` | Cómo tocar este repo sin romperlo. | raíz |

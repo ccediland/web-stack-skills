@@ -1,0 +1,19 @@
+# Normaliza saltos de línea: en el repo siempre LF, evita que CRLF de Windows
+# (al editar bajo /mnt/c o con herramientas Windows) contamine diffs y git blame.
+* text=auto eol=lf
+
+# Scripts y archivos sensibles a EOL: forzar LF (un shebang con CRLF falla con
+# "bad interpreter").
+*.sh   text eol=lf
+*.bash text eol=lf
+
+# Binarios comunes: no tocar.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
+*.woff binary
+*.woff2 binary
